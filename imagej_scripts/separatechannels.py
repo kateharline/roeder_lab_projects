@@ -26,7 +26,7 @@ def process(filename, output_path):
 	IJ.run("Split Channels")
 	for i in range(0, num_channels):
 		curr_img = WM.getCurrentImage()
-		IJ.saveAs("Tiff", output_path + 'C-'+ str(i+1) + filename)
+		IJ.saveAs("Tiff", output_path + 'C-'+ str(i+1) + '_' + filename)
 		curr_img.close()
 	return
 	
