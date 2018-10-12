@@ -13,25 +13,22 @@ start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):
-	IJ.open(path)
-	img = WM.getCurrentImage()
-	return img
+    IJ.open(path)
+    img = WM.getCurrentImage()
+    return img
 
 def process(filename, output_path):
-	IJ.run("Split Channels")
-	# the number of channels is one (orig image) less than the number of images opened
-	num_channels = WM.getImageCount() - 1
-	for i in range(0, num_channels):
-		curr_img = WM.getCurrentImage()
-		IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
-		curr_img.close()
-	return
-	
+    IJ.run("Split Channels")
+    # the number of channels is one (orig image) less than the number of images opened
+    num_channels = WM.getImageCount() - 1
+    for i in range(0, num_channels):
+        curr_img = WM.getCurrentImage()
+        IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
+        curr_img.close()
+    return
+
 def batch_process(extension, source_dir):
-	for folder, subs, files in os.walk(source_dir):
-		print('folder' +str(folder))
-		print('subs' +str(subs))
-		print('files' + str(files))
+    for folder, subs, files in os.walk(source_dir):
         output_path = os.path.join(folder, 'channels_separated')
         for filename in files:
             if filename.endswith(extension):
@@ -40,6 +37,6 @@ def batch_process(extension, source_dir):
                 img = load(os.path.join(folder, filename))
                 process(filename, output_path)
                 img.close()
-	return
+    return
 
 batch_process(start_extension, input_path)
