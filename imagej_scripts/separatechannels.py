@@ -12,7 +12,7 @@ num_channels = 2
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
 new_extension = '.tif'
-output_path = input_path + '/channels_separated/'
+output_path = os.path.join(input_path, 'channels_separated')
 
 if not os.path.exists(output_path):
 	os.makedirs(output_path)
@@ -26,14 +26,14 @@ def process(filename, output_path):
 	IJ.run("Split Channels")
 	for i in range(0, num_channels):
 		curr_img = WM.getCurrentImage()
-		IJ.saveAs("Tiff", output_path + 'C-'+ str(i+1) + '_' + filename)
+		IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
 		curr_img.close()
 	return
 	
 def batch_process(extension, source_dir, output_dir):
 	for filename in os.listdir(source_dir):
 		if filename.endswith(extension):
-			img = load(source_dir + '/'+ filename)
+			img = load(os.path.join(source_dir, filename))
 			process(filename, output_path)
 			img.close()
 	return
