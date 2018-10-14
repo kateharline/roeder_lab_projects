@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/home/aroeder/Desktop/Kate/leaf_live_beta/pAR169xpAR229_20180823/1-1'
+input_path = '/home/aroeder/Desktop/Kate/leaf_live_beta/pAR169xpAR229_20180823/new'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
