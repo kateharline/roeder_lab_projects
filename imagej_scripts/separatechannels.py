@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Documents/roeder_lab/imaging/leaf_live_beta/pAR169xpAR229_20180823'
+input_path = '/home/aroeder/Desktop/Kate/leaf_live_beta/pAR169xpAR229_20180823/1-1'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
@@ -24,6 +24,7 @@ def process(filename, output_path):
     for i in range(0, num_channels):
         curr_img = WM.getCurrentImage()
         IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
+	print('img inner ' +str(curr_img))
         curr_img.close()
     return
 
@@ -35,7 +36,9 @@ def batch_process(extension, source_dir):
                 if not os.path.exists(output_path):
                     os.makedirs(output_path)
                 img = load(os.path.join(folder, filename))
+		print('img outer1 ' +str(img))
                 process(filename, output_path)
+		print('img outer2 ' +str(img))
                 img.close()
     return
 
