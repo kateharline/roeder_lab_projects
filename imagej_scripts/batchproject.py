@@ -6,10 +6,10 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Documents/roeder_lab/imaging/leaf_live_beta/pAR169xpAR229_20180823'
+input_path = '/Users/kateharline/Desktop/pLH13_2-4'
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.lsm'
+start_extension = '.tif'
 new_extension = '.tif'
 
 def load(path):
@@ -20,7 +20,8 @@ def load(path):
 def process(filename, output_path):
     IJ.run("Z Project...", "projection=[Max Intensity]");
     # the number of channels is one (orig image) less than the number of images opened
-    IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_'+ str(i+1) + '_' + filename))
+    curr_img = WM.getCurrentImage()
+    IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_' + filename))
     curr_img.close()
     return
 
