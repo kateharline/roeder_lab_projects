@@ -27,7 +27,7 @@ def process(filename, output_path):
 
 def batch_process(extension, source_dir):
     for folder, subs, files in os.walk(source_dir):
-        output_path = os.path.join(folder, 'channels_separated')
+        output_path = os.path.join(folder, 'max_int')
         for filename in files:
             if filename.endswith(extension):
                 if not os.path.exists(output_path):
