@@ -66,6 +66,7 @@ class TestScorer(cmd.Cmd):
         return
 
     def do_save_scores(self, arg):
+        'enter when you are ready to export scores to csv for futher analysis'
         # row headers
         header = ['Student_name']
         for i in range(0, 20):
@@ -76,7 +77,6 @@ class TestScorer(cmd.Cmd):
             w = csv.writer(outfile)
             w.writerow(h for h in header)
             for key, val in self.scores.items():
-                print([key, *val])
                 w.writerow([key, *[str(i) for i in val]])
         return
 
