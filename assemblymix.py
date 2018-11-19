@@ -8,8 +8,9 @@ vector_size = 14
 
 # NEB set
 insert_vector_ratio = 2
-total_mix = 10
+max_vectors_mix = 10
 pmol_range = [0.03, .2]
+max_vector_vol = 10
 
 # calculate ng from ul and conc ng/ul
 def ng(conc, ul):
@@ -39,7 +40,7 @@ def get_ng_desired(vector_pmols, insert_vector_ratio, insert_sizes):
 
 def optimize_vols(insert_concs, vector_conc, insert_vector_ratio, total_mix, pmol_range):
 
-    for vector_vol in np.arange(0, 10, .1):
+    for vector_vol in np.arange(0, max_vector_vol, .1):
         vector_ng = ng(vector_conc, vector_vol)
         vector_pmols = pmols(vector_ng, vector_size)
 
@@ -50,7 +51,7 @@ def optimize_vols(insert_concs, vector_conc, insert_vector_ratio, total_mix, pmo
 
             total_mix = vector_vol + sum(insert_vols)
 
-            if total_mix <= 10:
+            if total_mix <= max_vectors_mix:
                 return vector_vol, vector_pmols, insert_vols
             else:
                 continue
