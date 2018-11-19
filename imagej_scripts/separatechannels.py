@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/home/aroeder/Desktop/Kate/leaf_live_beta/pAR169xpAR229_20180823/new'
+input_path = '/home/aroeder/Desktop/20181116_leaf1_glassfix_analysis/new'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
@@ -20,7 +20,7 @@ def load(path):
 def process(filename, output_path):
     IJ.run("Split Channels")
     # the number of channels is one (orig image) less than the number of images opened
-    num_channels = WM.getImageCount() - 1
+    num_channels = WM.getImageCount()
     print(WM.getImageCount())
     for i in range(0, num_channels):
         curr_img = WM.getCurrentImage()
