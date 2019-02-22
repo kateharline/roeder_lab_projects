@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/home/aroeder/Desktop/Kate/leaf_live_beta/pAR169xpAR229_20180823/new'
+input_path = '/home/aroeder/Desktop/Kate/20181202_leaf1_pfd'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
@@ -20,8 +20,7 @@ def load(path):
 def process(filename, output_path):
     IJ.run("Split Channels")
     # the number of channels is one (orig image) less than the number of images opened
-    num_channels = WM.getImageCount() - 1
-    print(WM.getImageCount())
+    num_channels = WM.getImageCount()
     for i in range(0, num_channels):
         curr_img = WM.getCurrentImage()
         IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
@@ -37,7 +36,7 @@ def batch_process(extension, source_dir):
                     os.makedirs(output_path)
                 img = load(os.path.join(folder, filename))
                 process(filename, output_path)
-                img.close()
+                # img.close()
     return
 
 batch_process(start_extension, input_path)
