@@ -23,6 +23,8 @@ def process(filename, output_path):
     curr_img = WM.getCurrentImage()
     # add scale bar to image
     IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    # save scale bar to stack
+    IJ.run("Flatten");
     IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_w_scale' + filename))
     curr_img.close()
     return
