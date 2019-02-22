@@ -22,7 +22,7 @@ def process(filename, output_path):
     # the number of channels is one (orig image) less than the number of images opened
     curr_img = WM.getCurrentImage()
     # add scale bar to image
-    run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_' + filename))
     curr_img.close()
     return
