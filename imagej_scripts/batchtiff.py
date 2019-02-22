@@ -6,10 +6,10 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/make_max_int'
+input_path = '/Users/kateharline/Desktop/leaf8_max_int_projections'
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.tif'
+start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):
@@ -18,11 +18,8 @@ def load(path):
     return img
 
 def process(filename, output_path):
-    IJ.run("Z Project...", "projection=[Max Intensity]");
     # the number of channels is one (orig image) less than the number of images opened
     curr_img = WM.getCurrentImage()
-    # add scale bar to image
-    run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_' + filename))
     curr_img.close()
     return
