@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/pLH13_2-4'
+input_path = '/home/aroeder/Desktop/Kate/20190125_leaf1_pfd_fix_dissect/max_project'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.tif'
