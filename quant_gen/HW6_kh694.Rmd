@@ -50,13 +50,20 @@ cat('There are N = ', N, ' genotypes. There are n = ', n, ' samples.')
 # D
 ```{r}
 # convert genotypes into xa and xd matrices
-# set up new matrix
-xa_matrix <- matrix(NA, nrow = nrow(genotypes), ncol = ncol(genotypes))
-# fill with x_a values
-for (i in 1:ncol(genotypes)) {
-  xa_matrix[,i] <- sapply(genotypes[,i], (function(x) switch (x,
-    'A1A1' = -1, 'A1A2' = 0, 'A2A2' = 1
-  )))
+
+# convert the values to dummy encodings
+xa_converter <- function(geno_in){
+  geno_count <- table(geno_in)
+  minor_allele <- names(geno_count[geno_count == min(geno_count)])
+  xa_code <- ifelse(geno_in == minor_allele, 1, 0)
+  xa_result <- rowSums(xa_code) - 1
+  return(xa_result)
+}
+# initialize matrix to create encodings
+xa_matrix <- matrix(NA, nrow = nrow(genotype_data), ncol = ncol(genotype_data)/2)
+# store xa encodings
+for (i in 1:(ncol(genotype_data)/2)){
+  xa_matrix[,i] <- xa_converter(genotype_data[,c(2*i -1, 2*i)])
 }
 # then convert x_a to x_d
 xd_matrix <- -2*abs(xa_matrix)+1
