@@ -25,7 +25,7 @@ On the other hand, there is always a chance the null hypothesis was rejected inc
 # A
 ```{r}
 # input the phenotype data and report the number of samples, s
-phenotypes <- read.table("./QG19 - hw6_phenotypes.txt", header = T)
+phenotypes <- read.table("./QG19 - hw6_phenotypes.txt", header = F)
 n <- length(phenotypes[,1])
 cat('There are n = ', n, 'samples')
 ```
@@ -33,16 +33,17 @@ cat('There are n = ', n, 'samples')
 # B
 ```{r}
 # make a histogram of the phenotype data
-hist(phenotypes[,1], main = 'Distribution of Scaled Heights', xlab = 'Scaled Height')
+heights_hist <- hist(phenotypes[,1], main = 'Distribution of Scaled Heights', xlab = 'Scaled Height')
+heights_hist
 ```
 
 # C
 ```{r}
 # input genotype data, report the number of genotypes N, sample size n
-genotypes <- read.table("./QG19 - hw6_genotypes.txt", header = T)
+genotypes <- read.table("./QG19 - hw6_genotypes.txt", header = F)
 N <- ncol(genotypes)
 
-n <- nrow(genotypes) / 2
+n <- nrow(genotypes)
 cat('There are N = ', N, ' genotypes. There are n = ', n, ' samples.')
 ```
 

@@ -6,11 +6,8 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-<<<<<<< HEAD
-input_path = '/home/aroeder/Desktop/Kate/20190125_leaf1_pfd_fix_dissect/max_project'
-=======
-input_path = '/Users/kateharline/Desktop/max_int_w_scale'
->>>>>>> ca2fde181c226aa624846d0f91d026fe31e09d6a
+input_path = '/home/aroeder/Desktop/max'
+
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.tif'
