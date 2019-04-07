@@ -1,0 +1,255 @@
+---
+title: "BTRY4830_Lab4"
+author: "Olivia Lang"
+date: "2/21/2019"
+output: pdf_document
+---
+
+1. Logical/Boolean Data Type  
+
+2. Logical/Boolean Algebra  
+\hspace*{0.25in} OR, AND, NOT operators   
+
+3. More on Vector Elements   
+\hspace*{0.25in} %%in%% operator and comparing logical lists   
+
+4. Exercise  
+
+
+
+
+### 1. Logical/Boolean Data Type
+
+The **logical** or **boolean** class can only take on two values: TRUE or FALSE. It is designed to allow us to evaluate logical questions (e.g. Is it true that my numerical variable is smaller than 25) and for testing conditions. In R and many other languages, the acutal values for TRUE and FALSE are 1 and 0. We can visualize this below.
+
+```{r, comment = NA}
+TRUE + TRUE
+sum(FALSE)
+sum( TRUE, TRUE, TRUE )
+TRUE*5
+```
+
+We can use them if you are interested in finding out whether certain elements of a vector are greater than or smaller than a certain value. You can use >, <, >=, <-=, ==.
+
+```{r, comment = NA}
+example.vector <- seq(1,25,by=2)
+example.vector
+example.vector > 10
+example.vector >= 15
+example.vector <= 5
+example.vector == 7
+```
+
+
+```{r, eval = FALSE}
+# What are the outputs for the following statements?
+TRUE==1
+example.vector[ example.vector <=5 ]
+```
+
+Note, each position where the value meets the condition will be marked with TRUE, and with FALSE otherwise. Since TRUE and FALSE are essentially 1 and 0, you can easily find out how many elements satisfy the condition by simply taking the sum of the result.
+
+```{r, eval = FALSE}
+sum( example.vector > 10 )
+```
+
+We can do the same thing with matrices.
+
+```{r, comment = NA}
+example.mx <- matrix(c(2,5,7,-2,-5,-10), ncol = 3, byrow=T)
+example.mx < 1
+```
+
+What are we testing here?
+
+```{r, comment = NA}
+dim(example.mx)[1] == 2
+```
+
+```{r, comment = NA}
+example.vector == 3
+```
+
+- Quick Question !?
+  What would I write to determine the number of cars in the mtcars dataframe that have more than 6 cylinders
+
+```{r, comment = NA}
+head(mtcars)
+mtcars[mtcars$cyl > 6,]
+```
+
+### 2. Logical/Boolean Algebra
+
+Logical/Boolean Algebra allows us to combine multiple conditions. There are 3 basic operators:
+
+- The AND (&) operator returns TRUE **only if all conditions are TRUE**
+
+```{r, comment = NA}
+FALSE & FALSE
+TRUE & FALSE
+TRUE & TRUE
+# Example of an AND operator
+example.vector > 5 & example.vector < 10
+# if you want to see the actual elements 
+example.vector[example.vector >10 & example.vector < 20]
+```
+
+- The OR (|) operator returns TRUE **when at least one condition is TRUE**
+
+```{r, comment= NA}
+FALSE | FALSE
+TRUE | FALSE
+TRUE | TRUE
+# Example of an OR operator
+example.vector > 10 | example.vector < 20
+example.vector < 10 | example.vector > 20
+```
+
+- The NOT (!) returns TRUE **if condition is not TRUE**
+
+```{r, comment = NA}
+!TRUE
+example.vector != 3
+```
+
+
+- You can build compound statements
+
+```{r, eval = FALSE}
+# What are the outputs for the following statements?
+! (FALSE | TRUE)
+! (FALSE & TRUE) | (TRUE & ! FALSE)
+```
+
+### 3. More on Vector Elements
+
+We can check whether a certain element is present or absent in a vector using the **%in%** operator. We can find out the index of a certain entry in a vector using the which() function.
+
+```{r, comment = NA}
+fruits <- c("banana","apple","strawberry","peach","mango")
+"mango" %in% fruits
+"durian" %in% fruits
+!( "durian" %in% fruits )
+which( fruits == "apple" )
+```
+
+We can also compare the content of two vectors in a variety of different ways.
+
+```{r, comment = NA}
+fruits2 <- c("orange","banana","durian","cherry","mango","apple")
+fruits2 %in% fruits
+# show me the position
+which(fruits2 %in% fruits)
+#show me the elements
+fruits2[fruits2 %in% fruits]
+# There is also a function for this
+intersect(fruits2, fruits)
+```
+
+- Quick Question !?
+  From mtcars, what are all the car names with mpg over 20.  
+
+```{r, comment = NA}
+head(mtcars)
+row.names(mtcars[mtcars$mpg > 20,])
+```
+
+
+
+### 4. Exercise
+
+- When trying to determine if one distribution is true or not one can specify an alpha value
+- This alpha value specifies the confidence of your answer
+- We can convert the alpha value into a test statistics using qnorm
+
+```{r}
+q <- qnorm(0.05,lower.tail = F)
+```
+
+- Below is a function that creates plots similar to the two distribution that you have seen in the lectures
+- The splitVal holds the value of the test statistic
+
+```{r}
+library(ggplot2)
+
+theExercise <- function(sampSize=1000, h0Mean=0, trueMean=3, h0sd=1, truesd=1, shadeDirection="Auto", alpha=0.05, rangex=c(-10,10)){
+  
+  # Assuming alpha region is shaded to the right (true mean is greater than in  the null case)
+  splitVal=qnorm(alpha, mean = h0Mean, sd=h0sd, lower.tail = FALSE)
+  h0xlim <- c(splitVal, rangex[2])
+  truxlim <- c(rangex[1],splitVal)
+  
+  # Adjust variables if alpha region is shaded to the left (null mean is greater than true mean)
+  if( (shadeDirection=="Auto" & h0Mean > trueMean) | shadeDirection=="Left"){
+    print("Left tail")
+    splitVal=qnorm(alpha, mean = h0Mean, sd=h0sd, lower.tail = TRUE)
+    h0xlim <- c(rangex[1], splitVal)
+    truxlim <- c(splitVal, rangex[2])
+  }else{
+    print("Right tail")
+  }
+  
+  # Plot figure
+  thePlot <- ggplot(data.frame(x=seq(rangex[1],rangex[2],by=0.05)), aes(x)) +              # set domain of x-values
+    stat_function(  fun=dnorm, args=list(mean=h0Mean, sd=h0sd), xlim=h0xlim,
+                 geom='area', col='blue', fill='pink'  ) +                                 # plot shaded ___ region
+    stat_function(  fun=dnorm, args=list(mean=trueMean, sd=truesd), xlim=truxlim,
+                 geom='area', col='red', fill='lightblue'  ) +                             # plot shaded ___ region
+    stat_function(  fun=dnorm, aes(color = "H0"), args=list(mean=h0Mean, sd=h0sd)) +       # plot h0 density curve
+    stat_function(  fun=dnorm, aes(color = "True"), args=list(mean=trueMean, sd=truesd)) + # plot true density curve
+    geom_vline(xintercept = splitVal) +                                                    # draw vertical black line at splitVal
+    theme_bw() +
+    scale_color_manual("Legend", values=c("H0"="blue", "True"="red"))                      # legend
+  
+  # Show + Return plot
+  return(thePlot)
+}
+
+# Example plot
+example.plot <- theExercise(h0Mean=0, trueMean=6, h0sd=2, truesd=2, alpha=0.05, rangex=c(-9,14)) +
+  labs(title = "Null and True distributions",
+       caption = "H0: mu is 0 and sd is 2,\nTrue: mu is 6 and sd is 2\nshaded with alpha=0.05",
+       x = "prob_densisty", y = "sample_space")
+example.plot
+
+```
+
+
+
+Use the function above to generate the plot where the null hypothesis has mean value of 0 while the true mean is 2.5 (sd is 1 for both). Please also answer the following questions and add them to the figure as you will be turning in one PNG file to CMS.
+
+-What is the pink shaded region?
+
+-What is the blue shaded region?
+
+-What is the typeII error rate for this model?--Add a calculation that prints the beta or type II error using one of the distribution functions (**rnorm**, **dnorm**, **qnorm**, **pnorm**)
+
+The following code can be used to help you get started. Don't forget to add your name and netID to the subtitle and to change the name of the file you're saving to!
+
+
+```{r, eval=FALSE}
+answerplot <- theExercise(h0Mean=0, trueMean=2.5, h0sd=1, truesd=1) + # fill in values as appropriate
+      labs(title = "Lab4 Exercise Turn-in Plot",
+       subtitle = "Name:Kate Harline, NetID:kh694",
+       caption = paste0("The pink region represents the probability of a type I error \n",
+                        "The blue region is represents the probability of a type II error \n",
+                        "The Beta/typeII error value with an alpha of 0.05 for this plot is  0.1962351",
+                        sep='' ),
+       x = "prob_densisty", y = "sample_space")
+
+ggsave("./Lab4_plot.png", answerplot, device="png")
+
+# calculate beta
+q <- qnorm(0.05, mean = 0, lower.tail = FALSE)
+p <- pnorm(q, mean = 2.5, lower.tail = TRUE)
+p
+```
+
+
+
+
+**Challenges (no need to turn these in):**
+
+- Rewrite the function so that the splitVal is determined by an input beta value (instead of the input alpha value)
+
+- Look at different parameters for the true and null hypothesis distributions (both mean and sd)...how does changing the parameters of the distributions affect the beta value? How about the split value? Alpha value?

@@ -1,0 +1,404 @@
+---
+title: "BTRY4830_Lab8"
+author: "Kate Harline"
+date: "3/21/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE, echo = TRUE)
+library(ggplot2)
+```
+
+
+0. Review of Last Week: Getting p-vals
+
+1. Generating QQ plots
+
+2. Multiple Testing
+
+3. Principal Component Analysis
+
+4. Exercise: Try making a QQ-plot and PCA plot yourself
+
+
+
+
+
+## 0. Review so far: Getting p-vals
+
+- In Lab 6 we covered data handling for GWAS: how to load genotype/phenotype data into R and how to encode genotype data to $X_a$ and $X_d$ matrices. (first code chunk below, view in Rmd file)
+
+- Last week's Lab 7 covered calculating the F-statistic to get pvals from each genotype-phenotype pair, then plotted a basic Manhattan plot. (second and third code chunks below, view in Rmd file)
+
+```{r, comment = NA, echo=FALSE, eval = TRUE}
+# Recall from Lab 6...
+## Load Phenotype Data
+phenotype_data <- read.csv(  "./phenotype_data.csv", 
+                     header = TRUE, row.names = 1  )
+## Load Genotype Data
+genotype_data <- read.csv(  "./genotype_data.csv", 
+                      header = TRUE, 
+                      stringsAsFactors = FALSE,
+                      row.names = 1,
+                      colClasses = "character"  )
+# to avoid T being interpreted as TRUE, we can project the characters to lower case
+genotype_data <- apply(genotype_data, 2, tolower)
+
+## Encode Genotype Data as Xa, Xd matrices
+# Function to convert genotype data to Xa encodings
+xa_converter <- function(geno_in){
+  geno_count <- table(geno_in)
+  minor_allele <- names(geno_count[geno_count == min(geno_count)])
+  xa_code <- ifelse(geno_in == minor_allele, 1,0)
+  xa_result <- rowSums(xa_code) - 1
+  return(xa_result)     # what kind of data is returned?
+}
+# Initialize Xa matrix
+xa_matrix <- matrix(NA, 
+                    nrow = nrow(genotype_data), 
+                    ncol = ncol(genotype_data)/2)
+# Store Xa encodings for all genotypes
+for (i in 1:(ncol(genotype_data)/2)){
+  xa_matrix[,i] <- xa_converter(genotype_data[,c(2*i -1, 2*i)])  
+}
+# Encode Xd matrix based on Xa encodings
+xd_matrix <-  1 - 2*abs(xa_matrix)
+
+## Filter Xa, Xd matrices on MAF < 0.1
+xa_maf_calc <- xa_matrix + 1
+MAF <- apply(xa_maf_calc, 2, function(x) sum(x) / (length(x) * 2))
+
+xa_filter <- xa_matrix[,which(MAF > 0.1 & MAF < 0.5)]
+xd_filter <- xd_matrix[,which(MAF > 0.1 & MAF < 0.5)]
+```
+
+```{r, comment = NA, echo=FALSE, eval = TRUE}
+# install.packages(MASS)
+library(MASS)
+
+# Recall from Lab 7 (last week)...
+## Function to calculate the pval given a set of individuals' phenotype, and genotype encodings (LRT, F-statistic)
+pval_calculator <- function(pheno_input, xa_input, xd_input){
+  
+  n_samples <- length(xa_input)
+  
+  X_mx <- cbind(1,xa_input,xd_input)
+  
+  MLE_beta <- ginv(t(X_mx) %*% X_mx) %*% t(X_mx) %*% pheno_input
+  y_hat <- X_mx %*% MLE_beta
+  
+  SSM <- sum((y_hat - mean(pheno_input))^2)
+  SSE <- sum((pheno_input - y_hat)^2)
+  df_M <- 2
+  df_E <- n_samples - 3 
+  
+  MSM <- SSM / df_M
+  MSE <- SSE / df_E
+  
+  Fstatistic <- MSM / MSE
+  
+  pval <- pf(Fstatistic, df_M, df_E,lower.tail = FALSE)
+  
+  return(pval)
+}
+
+## Get pvals for the given data using the function above
+# Initialize variables
+n_geno <- ncol(xa_filter)
+n_pheno <- ncol(phenotype_data)
+pval_mx <- matrix(NA, nrow = n_geno, ncol = n_pheno)
+# Calculate and save pvals for each phenotype-genotype pair
+for (j in 1 : n_pheno) {
+    for (i in 1 : n_geno){
+        pval_mx[i,j] <- pval_calculator(phenotype_data[,j], 
+                                        xa_input = xa_filter[,i], 
+                                        xd_input = xd_filter[,i])
+    }
+}
+```
+
+```{r, echo=FALSE, eval=TRUE}
+# Plot Manhattan plots
+par(mfrow=c(1,2))
+pvals <- data.frame(pval_mx)
+colnames(pvals) <- c('pheno1', 'pheno2')
+# ...for pheno1
+plot(-log10(pvals$pheno1),ylim=c(0,4), main='Phenotype 1 Manhattan Plot')
+abline(h=-log10(0.05),col='blue')
+# ...for pheno2
+plot(-log10(pval_mx[,2]), main='Phenotype 2 Manhattan Plot')
+abline(h=-log10(0.05),col='blue')
+```
+
+## 1. Generating QQ plots
+
+Two big questions we can ask ourselves are:
+
+  (1) Which of these variants biologically relates to the phenotype I am testing
+    
+  (2) Are there any other trends in the data that could be corrupting the direct comparison between the genotype and phenotype
+
+Genome-wide analysis involves hundreds of thousands of statistical tests, and even modest levels of bias can distort the null distribution and overwhelm a small number of true associations. To search for evidence of systemic bias (from unrecognized population structure, analytical approach, genotyping artifacts, etc.), a **quantile-quantile (Q-Q)** plot can be used to characterize the extent to which the observed distribution of the test statistic follows the expected (null distribution). Basically, the QQ-plot compares the values of observed data to values from the expected distribution to look for deviation from the expectation.
+
+Example: You measured a bunch of people in a population and you think the heights are distributed normally but you aren't sure. Use this test to figure it out.
+
+\vspace{20pt}
+
+Today we are looking at the p-values generated from our LRT test last week to check that they are normally distributed. Consider the histograms below of p-values we produced in last week's lab (Lab 7). They somewhat follow a uniform distribution but the QQ plot will be a clearer (yet still subjective) way of checking this uniformity.
+
+```{r, echo=FALSE, fig.height = 3.8, fig.width = 6, fig.align = "center"}
+par(mfrow=c(1,2))
+hist(pval_mx[,1],
+     xlab = "pvals",
+     ylab = "number of genotypes",
+     breaks =09,
+     main = "Histogram of pvalues\ncalculated from Phenotype 1")
+hist(pval_mx[,2],
+     xlab = "pvals",
+     ylab = "number of genotypes",
+     breaks =09,
+     main = "Histogram of pvalues\ncalculated from Phenotype 2")
+```
+
+
+\vspace{20pt}
+
+How to construct a QQ plot for GWAS:
+
+- If you performed N tests, take the -log (base 10) of each of the p-values and put them in rank order from smallest to largest
+
+- Create a vector of N values evenly spaced from $\frac{1}{N}$ to 1 (how do we do this?), take the -log of each of these values and rank them from smallest to largest
+
+- Take the pair of the smallest values of each of these lists and plot a point on an x-y plot with the observed -log p-value on the y-axis and the spaced -log value on the x-axis
+
+- Repeat for the next smallest pair, for the next, etc. until you have plotted all N pairs in order
+
+\vspace{20pt}
+
+To check the pvalues from last week's lab, we can generate a QQ plot of the observed values against the expected uniformly distributed values. Any deviation from the X=Y line implies a consistent difference between cases and controls across the whole genome (suggesting a bias like the ones I've mentioned). A clean QQ plot (see below), on the other hand, should show a solid line matching X=Y until it sharply curves at the end (representing the small number of true associations among thousands of unassociated SNPs).
+
+\vspace{20pt}
+
+```{r, echo=FALSE, fig.cap="(A) ideal GWAS case where there are NO causal polymorphisms, (B) ideal GWAS case where there ARE causal polymorphisms, (C) uh oh!", out.width = '30%', fig.show='hold', fig.align='center'}
+knitr::include_graphics(c("normal_QQ.png", "ideal_QQ.png", "uh_oh_QQ.png"))
+```
+
+
+**POSSIBLE OUTCOME (A):** In an ideal GWAS case where there ARE NO causal polymorphisms, you QQ will look like the figure below. The reason is that we will observe a uniform distribution of p-values from such a case in our QQ we are plotting this observed distribution of p-value versus the expected distribution of p-values: a unifrom distribution (where both have been -log transformed). Note that if your GWAS analysis is correct but you do not have enough power to detect positions of causal polymorphisms, this will also be your result, i.e. it is a way to assess whether you can detect any hits in your GWAS.
+
+\vspace{20pt}
+
+**POSSIBLE OUTCOME (B):** In an ideal GWAS case where there ARE causal polymorphisms, your QQ plot will be a line with a tail like the figure below. This happens because most of the p-values observed follow a uniform distribution (i.e. they are not in LD with a causal polymorphism so the null hypothesis is correct!) but the few that are in LD with a causal polymorphism will produce significant p-values (extremely low = extremely high -log(p-values)) and these are in the "tail." This is how we want our QQ-plot to look.
+
+
+\vspace{20pt}
+
+**POSSIBLE OUTCOME (C):** In practice, you can find your QQ plot looks different than either the "null GWAS" case or the "ideal GWAS" case. This indicates that something is wrong, and, if this is the case, you should not interpret any of your significant p-values as indicating locations of causal polymorphisms. Note that this means that you need to find an analysis strategy such that the result of your GWAS produes a QQ plot that does NOT look like this (note that this takes experience and many tools to do consistently!). Also note that unaccounted for covariates can cause this issue and the most frequent culprit is unaccounted for population structure.
+
+
+
+
+
+\vspace{20pt}
+
+
+
+You will create a QQ-plot for the p-values for the exercise this week (see below).
+
+
+
+## 2. Multiple Testing
+
+
+Some fun: https://xkcd.com/882/
+
+Since the goal of a GWAS is to minimize the number of false positives, we may want to perform a multiple test-correction. Multiple tests arise when a statistical analysis involves multiple simultaneous statistical tests, each of which has a potential to produce a "discovery." A stated confidence level generally applies only to each test considered individually, but often it is desireable to have a confidence level for the whole family of simultaneous tests. Below is a simulation of 12000 uniformly-distributed pvalues to demonstrate when you perform a test many times, some fraction is bound to fall within the type I error cutoff ($\alpha=0.5$).
+
+```{r}
+sim_pvals <- runif(12000,min = 0,max = 1)
+plot(seq(length(sim_pvals)), -log10(sim_pvals), xlab='polymorphic site', ylab='-log10(pval)', main='Simulated manhattan plot')
+abline(h=-log10(0.05), col='red')
+```
+
+```{r, echo=FALSE, eval=TRUE}
+cat('There are', sum(sim_pvals <0.05), '"significant" pvals')
+```
+
+
+### Solution A: Bonferroni Correction method
+
+Methods for dealing with multiple testing frequently call for adjusting $\alpha$ in some way, so that the probability of observing at least one significant result due to chance remains below your desired signficance level. The **Bonferroni correction** is at a signficance level of $\frac{\alpha}{m}$ where $\alpha$ is the desired overall $\alpha$ level and $m$ is the number of hypotheses. Let's see how many are below this threshold.
+
+Now lets see how many significant hits we have for the basic Type I error vs those with the Bonferroni correction applied in the set of pvalues we generated for the first phenotype in last week's lab (Lab 7).
+
+```{r, echo=FALSE, eval=TRUE}
+# Plot Manhattan plots of data from the last lab
+par(mfrow=c(1,2))
+# ...for pheno1
+plot(-log10(pvals$pheno1),ylim=c(0,4), main='Phenotype 1 Manhattan Plot')
+abline(h=-log10(0.05),col='blue')
+abline(h=-log10(0.05/n_geno),col='red')      # Bonferroni correction
+# ...for pheno2
+plot(-log10(pval_mx[,2]), main='Phenotype 2 Manhattan Plot')
+abline(h=-log10(0.05),col='blue')
+abline(h=-log10(0.05/n_geno),col='red')      # Bonferroni correction
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+cat('Significant hits for Phenotype 1 w/ type 1 error 0.05 = ', sum(pval_mx[,1] < 0.05), '\n')
+cat('Significant hits for Phenotype 2 w/ type 1 error 0.05 = ', sum(pval_mx[,2] < 0.05), '\n')
+cat('Significant hits for Phenotype 1 w/ type 1 error 0.05/n_geno (Bonferroni) = ', sum(pval_mx[,1] < 0.05/n_geno), '\n')
+cat('Significant hits for Phenotype 2 w/ type 1 error 0.05/n_geno (Bonferroni) = ', sum(pval_mx[,2] < 0.05/n_geno), '\n')
+```
+
+
+
+### Solution B: Benjamini-Hochberg and others
+
+Another way of dealing with multiple testing is the **Benjamini-Hochberg** method which aims to control the number of false discoveries among rejected hypotheses. The calculation for this isn't complicated so you can look this up in your own time on how it works but know that unlike the Bonferoni corrections, it is a little more involved in coding than the Bonferoni correction. Luckily, R has a function of this!
+ 
+- Introducing the **p.adjust** function:
+
+```{r}
+bonf_pvals <- p.adjust(sim_pvals,method = "bonferroni")   # Bonferroni
+bh_pvals <- p.adjust(sim_pvals,method = "BH")   # Benjamini-Hochberg, can also use the string 'fdr'
+bonf_pvals_ourvsn <- sim_pvals*length(sim_pvals)
+bonf_pvals_ourvsn[bonf_pvals_ourvsn > 1] = 1
+
+unique(bonf_pvals)
+unique(bonf_pvals_ourvsn)
+```
+
+```{r}
+print(paste("The total pvals that are significant =", sum(sim_pvals<0.05)))
+print(paste("The total pvals that are significant =", sum(bonf_pvals<0.05)))
+print(paste("The total pvals that are significant =", sum(bh_pvals<0.05)))
+```
+
+
+- But what if there are 3 variants that are significant
+
+```{r}
+# sample 3 random indexes from simulated pvals and assign them significant pvals
+sim_pvals[sample(seq(sim_pvals),3)] <- runif(3,min = 10^-10,max = 10^-6)
+# use p.adjust to correct simulated data in using both methods
+bonf_pvals <- p.adjust(sim_pvals,method = "bonferroni")
+bh_pvals <- p.adjust(sim_pvals,method = "BH")
+```
+```{r, echo=FALSE, eval=TRUE}
+# compare which values are significant
+print(paste("The total pvals that are significant (bonf_pvals) =", sum(bonf_pvals<0.05)))
+print(paste("The total pvals that are significant (bh_pvals)   =", sum(bh_pvals<0.05)))
+```
+
+
+- Try increasing the size of the pvalue vector (increase number of tests): Bonferonni will begin to accept nothing despite the fact that many of the variants may be significant
+
+- To get past this problem the GWAS community has agreed that the cut-off is 5*10^-8, although there is still some debate (https://www.nature.com/articles/ejhg2015269, https://academic.oup.com/ije/article/41/1/273/647338)
+
+
+
+
+
+## 3. Principal Component Analysis
+
+**Principal components analysis(PCA)** is important for genetic analysis for two reasons:
+
+  (1) The measured data is often very high dimensional (meaning there are thousands of SNPs measured, or genes measured for their expression).  Visualizing this data is impossible as we only see in 3-dimensions.  PCA lets us condense the dimensionality.
+  (2) Ancestry or population structure is a large and sometimes overwheling cause for why genetic data looks the way it does.  If we are testing whether SNP A causes trait X, we want to make sure that the p-value reflects SNP A, not the habits of the people that contain SNP A.  To factor out this population structure trend we must first measure it - for this task we use PCA.
+
+Think of PCA as a process to find the axes with the most variation in high-dimensional data, and then project that data onto these new axes. This will allow for easier statistical analysis and visualization of the data. For a full explanation of the process, you can read the following tutorial but fully understanding PCA will require some basic linear algebra and is beyond the scope of this class.
+
+- Tutorial written by Jonathon Shelns on PCA: http://arxiv.org/pdf/1404.1100.pdf
+
+Let's begin with a simple case where we have two measured variables x and y which are generated like this:
+
+```{r , comment = NA, fig.align='center'}
+# Create some fake data and store as matrix
+set.seed(2019)
+x <- rnorm(300,2,1)
+y <- x + rnorm(300,0.5,1)
+example.data <- cbind(x,y)
+# Plot the fake data
+plot(example.data[,1],example.data[,2])
+```
+
+We can see that x and y are heavily correlated, which is not very surprising since the value of y was generated based on the value of x. In this case we don't really need to reduce the dimensions since a 2-D plot is easy to generate. However, for the sake of demonstration (and the lack of ability to plot 4 or 5 dimensional data) let us try to reduce this 2 dimensional dataset into a single dimension without losing too much information. The most valuable information in this dataset is probably the correlation between x and y (since there is not much left if you take that relationship out... just normal errors). So it seems like a good idea to keep that information in the single dimension that we have. Let's first center our data to (0,0) to make it easier to draw vectors. 
+
+
+```{r , comment = NA, fig.align='center'}
+example.data.center <- scale(example.data, center = TRUE, scale = FALSE)
+plot(example.data.center[,1], example.data.center[,2],xlim = c(-5,5), ylim = c(-5,5))
+arrows(x0=0, y0=0, x1 = 1, y1 = 0, col = "red", lwd = 3,length =0.15)
+arrows(x0=0, y0=0, x1 = 0, y1 = 1, col = "red", lwd = 3,length =0.15)
+```
+
+So right now the data is represented by the coordinates of x and y, and the basis vectors are (1,0) and (0,1) shown as the red arrows. In order to capture the relationship between x and y and representing the data in 1-D we would probably use a vector that goes along the diagonal of the data. The direction along the diagonal explains the the largest amount of variance in the data (has the largest spread along its direction) and if we project each data point onto this vector we wont be losing too much information about the relationship between x and y. Let's find out the exact direction of that vector by using pca in R. There are two functions in R that are commonly used to perform pca: prcomp() and princomp(). Although they are doing the same thing, they use slightly different methods to calculate the outcomes and prcomp() happens to use the method that is faster and is computationally less expensive. So let's use prcomp() to do our calculations.
+
+```{r}
+# when you use prcomp, your input data should have measured variables in columns and individual samples/points as rows (N samples x G genes (genotypes))
+pca.result <- prcomp(example.data.center)
+```
+
+That was easy, but what is saved in the result?
+
+```{r}
+str(pca.result)
+```
+
+You can see that there are 5 different results saved in the variable pca.result.
+
+```{r}
+#$sdev contains information about the fraction of variation explained by a certain principal component.
+pca.result$sdev
+(pca.result$sdev / sum(pca.result$sdev))*100
+summary(pca.result)
+```
+
+What is shown here is the percentage of variance explained by each principal component. This means that the first PC explains ~88% of the variation in the data, and the second component explains about 11% of the variation and so on. 
+
+```{r}
+#$rotation contains the directions of principal components in each of its columns.
+pca.result$rotation
+plot(example.data.center[,1], example.data.center[,2],
+     xlim = c(-5,5), ylim = c(-5,5))
+arrows(x0=0, y0=0,
+       x1 = pca.result$rotation[1,1],
+       y1 = pca.result$rotation[2,1],
+       col = 'green', lwd = 2)
+arrows(x0=0, y0=0,
+       x1 = pca.result$rotation[1,2],
+       y1 = pca.result$rotation[2,2],
+       col = 'green', lwd = 2)
+```
+
+This shows us the directions of our principal components in each of its columns. We can see that the first PC is the direction along the diagonal.
+
+```{r}
+#$center contains the mean for each data column (in our case it would be close or equal to 0 since we centered the data). 
+pca.result$center
+
+#$scale contains information about whether or not we gave the option to scale (divide it by its standard deviation) the data. 
+pca.result$scale
+
+#$x contains the coordinate values of the data projected to a principal component in each of its columns.
+plot(pca.result$x[,1],pca.result$x[,2],xlim = c(-5,5), ylim = c(-5,5))
+```
+
+
+
+You can see that the representation of the data looks like a rotation using the diagonal of the original data as the first axis. So if we are interested in only keeping 1-D of the data without losing too much information, our best shot would be to keep the first column of the projected data pca.result$x[,1].
+
+
+
+## 4. Exercise: Try making a QQ-plot and PCA plot yourself
+
+Make the two plots below and plop them into a figure. Turn the image file into CMS when you are done.
+
+- Use the dataset from computer lab 7 to generate QQ plots for the pvalues calculated for the second phenotype last week. (See the Rmd of this week's lab for the code up until now). This is your first graph for the figure to turn into CMS
+
+- Generate a PCA plot for the pca_example.csv dataset included with the lab materials on CMS. This is your second graph for the figure to turn into CMS
+

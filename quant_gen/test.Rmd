@@ -1,0 +1,50 @@
+---
+title: "kh694_Hw3"
+author: "Kate Harline"
+date: "2/16/2019"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+header-includes:
+- \usepackage{geometry}
+- \usepackage{graphicx}
+- \usepackage{amssymb}
+- \usepackage{epstopdf}
+- \usepackage{setspace}
+- \usepackage{paralist}
+- \usepackage{amsmath}
+- \usepackage{epsfig,psfrag}
+- \usepackage{color}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\title{Quantitative Genomics and Genetics - Spring 2019 \\
+BTRY 4830/6830; PBSB 5201.01}
+\author{Homework 3 (version 1)}
+\date{Assigned February 12; Due 11:59PM February 16}    
+
+\maketitle
+\section*{Problem 1 (Easy)}
+
+\begin{itemize}
+
+\item[a.]
+
+Yes, this is a valid estimator. Any function that returns a value for a parameter is technically an estimator. However, creating an estimator that correctly represents the underlying probability distribution for the data is more difficult. $\hat{p}= 0.5$ would be correct if the coin is fair.
+
+\item[b.] 
+
+This would calculate the $\hat{p}$ based on the actual observations from the experiment, rather than relying on the underlying assumption that the experiment properly follows a Bernoulli distribution with ${p}= 0.5$, i.e. the coin is fair.
+
+\end{itemize}
+\section*{Problem 2 (Medium)}
+
+
+```{r}
+a <- 3+3
+a
+```
