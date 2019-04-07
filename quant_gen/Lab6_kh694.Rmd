@@ -1,0 +1,71 @@
+---
+title: "Lab6"
+author: "Kate Harline"
+date: "3/7/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+## Genotype Data Handling
+```{r}
+# load file
+genotype_data <- read.csv("./genotype_data.csv", header=TRUE, stringsAsFactors = FALSE, row.names = 1, colClasses = "character")
+class(genotype_data)
+# fix converison of T to true
+genotype_data <- apply(genotype_data, 2, tolower)
+
+# convert the values to dummy encodings
+xa_converter <- function(geno_in){
+  geno_count <- table(geno_in)
+  minor_allele <- names(geno_count[geno_count == min(geno_count)])
+  xa_code <- ifelse(geno_in == minor_allele, 1, 0)
+  xa_result <- rowSums(xa_code) - 1
+  return(xa_result)
+}
+# initialize matrix to create encodings
+xa_matrix <- matrix(NA, nrow = nrow(genotype_data), ncol = ncol(genotype_data)/2)
+# store xa encodings
+for (i in 1:(ncol(genotype_data)/2)){
+  xa_matrix[,i] <- xa_converter(genotype_data[,c(2*i -1, 2*i)])
+}
+head(xa_matrix[, 1:10])
+
+```
+## Exercise
+
+# A
+```{r}
+# convert x_as to x_d
+xd_matrix <- -2*abs(xa_matrix)+1
+head(xd_matrix[, 1:10])
+```
+# B
+
+```{r}
+# load phenotype data
+phenotype_data <- read.csv("./phenotype_data.csv", header=TRUE, stringsAsFactors = FALSE, row.names = 1, colClasses = "character")
+
+hist(as.numeric(phenotype_data[,"pheno1"]), xlab = 'Phenotype 1 value', main = 'Phenotype 1 Distribution')
+hist(as.numeric(phenotype_data[,"pheno2"]), xlab = 'Phenotype 2 value', main = 'Phenotype 2 Distribution')
+
+
+```
+
+# C
+
+```{r}
+# convert back out of dummy encoding
+xa_maf_calc <- xa_matrix + 1
+  # find the minor allele frequency 
+MAF <- apply(xa_maf_calc, 2, function(x) sum(x) / (length(x)*2))
+# make sure minor allele and filter
+xa_filter <- xa_matrix[, which(MAF > 0.1 & MAF < 0.5)]
+xd_filter <- xd_matrix[, which(MAF > 0.1 & MAF < 0.5)]
+xa_filter
+xd_filter
+```

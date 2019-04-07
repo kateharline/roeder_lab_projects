@@ -1,0 +1,63 @@
+---
+title: "HW6"
+author: "Kate Harline"
+date: "4/5/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1
+# A
+
+The assumption of a linear regression is that $\epsilon \sim N(0, \sigma^2)$ regardless of the distribution of the independent variables (genotypes, X). This imposes the same assumption on the dependent variable (phenotypes, Y) because in the simplest case for one individual $\hat{y_i} = \hat{\beta_{\mu}} + x_{i,a}\hat{\beta_{a}} + x_{i,d}\hat{\beta_{d}} + \epsilon$ when a polymorphism is noncausal,  $\hat{\beta_{a}} = \hat{\beta_{d}} = 0$ so $\hat{y_i} = \hat{\beta_{\mu} + \epsilon \sim N(0, \sigma^2)$ therefore the distribution for the linear regression model follows $Pr(Y | X) \sim N(\beta_{\mu} + X_{a}{\beta_{a}} + X_{d}\beta_{d}, \sigma^2_{\epsilon}$.
+
+# B
+
+Correctly rejecting the null hypothesis in a GWAS signifies that the region that contains this "hit" contains the causal polymorphism, not that the "hit" itself is causal. Due to the structure of genomes and the current depth of sequencing data, a GWAS is a mapping experiment. Genomic structure and inheritance patterns dictate that through linkage disequilibrium, sites that are closer together are inherited together. 
+
+On the other hand, there is always a chance the null hypothesis was rejected incorrectly and therefore we have obtained a false positive. We control for the false positives by setting a lower alpha and doing multi-test corrections. 
+
+## Problem 2
+
+# A
+```{r}
+# input the phenotype data and report the number of samples, s
+phenotypes <- read.table("./QG19 - hw6_phenotypes.txt", header = T)
+n <- length(phenotypes[,1])
+cat('There are n = ', n, 'samples')
+```
+
+# B
+```{r}
+# make a histogram of the phenotype data
+hist(phenotypes[,1], main = 'Distribution of Scaled Heights', xlab = 'Scaled Height')
+```
+
+# C
+```{r}
+# input genotype data, report the number of genotypes N, sample size n
+genotypes <- read.table("./QG19 - hw6_genotypes.txt", header = T)
+N <- ncol(genotypes)
+
+n <- nrow(genotypes) / 2
+cat('There are N = ', N, ' genotypes. There are n = ', n, ' samples.')
+```
+
+# D
+```{r}
+# convert genotypes into xa and xd matrices
+# set up new matrix
+xa_matrix <- matrix(NA, nrow = nrow(genotypes), ncol = ncol(genotypes))
+# fill with x_a values
+for (i in 1:ncol(genotypes)) {
+  xa_matrix[,i] <- sapply(genotypes[,i], (function(x) switch (x,
+    'A1A1' = -1, 'A1A2' = 0, 'A2A2' = 1
+  )))
+}
+# then convert x_a to x_d
+xd_matrix <- -2*abs(xa_matrix)+1
+
+```

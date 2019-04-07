@@ -1,0 +1,331 @@
+---
+title: "BTRY4830_Lab7"
+author: "Olivia Lang"
+date: "3/14/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE, echo = TRUE)
+library(ggplot2)
+```
+
+
+0. Review of Last Week: Loading and Handling Genotype and Phenotype data
+
+1. Some Useful equations to recall from lecture
+
+2. Calculating P-vals
+
+3. Visualizing your results--Histogram of pvalues
+
+4. Exercise: Visualizing your results--The Manhattan Plot
+
+\vspace{12pt}
+\centerline{ \textit{ Lecture 12 slides are a good resource for this lab } }
+
+
+## 0. Review of Last Week: Loading and Handling Genotype and Phenotype data
+
+Last week we covered data handling for GWAS: how to load genotype/phenotype data into R and how to encode genotype data to $X_a$ and $X_d$ matrices. This week we are using the same data (I hope you kept your code!) to conduct a GWAS. By the end of the class, you should be able to produce a basic Manhattan Plot.
+
+```{r, comment = NA, echo=FALSE, eval = TRUE}
+# Recall from last week...
+## Load Phenotype Data
+phenotype_data <- read.csv(  "./phenotype_data.csv", 
+                     header = TRUE, row.names = 1  )
+## Load Genotype Data
+genotype_data <- read.csv(  "./genotype_data.csv", 
+                      header = TRUE, 
+                      stringsAsFactors = FALSE,
+                      row.names = 1,
+                      colClasses = "character"  )
+# to avoid T being interpreted as TRUE, we can project the characters to lower case
+genotype_data <- apply(genotype_data, 2, tolower)
+
+## Encode Genotype Data as Xa, Xd matrices
+# Function to convert genotype data to Xa encodings
+xa_converter <- function(geno_in){
+    geno_count <- table(geno_in)
+    minor_allele <- names(geno_count[geno_count == min(geno_count)])
+    xa_code <- ifelse(geno_in == minor_allele, 1,0)
+    xa_result <- rowSums(xa_code) - 1
+    return(xa_result)     # what kind of data is returned?
+}
+# Initialize Xa matrix
+xa_matrix <- matrix(NA, 
+                    nrow = nrow(genotype_data), 
+                    ncol = ncol(genotype_data)/2)
+# Store Xa encodings for all genotypes
+for (i in 1:(ncol(genotype_data)/2)){
+    xa_matrix[,i] <- xa_converter(genotype_data[,c(2*i -1, 2*i)])  
+}
+# Encode Xd matrix based on Xa encodings
+xd_matrix <-  1 - 2*abs(xa_matrix)
+
+## Filter Xa, Xd matrices on MAF < 0.1
+xa_maf_calc <- xa_matrix + 1
+MAF <- apply(xa_maf_calc, 2, function(x) sum(x) / (length(x) * 2))
+
+xa_filter <- xa_matrix[,which(MAF > 0.1 & MAF < 0.5)]
+xd_filter <- xd_matrix[,which(MAF > 0.1 & MAF < 0.5)]
+```
+
+## 1. Some Useful equations to recall from lecture
+
+Recall from last lab we encoded the $X_a$ and $X_d$ variables from the genotypes:
+
+\begin{equation}
+X_a(A_1 A_1)=-1, X_a(A_1 A_2)=0, X_a(A_2 A_2)=1
+\end{equation}
+
+\begin{equation}
+X_d(A_1 A_1)=-1, X_d(A_1 A_2)=1, X_d(A_2 A_2)=-1
+\end{equation}
+
+In lecture you discussed the probability model for $X$ and $Y$ where $X$ is the independent variable and $Y$ is the dependent variable:
+
+\begin{equation}
+Y = \beta_aX_a + \beta_dX_d + \beta_\mu + \epsilon
+\end{equation}
+
+...expanded out as matrices for your sample:
+
+\begin{equation}
+%
+  \begin{bmatrix}
+    y_1 \\
+    y_2 \\
+    \vdots \\
+    y_n
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    1 & x_{1,a} & x_{1,d} \\
+    1 & x_{2,a} & x_{2,d} \\
+    \vdots & \vdots & \vdots \\
+    1 & x_{n,a} & x_{n,d}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \beta_\mu \\
+    \beta_a \\
+    \beta_d
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+    \epsilon_1 \\
+    \epsilon_2 \\
+    \vdots \\
+    \epsilon_n
+  \end{bmatrix}
+%
+\end{equation}
+
+We can solve for the $MLE(\hat{\beta})$ with the following equation:
+
+\begin{equation}
+MLE(\hat{\beta}) = (\mathbf{x}^{T}\mathbf{x})^{-1} \mathbf{x}^{T}\mathbf{y}
+\end{equation}
+
+
+Leaving us an equation of the estimates:
+
+\begin{equation}
+\hat{y_i} = \hat{\beta_a}X_a + \hat{\beta_d}X_d + \hat{\beta_\mu}
+\end{equation}
+
+**Note Assumption:** for these analyses, we are assuming a normal distribution of the phenotype:
+
+\begin{equation}
+Pr(Y|X) \sim (\beta_\mu + X_a\beta_a + X_d\beta_d, \sigma_\epsilon^2)
+\end{equation}
+
+
+
+### Other equations to use when calculating pval in the next section:
+
+\begin{equation}
+SSM = \sum_{i=1}^{n}(y_i-\hat{y_i})^2
+\end{equation}
+
+
+\begin{equation}
+SSE = \sum_{i=1}^{n}(\hat{y_i}-\bar{y})^2
+\end{equation}
+
+
+\begin{equation}
+df(M) = 3-1 = 2
+\end{equation}
+
+
+\begin{equation}
+df(E) = n-3
+\end{equation}
+
+
+\begin{equation}
+MSM = \frac{SSM}{df(M)} = \frac{SSM}{2}
+\end{equation}
+
+
+\begin{equation}
+MSE = \frac{SSE}{df(E)} = \frac{SSE}{n-3}
+\end{equation}
+
+
+\begin{equation}
+F_{[2,n-3]} = \frac{MSM}{MSE}
+\end{equation}
+
+
+
+## 2. Calculating P-vals
+
+To do a GWAS, we need to calculate the pvalues of each genotype where the case for the null hypothesis where $\beta_a=0$ and $\beta_d=0$. We are going to use the test statistic discussed in class to evaluate this null hypothesis.
+
+\begin{equation}
+T( \mathbf{y}, \mathbf{x_a}, \mathbf{x_d} | H_0: \beta_a=0 \cap \beta_d=0 )
+\end{equation}
+
+Where in this case, our test statistic is the F-statistic calculated using the Likelihood Ratio Test (LRT). Below is the pseudocode for conducting the LRT: (1) calculate the statistic and then (2) find the pvalue for that statistic.
+
+Note (1) You will need to calculate the inverse of a matrix for this so please use the **ginv()** function from the *MASS* package instead of the **solve()** function. (2) We didn't go over matrix manipulation too much which is why I am providing the code to you here but matrix multiplication syntax is **%*%** and you can transpose a matrix using the **t()** function.
+
+
+```{r, eval = FALSE}
+# The pseudo code for this task
+
+# Calculate all the component values for determining an Fstatistic according to the equations above
+MLE.beta <- calculate MLE.beta 
+y.hat <- calculate the estimated values of y given the MLE>beta values
+
+SSM <- calculate SSM
+SSE <- calculate SSE
+ 
+df.M <- ?
+df.E <- ?
+
+MSM <- calculate MSM
+MSE <- calculate MSE
+
+# Calculate the Fstatistic from all the components
+Fstatistic <- MSM / MSE
+
+# use the f-distribution functions for this test (pf,df,qf,rf)
+pf(Fstatistic, df.M,df.E,lower.tail =FALSE)
+```
+
+
+Below is the actual code that fills out the pseudocode above. The pvalue calculations were wrapped in a function that outputs a single pvalue for the genotype-phenotype pair input. Below the function is the execution of the function on our loaded genotype and phenotype data where the function is called on each phenotype and genotype pair and stored in the *pval_mx*.
+
+
+```{r, comment = NA, results='hide'}
+# install.packages(MASS)
+library(MASS)
+
+# Function to calculate the pval given a set of individuals' phenotype, and genotype encodings.
+pval_calculator <- function(pheno_input, xa_input, xd_input){
+    n_samples <- length(xa_input)
+
+    X_mx <- cbind(1,xa_input,xd_input)
+    
+    MLE_beta <- ginv(t(X_mx) %*% X_mx) %*% t(X_mx) %*% pheno_input
+    y_hat <- X_mx %*% MLE_beta
+  
+    SSM <- sum((y_hat - mean(pheno_input))^2)
+    SSE <- sum((pheno_input - y_hat)^2)
+  
+    df_M <- 2
+    df_E <- n_samples - 3 
+  
+    MSM <- SSM / df_M
+    MSE <- SSE / df_E
+    
+    Fstatistic <- MSM / MSE
+  
+    pval <- pf(Fstatistic, df_M, df_E,lower.tail = FALSE)
+
+    return(pval)
+}
+
+# Initialize some variables and constants
+n_geno <- ncol(xa_filter)
+n_pheno <- ncol(phenotype_data)
+pval_mx <- matrix(NA, nrow = n_geno, ncol = n_pheno)
+
+# Calculate and save pvals for each phenotype-genotype pair
+for (j in 1 : n_pheno) {
+    for (i in 1 : n_geno){
+        pval_mx[i,j] <- pval_calculator(phenotype_data[,j], 
+                                        xa_input = xa_filter[,i], 
+                                        xd_input = xd_filter[,i])
+    }
+}
+```
+
+
+
+## 3. Visualizing your results--Histogram of pvalues
+
+So we've calculated the pvalues, let's see what they look like! Plot a Histogram of the p-values and see if it follows a uniform distribution:
+
+```{r}
+par(mfrow=c(1,2))
+hist(pval_mx[,1],
+     xlab = "pvals",
+     ylab = "number of genotypes",
+     breaks =12,
+     main = "Histogram of pvalues\ncalculated from Phenotype 1")
+hist(pval_mx[,2],
+     xlab = "pvals",
+     ylab = "number of genotypes",
+     breaks =12,
+     main = "Histogram of pvalues\ncalculated from Phenotype 2")
+```
+
+
+Now lets see how many significant hits we have. For a Type I error of 0.05, how many genotypes are significant for phenotype 1? for phenotype 2?
+
+```{r}
+cat('Significant hits for Phenotype 1 w/ type 1 error 0.05 = ', sum(pval_mx[,1] < 0.05), '\n')
+cat('Significant hits for Phenotype 2 w/ type 1 error 0.05 = ', sum(pval_mx[,2] < 0.05), '\n')
+```
+
+
+
+
+## 4. Exercise: Visualizing your results--The Manhattan Plot
+
+With your pvals calculated for each genotype-phenotype pair, you can create a **Manhattan Plot** for each of the phenotypes you tested. In GWAS Manhattan plots, genomic coordinates are displayed along the X-axis, with the negative logarithm of the association p-value for each SNP displayed on the Y-axis, meaning that each dot on the Manhattan plot signifies a SNP. Since the strongest associations have the smallest p-values, their negative logarithms will be the greatest. So, we want to look for peaks.
+
+Please generate a Manhattan Plot for each phenotype in your data. Add a horizontal line to indicate the threshold for the Type I error rate of 0.05.
+
+-Manhattan plot
+
+-line for traditional Type I error rate of 0.05
+
+When you are done, please submit to CMS a PNG image of the Manhattan Plots for both phenotypes on one figure, indicating which plot blongs to which phenotype in the title.
+
+Reminder: use **par(mfrow=c(n,m))** or the **grid.arrange()** function from the *gridExtra* package to add multiple plots to the same figure
+
+```{r}
+
+library(ggplot2)
+library(gridExtra)
+
+neg_log_p <- -1 * log(pval_mx)
+x <- seq(1, length(neg_log_p[,1]))
+y <- neg_log_p[,1]
+y2 <- neg_log_p[,2]
+neg_log_p[,1]
+
+plot1 <-ggplot(data = data.frame(x, y), mapping = aes(x, y)) + geom_point() + geom_hline(yintercept=-log(0.05), col='blue') + labs(x = 'Genomic Position', y= '-log(p)', title = 'GWA Hits Phenotype 1') + ylim(0,20)
+
+plot2 <-ggplot(data = data.frame(x, y2), mapping = aes(x, y2)) + geom_point() + geom_hline(yintercept=-log(0.05), col='blue') + labs(x = 'Genomic Position', y= '-log(p)', title = 'GWA Hits Phenotype 2') + ylim(0,20)
+
+
+plot3 <- grid.arrange(plot1,plot2, nrow=1, ncol=2)
+ggsave('./lab7_kh694.png', plot3, device='png')
+```

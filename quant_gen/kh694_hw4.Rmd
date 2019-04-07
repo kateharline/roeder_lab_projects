@@ -1,0 +1,112 @@
+---
+title: "HW#4"
+author: "Kate Harline feat. T-Bone"
+date: "3/3/2019"
+output: pdf_document
+---
+
+# Problem 1
+
+## A
+When you reject or do not reject a null hypothesis this is only within the constraints of the $\alpha$ you chose. $\alpha$ determines the p value and those more extreme at which point you reject the null. It is still possible however, that the data from which you calculated a p-value and compared it to the chosen $\alpha$ is still drawn from the null distribution by chance and you have therefore incorrectly rejected the null, or commited a type I error.
+
+## B
+We precisely set the type I error by choosing an $\alpha$ at which point we reject the $H_o$ and cannot reject $H_o$ but we will never know the true parameter value which is what determines the calculation of the power $1 - \beta$.
+
+# Problem 2
+## A
+The marginal probability distribution for each element follows $N ~ (\mu = 5.5, \sigma^2 = 0.5$. The correlation matrix is a symmetric matrix with each element the pairwise correlation between all $X_i$. Therefore, the off diagonal terms are given by:
+$Corr(X_1, X_2) = \frac{Cov(X_1, X_2)}{sqrt(Var(X_1))sqrt(Var(X_2))}$  for i.i.d. samples $Cov(X_1, X_2) = 0$ which gives 0. For the diagonal elements, this simplifies to $Corr(X_1, X_2) = \frac{Var(X_1, X_1)}{sqrt(Var(X_1))sqrt(Var(X_1))}$ which simplifies to 1. 
+
+## B
+No, the sampling distribution of the statistic need not follow the same distribution as the distribution of the sample from which it is calculated. The transformations invovled in calculating the statistic govern the distribution that it follows. 
+
+## C
+```{r}
+# modified from lab 5
+sampling_function <- function(sample_size, number_of_samples, sample_mean, sample_var){
+  
+  sample_sd <- sqrt(sample_var)
+  normSamples <- matrix(0,nrow=number_of_samples,ncol=sample_size)
+  for(i in 1:number_of_samples){
+    normSamples[i,] <- rnorm(sample_size, mean = sample_mean, sd = sample_sd)
+  }
+  
+  # param values to use in pnorm
+  sampleMeans <- apply(normSamples, 1, mean)
+  # basicR plot
+  hist(sampleMeans, probability = TRUE)
+  return(sampleMeans)
+}
+set.seed(777)
+sampling_function(sample_size = 100, 
+                  number_of_samples = 1000, sample_mean = 5.5, sample_var = 0.5)
+```
+
+## D
+```{r}
+sampling_function(sample_size = 10, 
+                  number_of_samples = 1000, sample_mean = 5.5, sample_var = 0.5)
+```
+
+## E
+The sampling distribution of the mean follows $N ~ (\mu = 5, \sigma^2 = \frac{0.5}{n})$
+
+## F
+```{r}
+sampling_function(sample_size = 100, 
+                  number_of_samples = 1000, sample_mean = 5, sample_var = 0.5)
+```
+## G
+```{r}
+sampling_function(sample_size = 10, 
+                  number_of_samples = 1000, sample_mean = 5, sample_var = 0.5)
+```
+
+## H 
+It makes sense that the histograms are "shifted" because you are using a different $\mu$ to generate the random samples, therefore the distribution of the statistic $T(x)$ changes to be centered around these different $\mu$.
+
+## I
+```{r}
+p_calc <- function(s, sample_mean, sample_var, sample_size) {
+  p_val <- 2*(1- pnorm(abs(s), mean = sample_mean, sd = sqrt(sample_var/sample_size)))
+  return(p_val)
+  
+}
+
+big_x <- sampling_function(sample_size = 100, 
+                  number_of_samples = 1, sample_mean = 5.5, sample_var = 0.5)
+big_x
+big_p <- p_calc(big_x, sample_mean = 5, sample_var = 0.5, sample_size = 100)
+print(paste('T(x) = ', big_x, ' p value = ', big_p))
+
+```
+Based on this p value, you reject the $H_o$ because $0 < .05$
+
+##J
+
+```{r}
+
+small_x <- sampling_function(sample_size = 10, 
+                  number_of_samples = 1, sample_mean = 5.5, sample_var = 0.5)
+small_p <- p_calc(big_x, sample_mean = 5, sample_var = 0.5, sample_size = 10)
+print(paste('T(x) = ', small_x, ' p value = ', small_p))
+
+```
+Based on this p value, you cannot reject the $H_o$ because $0.00581904636620689 > .05$ This makes sense because increasing sample size decreases the type I error.
+
+# Problem 3
+From the definition of a p-value
+$p = Pr(T(x) \geq t | H_o : c = \theta) \\$
+Which can be writted to consider the otherside of the distribution as
+$p = 1 - Pr(T(x) < t | H_o) \\$
+$Pr(T(x) < t | H_o)$ is the cdf for the null hypothesis such that
+$ p = 1 - F_o(t) \\$ 
+From the definition of cdf
+$Pr(T(x) \geq t | H_o) = Pr(F_o(T) \geq F_o(t) \\$
+which can also be changed to
+$Pr(T(x) \geq t | H_o) = 1 - Pr(F_o(T) \leq F_o(t) \\$
+setting these equal to each other gives
+$Pr(F_o(T) \leq F_o(t) = F_o(t) \\$
+Thus
+$F_o(T), 1 - F_o(T), p ~ U(0,1)$
