@@ -111,6 +111,7 @@ To get the p-value for the model we can simply do this:
 
 ```{r}
 fstat <- lm.summary$fstatistic
+fstat[3]
 pvalue <- pf(fstat[1],fstat[2],fstat[3], lower.tail = FALSE)
 print(pvalue)
 ```
@@ -317,3 +318,56 @@ We see that the original pvalue is not significant, but whe we altered the pheno
 
 Calculate the principal components of the genotype matrix.  Use the first principal component as a covariate within a linear regression test between all of the variants and the fourth phenotype.  Plot a QQ-Plot of the p-values with the covariate regression and without the covariate regression.  Are there any significant hits in either of your regression models? Submit your code as an R or Rmd file to CMS.
 
+```{r}
+library(gridExtra)
+# conduct pca of the genotype matrix
+pca.result <- prcomp(hapmap.geno.mx)
+
+# functions to run lm for each geno/pheno pair
+get_lms <- function(genos_xa, genos_xd, pheno){
+  # for each genotype, calculate a lm with given parameters
+  pvals <- matrix(data = NA, nrow = ncol(genos_xa))
+  for (i in 1:ncol(genos_xa)) {
+    df <- data.frame('Y' = pheno, 'Xa' = genos_xa[,i], 'Xd' = genos_xd[,i])
+    lmst <- lm(Y ~ Xa + Xd, data = df)
+    lmst_sum <- summary(lmst)
+    fstat <- lmst_sum$fstatistic
+    pvals[i] <- pf(fstat[1],fstat[2],fstat[3], lower.tail = FALSE)
+  }
+  return(pvals)
+}
+
+get_lms_cov <- function(genos_xa, genos_xd, pheno, cov1){
+  # for each genotype, calculate a lm with given parameters
+  pvals <- matrix(data = NA,nrow = ncol(genos_xa))
+  for (i in 1:ncol(genos_xa)) {
+    df <- data.frame("Y" = pheno, "Xa" = genos_xa[,i], "Xd" = genos_xd[,i], "cov1" = cov1 )
+    lmst <- lm(Y ~ Xa + Xd + cov1, data = df)
+    lmst_sum <- summary(lmst)
+    fstat <- lmst_sum$fstatistic
+    pvals[i] <- pf(fstat[1],fstat[2],fstat[3], lower.tail = FALSE)
+  }
+  return(pvals)
+}
+
+p_vals_no_cov <- get_lms(Xa.all, Xd.all, phenotypes[,4])
+p_vals_cov <- get_lms_cov(Xa.all, Xd.all, phenotypes[,4], pca.result$x[,1])
+
+
+# make qq plots
+# plot expected v observed
+obs_cov <- sort(-log10(p_vals_cov))
+obs_ncov <- sort(-log10(p_vals_no_cov))
+# generate range
+exp <- seq(from = (1 / length(obs_cov)), to = 1, length.out = length(obs_cov))
+# - log 10
+exp <- sort(-log10(exp))
+
+plot1 <-ggplot(data = data.frame(exp, obs_cov), mapping = aes(exp, obs_cov)) + geom_point() +  labs(title = 'QQ Plot phenotype 4 Cov = PCA1') 
+plot2 <-ggplot(data = data.frame(exp, obs_ncov), mapping = aes(exp, obs_ncov)) + geom_point() +  labs(title = 'QQ Plot phenotype 4 No Cov') 
+
+plot3 <- grid.arrange(plot1, plot2, nrow=1, ncol=2)
+plot3
+```
+
+The QQ plot with the covariate is somewhat straighter in the low significance range, with a more distinct jump in the significance range. It seems they both have some hits out of the expected range. I would do more analysis of the GWA data to make a firm conclusion on the true significance of the hits though.

@@ -1,6 +1,6 @@
 ---
 title: "HW6"
-author: "Kate Harline"
+author: "Kate Harline feat T-bone Wrighty McFlightsman"
 date: "4/5/2019"
 output: pdf_document
 ---
@@ -9,20 +9,19 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Problem 1
-# A
+# Problem 1
+## A
 
-The assumption of a linear regression is that $\epsilon \sim N(0, \sigma^2)$ regardless of the distribution of the independent variables (genotypes, X). This imposes the same assumption on the dependent variable (phenotypes, Y) because in the simplest case for one individual $\hat{y_i} = \hat{\beta_{\mu}} + x_{i,a}\hat{\beta_{a}} + x_{i,d}\hat{\beta_{d}} + \epsilon$ when a polymorphism is noncausal,  $\hat{\beta_{a}} = \hat{\beta_{d}} = 0$ so $\hat{y_i} = \hat{\beta_{\mu} + \epsilon \sim N(0, \sigma^2)$ therefore the distribution for the linear regression model follows $Pr(Y | X) \sim N(\beta_{\mu} + X_{a}{\beta_{a}} + X_{d}\beta_{d}, \sigma^2_{\epsilon}$.
+The assumption of a linear regression is that $\epsilon \sim N(0, \sigma^2)$ regardless of the distribution of the independent variables (genotypes, X). This imposes the same assumption on the dependent variable (phenotypes, Y). For example, in the simplest case for one individual $\hat{y_i} = \hat{\beta_{\mu}} + x_{i,a}\hat{\beta_{a}} + x_{i,d}\hat{\beta_{d}} + \epsilon$ when a polymorphism is noncausal,  $\hat{\beta_{a}} = \hat{\beta_{d}} = 0$ so $\hat{y_i} = \hat{\beta_{\mu}} + \epsilon \sim N(0, \sigma^2)$. Furhter, the distribution for the linear regression model follows $Pr(Y | X) \sim N(\beta_{\mu} + X_{a}{\beta_{a}} + X_{d}\beta_{d}, \sigma^2_{\epsilon}$ so the data we are testing will ideally also follow this type of distribution.
 
-# B
-
+## B
 Correctly rejecting the null hypothesis in a GWAS signifies that the region that contains this "hit" contains the causal polymorphism, not that the "hit" itself is causal. Due to the structure of genomes and the current depth of sequencing data, a GWAS is a mapping experiment. Genomic structure and inheritance patterns dictate that through linkage disequilibrium, sites that are closer together are inherited together. 
 
 On the other hand, there is always a chance the null hypothesis was rejected incorrectly and therefore we have obtained a false positive. We control for the false positives by setting a lower alpha and doing multi-test corrections. 
 
-## Problem 2
+# Problem 2
 
-# A
+## A
 ```{r}
 # input the phenotype data and report the number of samples, s
 phenotypes <- read.table("./QG19 - hw6_phenotypes.txt", header = F)
@@ -30,47 +29,44 @@ n <- length(phenotypes[,1])
 cat('There are n = ', n, 'samples')
 ```
 
-# B
+## B
 ```{r}
 # make a histogram of the phenotype data
 heights_hist <- hist(phenotypes[,1], main = 'Distribution of Scaled Heights', xlab = 'Scaled Height')
-heights_hist
+print(heights_hist)
 ```
 
-# C
+## C
 ```{r}
 # input genotype data, report the number of genotypes N, sample size n
 genotypes <- read.table("./QG19 - hw6_genotypes.txt", header = F)
 N <- ncol(genotypes)
 
-n <- nrow(genotypes)
+n <- nrow(genotypes) / 2
 cat('There are N = ', N, ' genotypes. There are n = ', n, ' samples.')
 ```
 
-# D
+## D
 ```{r}
 # convert genotypes into xa and xd matrices
 
-# convert the values to dummy encodings
-xa_converter <- function(geno_in){
-  geno_count <- table(geno_in)
-  minor_allele <- names(geno_count[geno_count == min(geno_count)])
-  xa_code <- ifelse(geno_in == minor_allele, 1, 0)
-  xa_result <- rowSums(xa_code) - 1
-  return(xa_result)
-}
+
 # initialize matrix to create encodings
 xa_matrix <- matrix(NA, nrow = nrow(genotypes)/2, ncol = ncol(genotypes))
 # store xa encodings
-for (i in 1:(nrow(genotypes)/2)){
-  xa_matrix[i,] <- xa_converter(genotypes[c(2*i -1, 2*i),])
+for (i in 1:(ncol(genotypes))){
+  loci <- matrix(genotypes[,i], nrow = nrow(genotypes)/2, ncol = 2, byrow = TRUE)
+  allele_freq <- table(loci)
+  minor_allele <- names(allele_freq[allele_freq == min(allele_freq)])
+  xa_encoding <- ifelse(loci == minor_allele, 1, 0)
+  xa_matrix[,i] <- rowSums(xa_encoding) -1 
 }
 # then convert x_a to x_d
 xd_matrix <- -2*abs(xa_matrix)+1
 
 ```
 
-# E
+## E
 ```{r}
 # calculate MLE of b's, calculate f statistic, 
 # install.packages(MASS)
@@ -108,7 +104,7 @@ pvals <- c()
 # Calculate and save pvals for each phenotype-genotype pair
 
   for (i in 1 : n_geno){
-      pvals <- c(pvals, pval_calculator(phenotypes, 
+      pvals <- c(pvals, pval_calculator(as.matrix(phenotypes), 
                                       xa_input = xa_matrix[,i], 
                                       xd_input = xd_matrix[,i]))
   }
@@ -116,7 +112,7 @@ pvals <- c()
 
 ```
 
-# F
+## F
 ```{r}
 # create Manhattan plot of the data
 library(ggplot2)
@@ -126,12 +122,12 @@ neg_log_p <- -1 * log(pvals)
 x <- seq(1, length(neg_log_p))
 y <- neg_log_p
 
-plot1 <-ggplot(data = data.frame(x, y), mapping = aes(x, y)) + geom_point() + geom_hline(yintercept=-log(0.05), col='blue') + labs(x = 'Genomic Position', y= '-log(p)', title = 'GWA Hits') + ylim(0,30)
+plot1 <-ggplot(data = data.frame(x, y), mapping = aes(x, y)) + geom_point() + geom_hline(yintercept=-log(0.05), col='blue') + labs(x = 'Genomic Position', y= '-log(p)', title = 'GWA Hits')
 
 print(plot1)
 ```
 
-# G
+## G
 ```{r}
 # create QQ plot of the data
 # plot expected v observed
@@ -141,21 +137,46 @@ exp <- seq(from = (1 / length(obs)), to = 1, length.out = length(obs))
 # - log 10
 exp <- sort(-log10(exp))
 
-plot1 <-ggplot(data = data.frame(exp, obs), mapping = aes(exp, obs)) + geom_point() +  labs(title = 'QQ Plot for Scaled Heights') 
+plot2 <-ggplot(data = data.frame(exp, obs), mapping = aes(exp, obs)) + geom_point() +  labs(title = 'QQ Plot for Scaled Heights')
+
+print(plot2)
 ```
 
-# H
-The QQ plot for the data shows ...
+## H
+The QQ plot for the data is still pretty squiggly. The line is not as straight as would be ideal for interpreting the significance of hits. We would expect the observed p-values to track linearly for the most part with normally distributed p-values of the same size at least until the suspected causal polymorphisms. However, we do not see this. Likely covariates need to be added to the model in order to correctly interpret the data.
 
-# I 
+## I 
 ```{r}
 # use bonferroni correction to reject the null with alpha = 0.5, 
 r <- sum(pvals < 0.05/ncol(xa_matrix))
+no_b <- sum(pvals < 0.05)
 
-cat('The null was rejected ', r, ' times.')
+cat('With a Bonferroni correction, the null was rejected ', r, ' times. ')
+cat('Without the Bonferroni correction, the null was rejected ', no_b, ' times.')
 ```
 
-# J 
-By chance, given the number of genotypes measured, we would expect $1194 * 0.05 \approx 60 $ hits. So ....
 
-## Problem 3
+## J 
+I would estimate with the Bonferroni correction, we are only actually measuring about 3 main causal genotypes as there are only 3 major towers in the Manhattan plot. There may be a few others where there are hillier peaks. I would need to see some LD block data in order to have a better sense of the width of genomic regions in which the SNPs that were measured are linked. It's likely that we are able to reject the null for SNPs that are in linkage disequilibrium and thus are only mapping significance to one area of the genome. In fact, it's likely that they are all surrounding the one to few actually causal polymorphisms that we may or may not have measured in the current dataset.
+
+# Problem 3
+
+Given the F-statistic,
+$F_{[2, n-3]} = \frac{\frac{SSE(\hat\theta_0) - SSE(\hat\theta_1)}{2}}{\frac{SSE(\hat\theta_1)}{n-3}}$
+Which can be simplified,
+$F_{[2, n-3]} = \frac{\frac{1}{2}SSE(\hat\theta_0) - SSE(\hat\theta_1)}{\frac{1}{n-3}SSE(\hat\theta_1)}$
+
+$F_{[2, n-3]} = \frac{n-3}{2}[\frac{SSE(\hat\theta_0)}{SSE(\hat\theta_1)} - 1]$
+Such that
+$\frac{2}{n-3}F_{[2, n-3]} + 1 = \frac{SSE(\hat\theta_0)}{SSE(\hat\theta_1)}$
+and the Likelihood for a linear regression,
+$L(\beta, \sigma^2_{\epsilon}, x|y) = \frac{1}{2\pi^{\frac{n}{2}}\sigma_{\epsilon}^n}e^{\frac{-1}{2\sigma^2_{\epsilon}}\sum(y_i-\hat{y_i})^2}$
+Which contains the "Sum of Squares of the Errors" as
+$L(\beta, \sigma^2_{\epsilon}, x|y) = \frac{1}{2\pi^{\frac{n}{2}}\sigma_{\epsilon}^n}e^{\frac{-1}{2\sigma^2_{\epsilon}}SSE(\hat{\theta})}$
+Plugging this into the Likelihood Ratio test
+$\Lambda = \frac{L(\hat{\theta_0})}{L(\hat{\theta_1})}$
+
+$\Lambda = \frac{\frac{1}{2\pi^{\frac{n}{2}}\sigma_{\epsilon}^n}e^{\frac{-1}{2\sigma^2_{\epsilon}}SSE(\hat{\theta}_0)}}{\frac{1}{2\pi^{\frac{n}{2}}\sigma_{\epsilon}^n}e^{\frac{-1}{2\sigma^2_{\epsilon}}SSE(\hat{\theta}_1)}}$
+So we can see that 
+$\Lambda = (\frac{2}{n-3}F_{[2, n-3]} + 1)^{-n/2}$
+

@@ -1,0 +1,93 @@
+---
+title: "Quant Gen Project"
+author: "Kate Harline"
+date: "4/21/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+## load data
+pheno <- read.csv('./proj_data_files/phenotypes.csv', header = TRUE, row.names = 1)
+geno <- read.csv('./proj_data_files/genotypes.csv', header = TRUE, row.names = 1)
+
+covars <- read.csv('./proj_data_files/covars.csv', header = TRUE, row.names = 1)
+
+SNP_info <- read.csv('./proj_data_files/SNP_info.csv', header = TRUE)
+gene_info <- read.csv('./proj_data_files/gene_info.csv', header = TRUE, row.names = 1)
+
+## steps of a minimal GWAS
+
+# 1 understand the data
+  # change the covariates matrix to dummy codings
+covars[,2] <- ifelse(covars[,2] == 'MALE', 0, 1)
+# GBR = 1, FIN = 2, CEU = 3, TSI = 4
+covars[,1] <- sapply(covars[,1], (function(x) (switch(as.character(x), 'GBR' = 1, 'FIN' = 2, 'CEU' = 3, 'TSI' = 4))))
+
+
+# 2 look at the phenotypes
+for (i in 1:ncol(pheno)) {
+  hist(pheno[,i], main = paste0('Distribution of Expression of ', names(pheno)[i]), xlab = 'Expression value')
+}
+
+# 3 check and filter genotypes
+ # check for missing data
+for (i in 1:ncol(geno)) {
+  # remove genos with > 5 % missing data
+  if(sum(is.na(geno[,i])) / nrow(geno) > .05){
+    geno[,i] <- NULL
+  }
+}
+
+for (i in 1:nrow(geno)) {
+  # remove individuals with > 10 % missing data
+  if(sum(is.na(geno[i,])) / ncol(geno) > .1){
+    geno[i,] <- NULL
+  }
+}
+
+mafs <- matrix(data = NA, nrow = ncol(geno))
+xa <- matrix(data = NA, nrow = nrow(geno), ncol = ncol(geno))
+  # calculate MAF, filter based on MAF
+for(i in 1:ncol(geno)){
+  # calculate minor allele frequencies under two assumptions
+  ma_2 <- sum(geno[,i]) / (length(geno[,i]) * 2)
+  ma_0 <- sum(geno[,i]*-1 + 2) / (length(geno[,i]) * 2)
+  # if 0 minor
+  if(ma_0 < ma_2){
+    mafs[i] <- ma_0
+    xa[,i] <- (geno[,i]-1)*-1
+  }
+  else {
+    mafs[i] <- ma_2
+    xa[,i] <- geno[,i]-1
+  }
+}
+
+# check maf dist
+hist(mafs, main = 'Distribution of MAFs', xlab = 'Minor allele frequency')
+# filter out mafs less than 5%
+xa <- xa[, which(mafs > 0.05)]
+
+# adjust encodings, make xa and xd matrices,
+xd_mx <- -2*abs(xa)+1 
+# 4 perform GWAS, run diagnostics
+  # include covariates
+
+# 5 present GWAS analysis, evaluate biological relevance
+```
+# A) Learning about the data structure
+The dataset comprises five files. The genotype file is an n x N matrix representing N = 50000 genotypes for n = 344 individuals. The phenotype data is an n x p matrix representing p = 5 phenotypes for n = 344 individuals. The covariates file is an n x c matrix reflecting c = 2 covariates (population and sex) for n = 344 individuals. This matrix was all strings that were converted to dummy variables as follows: 
+
+- Male = 0, Female = 1
+- GBR = 1, FIN = 2, CEU = 3, TSI = 4
+
+The SNP file is an N x i matrix with i = 3 information points that provide more information about the locations of the N = 50000 measured SNPs in the genome. The gene information file provides is a p x g matrix with g = 4 fields giving information about the p = 5 gene expression profiles analyzed. 
+
+# B) Exploring the phenotype data
+
+All of the phenotypes seem to be normally distributed. This implies a linear regression can be used to model these data because the assumption of a linear regression, $Y = \beta_{\mu} + \beta_a X_a + \beta_dX_d+ \epsilon$, is that the error terms are normally distributed $\epsilon ~ N(0, \sigma_{\epsilon}^2)$
+
+# C) Exploring the genotype data
+
+In general, the genotype data was very cleanly represented. The data lacked missing values so none of these needed to be removed from the dataset. Plotting the MAFs 

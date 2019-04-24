@@ -138,7 +138,7 @@ print(plot1)
 
 ## Part I
 ```{r}
-cat('Significant hits for Phenotype with type 1 error 0.05 = ', sum(pvals < 0.05), '\n')
+cat('Significant hits for Phenotype with type 1 error 0.05 = ', sum(pvals < 0.05))
 ```
 
 ## Part J
