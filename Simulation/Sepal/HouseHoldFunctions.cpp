@@ -95,29 +95,8 @@ func real GetElastFromMecaParam(real ElastMean, real ElastSd){
 	return NewElast;
 }
 
-// Get new Elasticity based on a Growth Arrest front
-func real GetElastFromGrowthFront(real ElastMean, real ElastCoefTimeVar, real CurrElastMean, real ElastSd, real CurrElastSd, real CurrElastV, real MinElast){
-	real AimElastMean = ElastMean - (1.-ElastCoefTimeVar)*CurrElastMean;
-	real AimElastSd = sqrt(ElastSd^2. - (1.-ElastCoefTimeVar)^2.*CurrElastSd^2.);
-	real AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
-	// compute the NewElast
-	NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
-	while (NewElast<MinElast){
-		AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
-		NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
-	}
-	return NewElast;
-}
-
-//Get new Elasticity value based on gradient factor experienced at position in the mesh
-func real GetElastFromGradient(){
-
-	return NewElast;
-}
-
 // Computes New ElastVertices with or without memory (ElastCoefTimeVar)
 // for each vertex
-
 func real GetElastVert(int i, real ElastMean, real ElastSd, real CurrElastMean, real CurrElastSd, real MinElast, real CurrElastV, real ElastCoefTimeVar, mesh sepal){
 	// get AimElast
 	// first, get the parameters of the aim distrib
@@ -128,8 +107,24 @@ func real GetElastVert(int i, real ElastMean, real ElastSd, real CurrElastMean, 
 	} else if (ElastCoefTimeVar == 0.){
 		// full memory
 		NewElast = CurrElastV;
-	}  else {
-		NewElast = GetElastFromGrowthFront(ElastMean, ElastCoefTimeVar, CurrElastMean, ElastSd, CurrElastSd, CurrElastV, MinElast);
+	} else {
+		real AimElastMean = ElastMean - (1.-ElastCoefTimeVar)*CurrElastMean;
+		real AimElastSd = sqrt(ElastSd^2. - (1.-ElastCoefTimeVar)^2.*CurrElastSd^2.);
+		cout << "undersqrt " << ElastSd^2. - (1.-ElastCoefTimeVar)^2.*CurrElastSd^2.;
+		cout << "AimElastSd" << AimElastSd;
+		cout << "CurrElastSd" << CurrElastSd;
+		real AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
+		cout << "AimElast " << AimElast;
+		// compute the NewElast
+		NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
+		// cout << "NewElast" << NewElast;
+		cout << "compare" << NewElast<MinElast;
+		while (NewElast<MinElast){
+			AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
+			NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
+		}
+		// cout << "NewElast" << NewElast;
 	}
+	cout << "NewElast" << NewElast;
 	return NewElast;
 }

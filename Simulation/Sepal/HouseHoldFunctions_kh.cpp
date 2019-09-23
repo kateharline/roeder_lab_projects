@@ -98,14 +98,13 @@ func real GetElastFromMecaParam(real ElastMean, real ElastSd){
 // Computes New ElastVertices with or without memory (ElastCoefTimeVar)
 // for each vertex
 
-// Get new Elasticity based on a Growth Arrest front
+// assign new Elasticity w effects from Growth Arrest front varied
 func real GetElastFromGrowthFront(real ElastMean, real ElastCoefTimeVar, real CurrElastMean, real ElastSd, real CurrElastSd, real CurrElastV, real MinElast){
-	real NewElast;
 	real AimElastMean = ElastMean - (1.-ElastCoefTimeVar)*CurrElastMean;
 	real AimElastSd = sqrt(ElastSd^2. - (1.-ElastCoefTimeVar)^2.*CurrElastSd^2.);
 	real AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
+	real NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
 	// compute the NewElast
-	NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
 	while (NewElast<MinElast){
 		AimElast = GetElastFromMecaParam(AimElastMean, AimElastSd);
 		NewElast = CurrElastV*(1.-ElastCoefTimeVar) + ElastCoefTimeVar*AimElast;
@@ -116,7 +115,7 @@ func real GetElastFromGrowthFront(real ElastMean, real ElastCoefTimeVar, real Cu
 //Get new Elasticity value based on gradient factor experienced at position in the mesh
 func real GetElastFromGradient(){
 	real NewElast;
-	return NewElast;
+	return gradient_function;
 }
 
 func real GetElastVert(int i, real ElastMean, real ElastSd, real CurrElastMean, real CurrElastSd, real MinElast, real CurrElastV, real ElastCoefTimeVar, mesh sepal){
@@ -129,13 +128,6 @@ func real GetElastVert(int i, real ElastMean, real ElastSd, real CurrElastMean, 
 	} else if (ElastCoefTimeVar == 0.){
 		// full memory
 		NewElast = CurrElastV;
-	} else if (ElastCoefTimeVar < 0){
-		/// define function that will apply gradient factor based on position
-		//  where gradient factor is active, more growth is possible, so wall stiffness is less
-		// decrease stiffness based on position
-		// no memory
-		NewElast = GetElastFromGradient();
-		cout << "Hello";
 	} else {
 		NewElast = GetElastFromGrowthFront(ElastMean, ElastCoefTimeVar, CurrElastMean, ElastSd, CurrElastSd, CurrElastV, MinElast);
 	}

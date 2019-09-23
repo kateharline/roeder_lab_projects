@@ -33,15 +33,15 @@ real rho = 0.5;
 // define the parameters of the gaussian distrib of the elasticity
 real ElastMean = 3270000;
 // real ElastSd = 0; // fig 2A; fig 7B
-real ElastSd = 0; // all figures except fig 2A and fig 7B
+real ElastSd = 2700000; // all figures except fig 2A and fig 7B
 real MinElast = 100000;
 // how fast is the change from the
 // current value to the new random
 // value ElastCoelTimeVar = 1 = Full resampling, = 0 = No resampling
-// real ElastCoefTimeVar = 1.; // fig 2D
+//real ElastCoefTimeVar = 1.; // fig 2D
 // real ElastCoefTimeVar = 0.; // fig 2A; 2F; 2H; fig 7B
-real ElastCoefTimeVar = 0.1; // fig S2C; S2F-G; fig 7C; 7D
-// real ElastCoefTimeVar = 0.9; // fig S2C
+// real ElastCoefTimeVar = 0.1; // fig S2C; S2F-G; fig 7C; 7D
+real ElastCoefTimeVar = 0.9; // fig S2C
 // real ElastCoefTimeVar = 0.003; // fig S2C
 
 // Kate use gradient factor to calculate elast update

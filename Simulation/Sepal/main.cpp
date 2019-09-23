@@ -1,3 +1,4 @@
+
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////
 //                                              //
@@ -79,6 +80,8 @@ include "ConvVertice-xy.cpp"
 // definition of the Hooke's matrix for orthotropic material in 2D [A1, B, 0; B, A2, 0; 0, 0, C]
 func A1 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
 
+bool debug = true;
+
 fsepal1 A1h = A1;
 func A2 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
 
@@ -128,7 +131,8 @@ while (step<maxstep && !(EndSimul)){
 	ElastVertices.resize(sepal.nv);
 	// Elasticity distribution computation
 	CurrElastMean = int2d(sepal)(Elastxyh)/int2d(sepal)(1.);
-	CurrElastSd = int2d(sepal)((Elastxyh-CurrElastMean)^2.)/int2d(sepal)(1.);
+	CurrElastSd = sqrt(int2d(sepal)((Elastxyh-CurrElastMean)^2.)/int2d(sepal)(1.));
+	// cout << "((Elastxyh-CurrElastMean)^2.)" << ((Elastxyh-CurrElastMean)^2.) << endl;
 	for (int i=0;i<sepal.nv;i++){
 		// Elast update
 		CurrElastV = Elastxyh(sepal(i).x, sepal(i).y);
