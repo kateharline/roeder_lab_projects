@@ -80,8 +80,6 @@ include "ConvVertice-xy.cpp"
 // definition of the Hooke's matrix for orthotropic material in 2D [A1, B, 0; B, A2, 0; 0, 0, C]
 func A1 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
 
-bool debug = true;
-
 fsepal1 A1h = A1;
 func A2 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
 
@@ -90,6 +88,8 @@ func B12 = rho*sqrt(A1*A2);
 fsepal1 B12h = B12;
 func C3 = Elastxyh(x,y)/(2.*(1.+nu));
 fsepal1 C3h = C3;
+
+
 // !! This matrix is defined in the eigen direction of the material, and if left as it is, allows
 // anisotropy only in the x-y orientations
 // -> need to rotate this matrix to be general - and allow the anisotropy to not be horizontal or vertical
@@ -135,7 +135,11 @@ while (step<maxstep && !(EndSimul)){
 	// cout << "((Elastxyh-CurrElastMean)^2.)" << ((Elastxyh-CurrElastMean)^2.) << endl;
 	for (int i=0;i<sepal.nv;i++){
 		// Elast update
-		CurrElastV = Elastxyh(sepal(i).x, sepal(i).y);
+		y = sepal(i.y)
+		ModSansGradient = Elastxyh(sepal(i).x, sepal(i).y)
+
+		CurrElastV = GetModulus(ModSansGradient, GradientFactor, y);
+
 		ElastVertices(i) = GetElastVert(i, ElastMean, ElastSd, CurrElastMean, CurrElastSd, MinElast, CurrElastV, ElastCoefTimeVar, sepal);
 	}
 

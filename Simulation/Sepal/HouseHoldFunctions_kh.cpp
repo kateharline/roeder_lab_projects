@@ -113,10 +113,25 @@ func real GetElastFromGrowthFront(real ElastMean, real ElastCoefTimeVar, real Cu
 }
 
 //Get new Elasticity value based on gradient factor experienced at position in the mesh
-func real GetElastFromGradient(){
-	real NewElast;
-	return gradient_function;
+// func real GetElastFromGradient(){
+// 	real gradient_function;
+// 	return gradient_function;
+// }
+
+
+func real GetModulus(real ModSansGradient, real GradientFactor, real OrganLength){
+	modulus = ModSansGradient * (1 + GradientFactor)
+	return modulus;
+
 }
+/** if meca_param elast_grad == 1 {
+	
+}
+
+else {
+
+}
+**/
 
 func real GetElastVert(int i, real ElastMean, real ElastSd, real CurrElastMean, real CurrElastSd, real MinElast, real CurrElastV, real ElastCoefTimeVar, mesh sepal){
 	// get AimElast
