@@ -39,13 +39,10 @@ real MinElast = 100000;
 // current value to the new random
 // value ElastCoelTimeVar = 1 = Full resampling, = 0 = No resampling
 // real ElastCoefTimeVar = 1.; // fig 2D
-real ElastCoefTimeVar = 0.; // fig 2A; 2F; 2H; fig 7B
+real ElastCoefTimeVar = 1.; // fig 2A; 2F; 2H; fig 7B
 // real ElastCoefTimeVar = 0.1; // fig S2C; S2F-G; fig 7C; 7D
 // real ElastCoefTimeVar = 0.9; // fig S2C
 // real ElastCoefTimeVar = 0.003; // fig S2C
-
-// Kate use gradient factor to calculate elast update
-// real ElastCoefTimeVar = -1;
 
 
 // define the anisotropy parameters
@@ -81,4 +78,4 @@ Kate edit to express growth gradient factor
 **/
 
 // set to zero for no gradient
-real GradientFactor = 1;
+real GradientFactor =12;

@@ -39,6 +39,7 @@ real ymin=0;
 real ymax=radius;
 
 // compute the mesh
+//definition of the domain for the problem 
 border out(t=0,pi){x=radius*cos(t);y=radius*sin(t);label=1;} // half circle
 border bot(t=-radius,radius){x=t;y=0;label=4;}
 border box1(t=-plotsize,plotsize){x=t;y=-plotsize/20;label=3;} // the box for the plot
@@ -48,6 +49,7 @@ border box4(t=-plotsize/20,2*plotsize){x=-plotsize;y=t;label=3;}
 mesh sepal=buildmesh(out(63)+bot(40)); // the sepal mesh
 mesh box=buildmesh(box1(1)+box3(1)+box2(-1)+box4(-1)); //the box for the plot
 // choose the finite elements
+//define the finite element space
 fespace fsepal(sepal,P2); // P2 elements for the sepal
 fespace fsepal0(sepal,P0);
 fespace fsepal1(sepal,P1);
@@ -62,6 +64,7 @@ real CurrElastV;
 real CurrElastMean;
 real CurrElastSd;
 // displacement (ux,uy), test function (wx,wy)
+// define the field variables for the finite element space
 fsepal ux=0,uy=0,wx,wy,ur;
 // a variable used just to plot combinations of the others
 fsepal variableplot=0;
@@ -99,6 +102,8 @@ include "RotMat_Comput.cpp"
 
 
 // define the variationnal equation to solve - developped
+// functions describing the elements in the mesh and on the boundary ("on") based on weak form of equation governing deformation due to
+// turgor pressure
 problem elasticity([ux,uy],[wx,wy])=
 	int2d(sepal)((
 	ARh*dx(ux)*dx(wx) + ERh*dy(uy)*dy(wy)
@@ -106,6 +111,7 @@ problem elasticity([ux,uy],[wx,wy])=
 	+ 0.5*IRh*(dx(uy)+dy(ux))*(dx(wy)+dy(wx))
 	+ GRh*(0.5*(dx(uy)+dy(ux))*dx(wx)+dx(ux)*(dx(wy)+dy(wx)))
 	+ FRh*(0.5*(dx(uy)+dy(ux))*dy(wy)+dy(uy)*(dx(wy)+dy(wx)))))
+	// N is the normal to the surface
 	-int1d(sepal,1)(p*(wx*N.x+wy*N.y))
 	+on(4,ux=0, uy=0); // boundary condition to fix the bottom of the structure
 
@@ -135,17 +141,20 @@ while (step<maxstep && !(EndSimul)){
 	// cout << "((Elastxyh-CurrElastMean)^2.)" << ((Elastxyh-CurrElastMean)^2.) << endl;
 	for (int i=0;i<sepal.nv;i++){
 		// Elast update
-		y = sepal(i.y)
-		ModSansGradient = Elastxyh(sepal(i).x, sepal(i).y)
-
-		CurrElastV = GetModulus(ModSansGradient, GradientFactor, y);
+		x = sepal(i).x;
+		y = sepal(i).y;
+//		CurrElastV = Elastxyh(sepal(i).x, sepal(i).y) *(1+GradientFactor/(1+y));
+		CurrElastV = Elastxyh(sepal(i).x, sepal(i).y);	
 
 		ElastVertices(i) = GetElastVert(i, ElastMean, ElastSd, CurrElastMean, CurrElastSd, MinElast, CurrElastV, ElastCoefTimeVar, sepal);
 	}
 
   // Update of the xyh data
 	nbTr = sepal(x,y).nuTriangle;
+
+	cout << "nuTriangle " << sepal(x,y).nuTriangle << endl;
   V0x = (sepal[nbTr(x,y)][0]).x;
+  cout << "V0x " << (sepal[nbTr(x,y)][0]).x << endl;
   V0y = (sepal[nbTr(x,y)][0]).y;
   V1x = (sepal[nbTr(x,y)][1]).x;
   V1y = (sepal[nbTr(x,y)][1]).y;

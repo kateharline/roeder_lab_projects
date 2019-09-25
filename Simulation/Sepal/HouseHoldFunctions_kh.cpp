@@ -119,11 +119,11 @@ func real GetElastFromGrowthFront(real ElastMean, real ElastCoefTimeVar, real Cu
 // }
 
 
-func real GetModulus(real ModSansGradient, real GradientFactor, real OrganLength){
-	modulus = ModSansGradient * (1 + GradientFactor)
-	return modulus;
+// func real GetModulus(real ModSansGradient, real GradientFactor, real OrganLength){
+// 	modulus = ModSansGradient * (1 + GradientFactor)
+// 	return modulus;
 
-}
+// }
 /** if meca_param elast_grad == 1 {
 	
 }

@@ -36,5 +36,6 @@ func Elastxy = (ElastVertices[sepal[nbTr(x,y)][0]]*Ai0(x,y)
 		  +ElastVertices[sepal[nbTr(x,y)][1]]*Ai1(x,y)
 		  +ElastVertices[sepal[nbTr(x,y)][2]]*Ai2(x,y))
                 /(sepal[nbTr(x,y)].area);
+
 fsepal1 Elastxyh = Elastxy;
 
