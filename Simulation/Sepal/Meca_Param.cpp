@@ -71,11 +71,3 @@ real MaxArea = 200.0;
 // save/plot the data or not, and the frequency of saving/plotting
 int savePic=1;
 int picturestep=30;
-
-/**
-Kate edit to express growth gradient factor
-
-**/
-
-// set to zero for no gradient
-real GradientFactor =12;

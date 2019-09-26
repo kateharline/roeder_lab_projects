@@ -81,17 +81,27 @@ for (int i=0;i<nbvertices;i++){
 include "ConvVertice-xy.cpp"
 
 // definition of the Hooke's matrix for orthotropic material in 2D [A1, B, 0; B, A2, 0; 0, 0, C]
-func A1 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
+func A1 = max((Elastxyh(x,y))*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
 
 fsepal1 A1h = A1;
-func A2 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
+func A2 = max((Elastxyh(x,y))*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
 
 fsepal1 A2h = A2;
 func B12 = rho*sqrt(A1*A2);
 fsepal1 B12h = B12;
-func C3 = (Elastxyh(x,y)+ElastMean*y/10)/(2.*(1.+nu));
+func C3 = (Elastxyh(x,y))/(2.*(1.+nu));
+
 fsepal1 C3h = C3;
 
+/**
+"Stupid Growth Factor"
+Elasticity increases linearly with position relative to total final height of sepal 
+
+func A1 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
+func A2 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
+func C3 = (Elastxyh(x,y)+ElastMean*y/10)/(2.*(1.+nu));
+
+**/
 
 // !! This matrix is defined in the eigen direction of the material, and if left as it is, allows
 // anisotropy only in the x-y orientations
@@ -152,9 +162,8 @@ while (step<maxstep && !(EndSimul)){
   // Update of the xyh data
 	nbTr = sepal(x,y).nuTriangle;
 
-	cout << "nuTriangle " << sepal(x,y).nuTriangle << endl;
+
   V0x = (sepal[nbTr(x,y)][0]).x;
-  cout << "V0x " << (sepal[nbTr(x,y)][0]).x << endl;
   V0y = (sepal[nbTr(x,y)][0]).y;
   V1x = (sepal[nbTr(x,y)][1]).x;
   V1y = (sepal[nbTr(x,y)][1]).y;
