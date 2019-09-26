@@ -81,15 +81,15 @@ for (int i=0;i<nbvertices;i++){
 include "ConvVertice-xy.cpp"
 
 // definition of the Hooke's matrix for orthotropic material in 2D [A1, B, 0; B, A2, 0; 0, 0, C]
-func A1 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
+func A1 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1+Anis/2.),0.);
 
 fsepal1 A1h = A1;
-func A2 = max(Elastxyh(x,y)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
+func A2 = max((Elastxyh(x,y)+ElastMean*y/10)*(1.-nu)/((1.+nu)*(1.-2.*nu))*(1-Anis/2.),0.);
 
 fsepal1 A2h = A2;
 func B12 = rho*sqrt(A1*A2);
 fsepal1 B12h = B12;
-func C3 = Elastxyh(x,y)/(2.*(1.+nu));
+func C3 = (Elastxyh(x,y)+ElastMean*y/10)/(2.*(1.+nu));
 fsepal1 C3h = C3;
 
 
