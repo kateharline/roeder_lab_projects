@@ -2,19 +2,19 @@
 title: "Quant Gen Project"
 author: "Kate Harline"
 date: "4/21/2019"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
 ## load data
 pheno <- read.csv('./proj_data_files/phenotypes.csv', header = TRUE, row.names = 1)
 geno <- read.csv('./proj_data_files/genotypes.csv', header = TRUE, row.names = 1)
-
-covars <- read.csv('./proj_data_files/covars.csv', header = TRUE, row.names = 1)
-
-SNP_info <- read.csv('./proj_data_files/SNP_info.csv', header = TRUE)
-gene_info <- read.csv('./proj_data_files/gene_info.csv', header = TRUE, row.names = 1)
 
 ## steps of a minimal GWAS
 
@@ -71,10 +71,68 @@ xa <- xa[, which(mafs > 0.05)]
 
 # adjust encodings, make xa and xd matrices,
 xd_mx <- -2*abs(xa)+1 
-# 4 perform GWAS, run diagnostics
-  # include covariates
+# save x_a and x_d matrices
+write.table(xa, "xa.csv", sep=",")
+write.table(xd_mx, "xd.csv", sep=",")
 
+```
+
+```{r}
+# load extra data for further analyses
+covars <- read.csv('./proj_data_files/covars.csv', header = TRUE, row.names = 1)
+SNP_info <- read.csv('./proj_data_files/SNP_info.csv', header = TRUE)
+gene_info <- read.csv('./proj_data_files/gene_info.csv', header = TRUE, row.names = 1)
+
+# load phenos a second time to skip load time of chunk 1
+pheno <- read.csv('./proj_data_files/phenotypes.csv', header = TRUE, row.names = 1)
+
+# load xa and xd matrices
+xa <- read.csv('./xa.csv', header = TRUE, row.names = 1)
+xd <- read.csv('./xd.csv', header = TRUE, row.names = 1)
+# 4 perform GWAS, run diagnostics
+# functions to run lm for each geno/pheno pair
+get_lms <- function(genos_xa, genos_xd, pheno){
+  # for each genotype, calculate a lm with given parameters
+  pvals <- matrix(data = NA, nrow = ncol(genos_xa), ncol = ncol(pheno))
+  for (j in 1:ncol(pheno)) {
+    for (i in 1:ncol(genos_xa)) {
+    df <- data.frame('Y' = pheno[,j], 'Xa' = genos_xa[,i], 'Xd' = genos_xd[,i])
+    lmst <- lm(Y ~ Xa + Xd, data = df)
+    lmst_sum <- summary(lmst)
+    fstat <- lmst_sum$fstatistic
+    pvals[i,j] <- pf(fstat[1],fstat[2],fstat[3], lower.tail = FALSE)
+    }
+  }
+  
+  return(pvals)
+}
+# calculate p vals for each phenotype and genotype pair
+p_vals_no_cov <- get_lms(xa, xd, pheno)
+
+# Manhattan plots for each phenotype
+for (i in 1:ncol(pheno)) {
+  y <- -1 * log(p_vals_no_cov[,i])
+  x <- seq(1, length(y))
+  plot(x, y, main = paste0('Manhattan plot for ', names(pheno)[i]), xlab = 'Genomic position', ylab = '-log(pval)')
+}
+
+# QQ plots for each phenotype
+for (i in 1:ncol(pheno)) {
+  # ordered observed p_values
+  y <- sort(-log10(p_vals_no_cov[,i]))
+  # ordered expected dist of p values
+  exp <- seq(from = (1 / length(y)), to = 1, length.out = length(y))
+  x <- sort(-log10(exp))
+  plot(x, y, main = paste0('QQ Plot for ', names(pheno)[i]), xlab = 'Expected p-values', ylab = 'Observed p-values')
+}
+
+  # do a multiple test correction
+  # perform PCA
+  # include covariates  
+  # iterate the above
+  # graph xa and xd for tallest significant hits
 # 5 present GWAS analysis, evaluate biological relevance
+
 ```
 # A) Learning about the data structure
 The dataset comprises five files. The genotype file is an n x N matrix representing N = 50000 genotypes for n = 344 individuals. The phenotype data is an n x p matrix representing p = 5 phenotypes for n = 344 individuals. The covariates file is an n x c matrix reflecting c = 2 covariates (population and sex) for n = 344 individuals. This matrix was all strings that were converted to dummy variables as follows: 
@@ -90,4 +148,4 @@ All of the phenotypes seem to be normally distributed. This implies a linear reg
 
 # C) Exploring the genotype data
 
-In general, the genotype data was very cleanly represented. The data lacked missing values so none of these needed to be removed from the dataset. Plotting the MAFs 
+In general, the genotype data was very cleanly represented. The data lacked missing values so none of these needed to be removed from the dataset. Plotting the MAFs reveals a nice distribution with a low number of 

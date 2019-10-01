@@ -1,14 +1,14 @@
 import numpy as np
 # calculation parameters
 # rxn specific
-insert_concs = [33.1, 267]
-insert_sizes = [5.6, 2.5]
-vector_conc = 77.8
-vector_size = 14
+insert_concs = [22.6, 264.5]
+insert_sizes = [2.4, 2.5]
+vector_conc = 50.6
+vector_size = 10.9
 
 # NEB set
 insert_vector_ratio = 2
-max_vectors_mix = 10.8
+max_vectors_mix = 10
 pmol_range = [0.03, .2]
 max_vector_vol = 10
 

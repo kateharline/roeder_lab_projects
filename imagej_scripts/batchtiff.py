@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/leaf8_max_int_projections'
+input_path = '/Users/kateharline/Desktop/pKH1xpAR393xpLH13_screen_nicole'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'

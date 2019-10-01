@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# freefem++
+Simulation/Data/
+Simulation/Plot/
