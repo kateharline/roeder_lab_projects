@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/pKH1xpAR393xpLH13_screen_nicole'
+input_path = '/Users/kateharline/Desktop/202007_screening_amiR2p0/to_project'
 
 
 # probably don't change -- unless you are changing code functionality
@@ -19,11 +19,12 @@ def load(path):
     return img
 
 def process(filename, output_path):
+    IJ.run("Make Composite");
     IJ.run("Z Project...", "projection=[Max Intensity]");
     # the number of channels is one (orig image) less than the number of images opened
     
     # add scale bar to image
-    IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    #IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     # save scale bar to stack
     IJ.run("Flatten");
     

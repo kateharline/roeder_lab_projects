@@ -18,9 +18,9 @@ creds = None
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
-if os.path.exists('token.pickle'):
-    with open('token.pickle', 'rb') as token:
-        creds = pickle.load(token)
+if os.path.exists('credentials.json'):
+    with open('credentials.json', 'rb') as token:
+        creds = json.load(token)
 
 service = build('drive', 'v3', credentials=creds)
 
@@ -30,7 +30,7 @@ def main():
 
 
     # https://developers.google.com/drive/api/v3/manage-downloads
-    request = service.files().export_media(fileId=file_id,
+    request = service.files().get_media(fileId=file_id,
                                                  mimeType='application/json')
     fh = io.BytesIO()
     downloader = MediaIoBaseDownload(fh, request)
