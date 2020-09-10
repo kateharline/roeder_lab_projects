@@ -9,8 +9,9 @@ path = '~/Desktop/202003_0715_analysis'
 # get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
 meshes = []
 
+print('path '+path)
 
-(dirpath, dirnames, filenames) = os.walk(path)
+dirpath, dirnames, filenames = os.walk(path)
 print('dirpath ' + dirpath)
 print('dirnames ' + dirnames)
 print('filenames ' + filenames)
@@ -18,7 +19,7 @@ print('filenames ' + filenames)
 
 # make dirs to save
 
-for (dirpath, dirnames, filenames) in os.walk(os.path.join(path, 'meshes')):
+for (dirpath, dirnames, filenames) in os.walk(path):
     meshes.extend(filenames)
 
     break
