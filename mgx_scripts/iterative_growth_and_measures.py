@@ -15,7 +15,9 @@ print(os.walk(os.path.join(path, 'meshes')))
 
 for (dirpath, dirnames, filenames) in os.walk(os.path.join(path, 'meshes')):
     meshes.extend(filenames)
-    print(meshes.extend(filenames))
+    print('dirpath ' +dirpath)
+    print('dirnames ' + dirnames)
+    print('filenames ' + filenames)
     break
 
 
