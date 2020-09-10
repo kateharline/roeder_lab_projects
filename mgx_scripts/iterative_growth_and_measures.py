@@ -13,13 +13,14 @@ if o_s == 'posix':
     root_path = '/home/kate'
 # todo add root for windows
 
-# allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-root = Tkinter.Tk()
-root.withdraw()
+
 
 deployed = false
 
 if deployed:
+    # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
+    root = Tkinter.Tk()
+    root.withdraw()
     file_path = tkFileDialog.askopenfilename()
 else:
     # main directory
