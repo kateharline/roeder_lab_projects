@@ -38,23 +38,23 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     print('dirpath ' + dirpath)
     print('dirnames ' + str(dirnames)[:])
-    print(name for name in filenames)
+    print(str(name) for name in filenames)
 
     break
 
 
 # https://stackoverflow.com/questions/1274405/how-to-create-new-folder
 if not os.path.exists(os.path.join(file_path, 'meshes')):
-    os.makedirs(os.path.join(path, 'meshes'))
+    os.makedirs(os.path.join(file_path, 'meshes'))
 
 if not os.path.exists(os.path.join(file_path, 'parents')):
-    os.makedirs(os.path.join(path, 'parents'))
+    os.makedirs(os.path.join(file_path, 'parents'))
 
 if not os.path.exists(os.path.join(file_path, 'attributes')):
-    os.makedirs(os.path.join(path, 'attributes'))
+    os.makedirs(os.path.join(file_path, 'attributes'))
 
 if not os.path.exists(os.path.join(file_path, 'snaps')):
-    os.makedirs(os.path.join(path, 'snaps'))
+    os.makedirs(os.path.join(file_path, 'snaps'))
 
 
 i = 0
