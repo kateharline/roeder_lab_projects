@@ -11,7 +11,7 @@ data_files_path = os.path.join('Desktop', data_files)
 o_s = os.name
 if o_s == 'posix':
     root_path = '/home/kate'
-elif os == '':
+# elif os == '':
 
 # todo add root for windows
 
