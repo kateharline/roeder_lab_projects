@@ -40,8 +40,6 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     print('dirnames ' + str(dirnames)[:])
     print(str(name) for name in filenames)
 
-    break
-
 
 # https://stackoverflow.com/questions/1274405/how-to-create-new-folder
 if not os.path.exists(os.path.join(file_path, 'meshes')):
