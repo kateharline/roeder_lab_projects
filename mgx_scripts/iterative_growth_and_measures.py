@@ -38,7 +38,7 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     print('dirpath ' + dirpath)
     print('dirnames ' + str(dirnames)[:])
-    print(str(name) for name in filenames)
+    print('filenames ' + str(filenames)[:])
 
 
 # https://stackoverflow.com/questions/1274405/how-to-create-new-folder
