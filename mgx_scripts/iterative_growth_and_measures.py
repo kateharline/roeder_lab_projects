@@ -32,7 +32,8 @@ print('file path '+ file_path)
 meshes = []
 
 
-dirpath, dirnames, filenames = os.walk(file_path)
+fs = os.walk(file_path)
+print('what\'s going on with the os walk' +len(fs))
 print('dirpath ' + dirpath)
 print('dirnames ' + dirnames)
 print('filenames ' + filenames)
