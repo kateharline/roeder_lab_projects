@@ -28,19 +28,13 @@ else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
 
-
 # make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
-if not os.path.exists(os.path.join(file_path, 'meshes')):
-    os.makedirs(os.path.join(file_path, 'meshes'))
+require_folders = ['meshes', 'parents', 'attributes', 'snaps']
 
-if not os.path.exists(os.path.join(file_path, 'parents')):
-    os.makedirs(os.path.join(file_path, 'parents'))
+for i in range(1, len(require_folders)):
+    if not os.path.exists(os.path.join(file_path, require_folders[i])):
+        os.makedirs(os.path.join(file_path, require_folders[i]))
 
-if not os.path.exists(os.path.join(file_path, 'attributes')):
-    os.makedirs(os.path.join(file_path, 'attributes'))
-
-if not os.path.exists(os.path.join(file_path, 'snaps')):
-    os.makedirs(os.path.join(file_path, 'snaps'))
 
 # get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
 dirs_lib = {}
@@ -50,11 +44,6 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     dot_dir = dirpath.split(os.sep)[-1]
     dirs_lib[dot_dir] = str(filenames)[:]
 
-    print('dirpath '  + dirpath)
-    print('dirnames ' + str(dirnames)[:])
-    print('filenames ' + str(filenames)[:])
-
-
 pprint.pprint(dirs_lib)
 
 
@@ -62,8 +51,8 @@ i = 0
 # open mgx
 # load stack 1, stack 2
                                 #filename, transform, add, stack number (0 indexed)
-Process.Mesh__System__Load(os.path.join(file_path, 'meshes', meshes[i]), 'no', 'no', '0')
-Process.Mesh__System__Load(os.path.join(file_path, 'meshes', meshes[i+1]), 'no', 'no', '1')
+Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][i]), 'no', 'no', '0')
+Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][i+1]), 'no', 'no', '1')
 
 
 # # todo check that parent file exists, if not save
