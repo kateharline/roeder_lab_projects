@@ -9,7 +9,7 @@ path = '~/Desktop/202003_0715_analysis'
 # get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
 meshes = []
 
-print(os.walk(os.path.join(path, 'meshes')))
+print(os.path.join(path, 'meshes'))
 
 (dirpath, dirnames, filenames) = os.walk(os.path.join(path, 'meshes'))
 print('dirpath ' + dirpath)
