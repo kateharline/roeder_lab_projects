@@ -1,10 +1,31 @@
 ######## New MorphoGraphX session v2.0 r1-63-ga635c756: 2020-08-27 18:16:00
 import os
 import logging
+import Tkinter, tkFileDialog
 
 
-# main directory
-path = '~/Desktop/202003_0715_analysis'
+# fun fun file management shit between dev env of vm build and windows build
+data_files = '202003_0715_analysis'
+data_files_path = os.path.join('Desktop', data_files)
+# https://docs.python.org/2/library/os.html
+o_s = os.name
+if o_s == 'posix':
+    root_path = '/home/kate'
+# todo add root for windows
+
+# allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
+root = Tkinter.Tk()
+root.withdraw()
+
+deployed = false
+
+if deployed:
+    file_path = tkFileDialog.askopenfilename()
+else:
+    # main directory
+    file_path = os.path.join(root_path, data_files_path)
+
+print('file path '+ file_path)
 
 # get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
 meshes = []
