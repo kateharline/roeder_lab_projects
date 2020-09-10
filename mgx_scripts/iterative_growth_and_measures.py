@@ -33,16 +33,16 @@ meshes = []
 
 
 fs = os.walk(file_path)
-print('what\'s going on with the os walk' +len(fs))
-print('dirpath ' + dirpath)
-print('dirnames ' + dirnames)
-print('filenames ' + filenames)
+
 
 
 # make dirs to save
 
 for (dirpath, dirnames, filenames) in os.walk(path):
     meshes.extend(filenames)
+    print('dirpath ' + dirpath)
+    print('dirnames ' + dirnames)
+    print('filenames ' + filenames)
 
     break
 
