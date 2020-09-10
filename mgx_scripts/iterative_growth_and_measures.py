@@ -35,10 +35,10 @@ meshes = []
 # make dirs to save
 
 for (dirpath, dirnames, filenames) in os.walk(file_path):
-    meshes.extend(filenames)
+    # meshes.extend(filenames)
     print('dirpath ' + dirpath)
-    print('dirnames ' + dirnames)
-    print('filenames ' + filenames)
+    print('dirnames ' + extend(dirnames))
+    print('filenames ' + extend(filenames))
 
     break
 
