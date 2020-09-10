@@ -37,8 +37,8 @@ meshes = []
 for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     print('dirpath ' + dirpath)
-    print('dirnames ' + extend(dirnames))
-    print('filenames ' + extend(filenames))
+    print('dirnames ' + str(dirnames)[:])
+    print('filenames ' + str(filenames)[:])
 
     break
 
