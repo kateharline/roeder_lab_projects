@@ -11,13 +11,17 @@ meshes = []
 
 print(os.walk(os.path.join(path, 'meshes')))
 
+(dirpath, dirnames, filenames) = os.walk(os.path.join(path, 'meshes'))
+print('dirpath ' + dirpath)
+print('dirnames ' + dirnames)
+print('filenames ' + filenames)
+
+
 # make dirs to save
 
 for (dirpath, dirnames, filenames) in os.walk(os.path.join(path, 'meshes')):
     meshes.extend(filenames)
-    print('dirpath ' +dirpath)
-    print('dirnames ' + dirnames)
-    print('filenames ' + filenames)
+
     break
 
 
