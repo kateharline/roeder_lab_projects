@@ -38,26 +38,31 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     print('dirpath ' + dirpath)
     print('dirnames ' + str(dirnames)[:])
-    print('filenames ' + str(filenames)[:])
+    print(name for name in filenames)
 
     break
 
 
 # https://stackoverflow.com/questions/1274405/how-to-create-new-folder
+if not os.path.exists(os.path.join(file_path, 'meshes')):
+    os.makedirs(os.path.join(path, 'meshes'))
 
-if not os.path.exists(os.path.join(path, 'parents')):
+if not os.path.exists(os.path.join(file_path, 'parents')):
     os.makedirs(os.path.join(path, 'parents'))
 
-if not os.path.exists(os.path.join(path, 'attributes')):
+if not os.path.exists(os.path.join(file_path, 'attributes')):
     os.makedirs(os.path.join(path, 'attributes'))
+
+if not os.path.exists(os.path.join(file_path, 'snaps')):
+    os.makedirs(os.path.join(path, 'snaps'))
 
 
 i = 0
 # open mgx
 # load stack 1, stack 2
                                 #filename, transform, add, stack number (0 indexed)
-Process.Mesh__System__Load(os.path.join(path, 'meshes', meshes[i]), 'no', 'no', '0')
-Process.Mesh__System__Load(os.path.join(path, 'meshes', meshes[i+1]), 'no', 'no', '1')
+Process.Mesh__System__Load(os.path.join(file_path, 'meshes', meshes[i]), 'no', 'no', '0')
+Process.Mesh__System__Load(os.path.join(file_path, 'meshes', meshes[i+1]), 'no', 'no', '1')
 
 
 # # todo check that parent file exists, if not save
