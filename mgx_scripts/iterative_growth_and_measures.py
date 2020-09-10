@@ -15,7 +15,7 @@ if o_s == 'posix':
 
 
 
-deployed = false
+deployed = False
 
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
