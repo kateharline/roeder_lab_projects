@@ -2,7 +2,7 @@
 import os
 import logging
 import Tkinter, tkFileDialog
-
+import pprint
 
 # fun fun file management shit between dev env of vm build and windows build
 data_files = '202003_0715_analysis'
@@ -11,6 +11,8 @@ data_files_path = os.path.join('Desktop', data_files)
 o_s = os.name
 if o_s == 'posix':
     root_path = '/home/kate'
+elif os == '':
+
 # todo add root for windows
 
 
@@ -26,22 +28,8 @@ else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
 
-print('file path '+ file_path)
 
-# get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-meshes = []
-
-
-# make dirs to save
-
-for (dirpath, dirnames, filenames) in os.walk(file_path):
-    # meshes.extend(filenames)
-    print('dirpath ' + dirpath)
-    print('dirnames ' + str(dirnames)[:])
-    print('filenames ' + str(filenames)[:])
-
-
-# https://stackoverflow.com/questions/1274405/how-to-create-new-folder
+# make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
 if not os.path.exists(os.path.join(file_path, 'meshes')):
     os.makedirs(os.path.join(file_path, 'meshes'))
 
@@ -53,6 +41,21 @@ if not os.path.exists(os.path.join(file_path, 'attributes')):
 
 if not os.path.exists(os.path.join(file_path, 'snaps')):
     os.makedirs(os.path.join(file_path, 'snaps'))
+
+# get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+dirs_lib = {}
+
+for (dirpath, dirnames, filenames) in os.walk(file_path):
+    # meshes.extend(filenames)
+    dot_dir = dirpath.split(os.sep)[-1]
+    dirs_lib[dot_dir] = str(filenames)[:]
+
+    print('dirpath '  + dirpath)
+    print('dirnames ' + str(dirnames)[:])
+    print('filenames ' + str(filenames)[:])
+
+
+pprint.pprint(dirs_lib)
 
 
 i = 0
