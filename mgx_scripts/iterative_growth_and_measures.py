@@ -42,7 +42,7 @@ dirs_lib = {}
 for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     dot_dir = dirpath.split(os.sep)[-1]
-    dirs_lib[dot_dir] = str(filenames)[:]
+    dirs_lib[dot_dir] = filenames
 
 pprint.pprint(dirs_lib)
 
