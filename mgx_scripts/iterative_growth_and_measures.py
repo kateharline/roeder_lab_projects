@@ -64,8 +64,11 @@ Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][
 #     # set stack 1 as main                   store, stack id
 Process.Stack__System__Set_Current_Stack('Main', '0')
 Process.Mesh__Heat_Map__Measures__Geometry__Area()
-pprint.pprint(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], '_attr.csv'))
-Process.Mesh__Attributes__Save_to_CSV(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], '_attr.csv'))
+
+savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-4] + '_attr.csv')
+
+pprint.pprint(savepath)
+Process.Mesh__Attributes__Save_to_CSV(savepath)
 # Process.Mesh__Attributes__Manage_Attributes('0')
 # Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), '1', '1.0')
 # todo maybe add a wait in so that user can arrange the
