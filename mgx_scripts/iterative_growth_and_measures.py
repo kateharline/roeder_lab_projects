@@ -42,9 +42,19 @@ dirs_lib = {}
 for (dirpath, dirnames, filenames) in os.walk(file_path):
     # meshes.extend(filenames)
     dot_dir = dirpath.split(os.sep)[-1]
+    # clean up dirs list so that meshes are in date order and only load those types of files
+    # https://docs.python.org/2/howto/sorting.html
+    filenames.sort()
+    filenames.remove('MorphoGraphX.py')
+    ##### option to define additional file selection rules
+
+
     dirs_lib[dot_dir] = filenames
 
+
 pprint.pprint(dirs_lib)
+
+
 
 
 i = 0
