@@ -68,11 +68,11 @@ Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][
 
 #     # set stack 1 as main                   store, stack id
 Process.Stack__System__Set_Current_Stack('Main', '0')
-Process.Mesh__Heat_Map__Measures__Geometry__Area()
-Process.Mesh__Attributes__Manage_Attributes('0')
-Process.Mesh__Attributes__Save_to_CSV(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), 'no', 'no', '0')
-Process.Mesh__Attributes__Manage_Attributes('0')
-Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), '1', '1.0')
+# Process.Mesh__Heat_Map__Measures__Geometry__Area()
+# Process.Mesh__Attributes__Manage_Attributes('0')
+# Process.Mesh__Attributes__Save_to_CSV(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), 'no', 'no', '0')
+# Process.Mesh__Attributes__Manage_Attributes('0')
+# Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), '1', '1.0')
 # todo maybe add a wait in so that user can arrange the
 
 # # todo check that parent file exists, if not save
