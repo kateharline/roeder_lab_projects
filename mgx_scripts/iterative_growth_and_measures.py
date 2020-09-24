@@ -45,7 +45,9 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     # clean up dirs list so that meshes are in date order and only load those types of files
     # https://docs.python.org/2/howto/sorting.html
     filenames.sort()
-    filenames.remove('MorphoGraphX.py')
+
+    if 'MorphoGraphX.py' in filenames:
+        filenames.remove('MorphoGraphX.py')
     ##### option to define additional file selection rules
 
 
