@@ -32,7 +32,7 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Area()
 
     # output attributes
-    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-4] + '_attr')
+    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
     Process.Mesh__Attributes__Save_to_CSV(savepath)
