@@ -16,8 +16,12 @@ if o_s == 'posix':
 # todo add root for windows
 
 
-
+# variables for control flow
 deployed = False
+inter_measures = False
+intra_measures = True
+inter_display = False
+intra_display = False
 
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
@@ -54,21 +58,82 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     dirs_lib[dot_dir] = filenames
 
 
-i = 0
+for i in range(0,len(dirs_lib['meshes'])-1):
+    # load stack 1, stack 2
+    # filename, transform, add, stack number (0 indexed)
+
+    if intra_measures:
+        do_intra_measures(dirs_lib['meshes'][i])
+    if inter_measures:
+        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+    if intra_display:
+        do_intra_display(dirs_lib['meshes'][i])
+    if inter_display:
+        do_inter_display(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+
+
+
+def do_intra_measures(mesh):
+    # load mesh
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+
+    # run desired processes
+    Process.Mesh__Heat_Map__Measures__Geometry__Area()
+
+    # output attributes
+    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-4] + '_attr')
+
+    pprint.pprint(savepath)
+    Process.Mesh__Attributes__Save_to_CSV(savepath)
+
+    return
+
+
+def do_inter_measures(mesh_0, mesh_1):
+    # load meshes
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_0), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_1), 'no', 'no', '1')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+
+    # set parents active on the alternate mesh
+
+    # run desired processes
+
+    # output attributes
+
+    return
+
+def do_intra_display(mesh):
+    # load meshes
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+
+    # user adjust arrangement
+
+
+    # take photos
+
+    return
+
+def do_inter_display(mesh_0, mesh_1):
+    # load meshes
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_0), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_1), 'no', 'no', '1')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+
+    # user adjust arrangement
+
+    # take photos
+
+    return
 # open mgx
-# load stack 1, stack 2
-                                #filename, transform, add, stack number (0 indexed)
-Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][i]), 'no', 'no', '0')
-Process.Mesh__System__Load(os.path.join(file_path, 'meshes', dirs_lib['meshes'][i+1]), 'no', 'no', '1')
 
 #     # set stack 1 as main                   store, stack id
-Process.Stack__System__Set_Current_Stack('Main', '0')
-Process.Mesh__Heat_Map__Measures__Geometry__Area()
 
-savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-4] + '_attr.csv')
 
-pprint.pprint(savepath)
-Process.Mesh__Attributes__Save_to_CSV(savepath)
+
+
 # Process.Mesh__Attributes__Manage_Attributes('0')
 # Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(file_path, 'attributes', dirs_lib['meshes'][i], 'attr.csv'), '1', '1.0')
 # todo maybe add a wait in so that user can arrange the
