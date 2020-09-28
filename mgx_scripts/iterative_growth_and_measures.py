@@ -20,17 +20,51 @@ if o_s == 'posix':
 deployed = False
 inter_measures = False
 intra_measures = True
+distance_measures = False
 inter_display = False
 intra_display = False
 
+def do_distance_measures(mesh, types):
+    """
+    allow user to input cell based axes for measures of distance within a mesh
+    :param mesh: string denoting path to mesh to be used
+    :param types: list of strings, which axes to measure
+    :return: none
+    """
+
+    return
+
 def do_intra_measures(mesh):
+    """
+    conduct all single mesh measures, then export attribute map to csv
+    :param mesh:
+    :return:
+    """
     # load mesh
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # run desired processes
     Process.Mesh__Heat_Map__Measures__Geometry__Area()
-
+    Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
+    Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
+                                                            # min or max, direct junctions (yes) or also neighbors (no)
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No')
+    # todo check that it will measure and save both as attributes
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No')
+    Process.Mesh__Heat_Map__Measures__Geometry__Length_Major_Axis()
+    Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
+    Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
+    Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
+    Process.Mesh__Heat_Map__Measures__Geometry__Neighbors()
+    Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Largest_Empty_Space()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
     # output attributes
     savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
 
