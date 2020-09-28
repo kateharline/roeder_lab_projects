@@ -23,56 +23,6 @@ intra_measures = True
 inter_display = False
 intra_display = False
 
-if deployed:
-    # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    root = Tkinter.Tk()
-    root.withdraw()
-    file_path = tkFileDialog.askopenfilename()
-else:
-    # main directory
-    file_path = os.path.join(root_path, data_files_path)
-
-# make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
-require_folders = ['meshes', 'parents', 'attributes', 'snaps']
-
-for i in range(1, len(require_folders)):
-    if not os.path.exists(os.path.join(file_path, require_folders[i])):
-        os.makedirs(os.path.join(file_path, require_folders[i]))
-
-
-# get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-dirs_lib = {}
-
-for (dirpath, dirnames, filenames) in os.walk(file_path):
-    # meshes.extend(filenames)
-    dot_dir = dirpath.split(os.sep)[-1]
-    # clean up dirs list so that meshes are in date order and only load those types of files
-    # https://docs.python.org/2/howto/sorting.html
-    filenames.sort()
-
-    if 'MorphoGraphX.py' in filenames:
-        filenames.remove('MorphoGraphX.py')
-    ##### option to define additional file selection rules
-
-
-    dirs_lib[dot_dir] = filenames
-
-
-for i in range(0,len(dirs_lib['meshes'])-1):
-    # load stack 1, stack 2
-    # filename, transform, add, stack number (0 indexed)
-
-    if intra_measures:
-        do_intra_measures(dirs_lib['meshes'][i])
-    if inter_measures:
-        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
-    if intra_display:
-        do_intra_display(dirs_lib['meshes'][i])
-    if inter_display:
-        do_inter_display(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
-
-
-
 def do_intra_measures(mesh):
     # load mesh
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
@@ -127,6 +77,58 @@ def do_inter_display(mesh_0, mesh_1):
     # take photos
 
     return
+
+if deployed:
+    # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
+    root = Tkinter.Tk()
+    root.withdraw()
+    file_path = tkFileDialog.askopenfilename()
+else:
+    # main directory
+    file_path = os.path.join(root_path, data_files_path)
+
+# make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
+require_folders = ['meshes', 'parents', 'attributes', 'snaps']
+
+for i in range(1, len(require_folders)):
+    if not os.path.exists(os.path.join(file_path, require_folders[i])):
+        os.makedirs(os.path.join(file_path, require_folders[i]))
+
+
+# get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+dirs_lib = {}
+
+for (dirpath, dirnames, filenames) in os.walk(file_path):
+    # meshes.extend(filenames)
+    dot_dir = dirpath.split(os.sep)[-1]
+    # clean up dirs list so that meshes are in date order and only load those types of files
+    # https://docs.python.org/2/howto/sorting.html
+    filenames.sort()
+
+    if 'MorphoGraphX.py' in filenames:
+        filenames.remove('MorphoGraphX.py')
+    ##### option to define additional file selection rules
+
+
+    dirs_lib[dot_dir] = filenames
+
+
+for i in range(0,len(dirs_lib['meshes'])-1):
+    # load stack 1, stack 2
+    # filename, transform, add, stack number (0 indexed)
+
+    if intra_measures:
+        do_intra_measures(dirs_lib['meshes'][i])
+    if inter_measures:
+        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+    if intra_display:
+        do_intra_display(dirs_lib['meshes'][i])
+    if inter_display:
+        do_inter_display(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+
+
+
+
 # open mgx
 
 #     # set stack 1 as main                   store, stack id
