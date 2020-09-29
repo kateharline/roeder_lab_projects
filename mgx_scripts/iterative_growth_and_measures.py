@@ -27,9 +27,9 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-deployed = False
+deployed = True
 inter_measures = True
-intra_measures = True
+intra_measures = False
 distance_measures = False
 inter_display = False
 intra_display = False
@@ -41,9 +41,9 @@ data_files_path = os.path.join('Desktop', data_files)
 
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    root = Tkinter.Tk()
+    root = Tk()
     root.withdraw()
-    file_path = tkFileDialog.askopenfilename()
+    file_path = Tkinter.tkFileDialog.askopenfilename()
 else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
@@ -162,8 +162,8 @@ def do_inter_measures(mesh_0, mesh_1):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh, 'no','0')
-    Process.Mesh__System__Save(mesh, 'no', '1')
+    Process.Mesh__System__Save(mesh_0, 'no','0')
+    Process.Mesh__System__Save(mesh_1, 'no', '1')
 
     return
 
