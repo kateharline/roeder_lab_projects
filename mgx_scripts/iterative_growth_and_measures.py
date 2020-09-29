@@ -2,6 +2,7 @@
 import os
 import logging
 from Tkinter import *
+import Tix
 import pprint
 import sys
 
@@ -41,9 +42,9 @@ data_files_path = os.path.join('Desktop', data_files)
 
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    root = Tk()
+    root = Tix.Tk()
     root.withdraw()
-    file_path = tkFileDialog.askopenfilename()
+    file_path = Tix.DirSelectDialog
 else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
