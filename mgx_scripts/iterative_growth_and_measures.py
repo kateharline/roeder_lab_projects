@@ -14,7 +14,7 @@ if o_s == 'posix':
 # elif os == '':
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
-sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects'))
+sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
 
 import funcs as f
 
