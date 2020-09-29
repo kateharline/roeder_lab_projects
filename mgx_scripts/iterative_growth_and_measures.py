@@ -6,6 +6,8 @@ import pprint
 import sys
 #import funcs
 
+print(sys.path)
+
 ####### DIR MANAGEMENT ########
 
 # https://docs.python.org/2/library/os.html
