@@ -65,6 +65,15 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Area()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Aspect_Ratio()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Perimeter()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Variability_Radius()
+    Process.Mesh__Heat_Map__Measures__Shape__Bending()
+    Process.Mesh__Heat_Map__Measures__Shape__Common_Bending()
+    Process.Mesh__Heat_Map__Measures__Shape__Common_Neighbors()
+    Process.Mesh__Heat_Map__Measures__Shape__Variability_Radius()
     # output attributes
     savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
 
