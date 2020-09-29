@@ -43,7 +43,7 @@ data_files_path = os.path.join('Desktop', data_files)
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
     root = Tk()
-    root.filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+    root.filename = tkFileDialog.askopenfilename(initialdir = root_path,title = "Select directory",filetypes = (("all files","*.*")))
     print (root.filename)
     file_path = root.filename
 else:
