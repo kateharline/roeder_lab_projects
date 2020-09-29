@@ -20,14 +20,6 @@ if o_s == 'posix':
 if not hasattr(sys, 'argv'):
     sys.argv  = ['']
 
-
-# make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
-require_folders = ['meshes', 'parents', 'attributes', 'snaps']
-
-for i in range(1, len(require_folders)):
-    if not os.path.exists(os.path.join(file_path, require_folders[i])):
-        os.makedirs(os.path.join(file_path, require_folders[i]))
-
 ######### USER INPUT ##########
 
 # variables for control flow
@@ -51,6 +43,16 @@ if deployed:
 else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
+
+
+# make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
+require_folders = ['meshes', 'parents', 'attributes', 'snaps']
+
+for i in range(1, len(require_folders)):
+    if not os.path.exists(os.path.join(file_path, require_folders[i])):
+        os.makedirs(os.path.join(file_path, require_folders[i]))
+
+
 
 ####### FILES ##########
 
