@@ -43,7 +43,7 @@ if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
     root = Tk()
     root.withdraw()
-    file_path = Tkinter.filedialog.askopenfilename()
+    file_path = tkFileDialog.askopenfilename()
 else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
