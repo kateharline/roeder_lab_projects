@@ -3,10 +3,7 @@ import os
 import logging
 from Tkinter import *
 import pprint
-import sys
-
-pprint(os.path)
-
+#import sys
 import funcs
 
 ####### DIR MANAGEMENT ########
