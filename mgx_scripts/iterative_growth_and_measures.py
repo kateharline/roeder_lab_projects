@@ -1,7 +1,7 @@
 ######## New MorphoGraphX session v2.0 r1-63-ga635c756: 2020-08-27 18:16:00
 import os
 import logging
-import Tkinter, tkFileDialog
+from Tkinter import *
 import pprint
 
 # fun fun file management shit between dev env of vm build and windows build
@@ -18,7 +18,7 @@ if o_s == 'posix':
 
 # variables for control flow
 deployed = False
-inter_measures = False
+inter_measures = True
 intra_measures = True
 distance_measures = False
 inter_display = False
@@ -74,30 +74,50 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Shape__Common_Bending()
     Process.Mesh__Heat_Map__Measures__Shape__Common_Neighbors()
     Process.Mesh__Heat_Map__Measures__Shape__Variability_Radius()
-    # output attributes
-    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
 
-    pprint.pprint(savepath)
-    Process.Mesh__Attributes__Save_to_CSV(savepath)
+
+    # save the mesh (attributes saved in mesh)
+    #                           filename, transform, mesh number
+    Process.Mesh__System__Save(mesh, 'no','0')
+
 
     return
 
 
 def do_inter_measures(mesh_0, mesh_1):
+    """
+    run processes that track changes between meshes
+    :param mesh_0: string, filepath of the first mesh (t)
+    :param mesh_1: string, filepath of the second mesh (t+1)
+    :return: null
+    """
     # load meshes
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_0), 'no', 'no', '0')
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_1), 'no', 'no', '1')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # set parents active on the alternate mesh
+    root = Tk()
+    w = Label(root, text="Hello, world!")
+    w.pack()
+
+    root.mainloop()
 
     # run desired processes
 
-    # output attributes
+    # save the mesh (attributes saved in mesh)
+    #                           filename, transform, mesh number
+    Process.Mesh__System__Save(mesh, 'no','0')
+    Process.Mesh__System__Save(mesh, 'no', '1')
 
     return
 
 def do_intra_display(mesh):
+    """
+    save snapshots for all desired measures
+    :param mesh: string, filepath of the
+    :return:
+    """
     # load meshes
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
@@ -156,22 +176,28 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
     dirs_lib[dot_dir] = filenames
 
 
-for i in range(0,len(dirs_lib['meshes'])-1):
+for i in range(0,len(dirs_lib['meshes'])):
     # load stack 1, stack 2
     # filename, transform, add, stack number (0 indexed)
 
     if intra_measures:
         do_intra_measures(dirs_lib['meshes'][i])
-    if inter_measures:
-        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+
     if intra_display:
         do_intra_display(dirs_lib['meshes'][i])
+
+
+    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
+
+    pprint.pprint(savepath)
+    Process.Mesh__Attributes__Save_to_CSV(savepath)
+
+for i in range(0, len(dirs_lib['meshes'])-1):
+
+    if inter_measures:
+        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
     if inter_display:
         do_inter_display(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
-
-
-
-
 # open mgx
 
 #     # set stack 1 as main                   store, stack id
