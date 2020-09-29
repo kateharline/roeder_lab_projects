@@ -1,8 +1,7 @@
 ######## New MorphoGraphX session v2.0 r1-63-ga635c756: 2020-08-27 18:16:00
 import os
 import logging
-from Tkinter import *
-import Tix
+import Tkinter, tkFileDialog
 import pprint
 import sys
 
@@ -42,9 +41,10 @@ data_files_path = os.path.join('Desktop', data_files)
 
 if deployed:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    root = Tix.Tk()
-    root.withdraw()
-    file_path = Tix.DirSelectDialog
+    root = Tk()
+    root.filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+    print (root.filename)
+    file_path = root.filename
 else:
     # main directory
     file_path = os.path.join(root_path, data_files_path)
