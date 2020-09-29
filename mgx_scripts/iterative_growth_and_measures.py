@@ -4,6 +4,9 @@ import logging
 from Tkinter import *
 import pprint
 import sys
+
+pprint(os.path)
+
 import funcs
 
 ####### DIR MANAGEMENT ########
