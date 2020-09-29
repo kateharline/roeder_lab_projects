@@ -3,8 +3,8 @@ import os
 import logging
 from Tkinter import *
 import pprint
-#import sys
-import funcs
+import sys
+#import funcs
 
 ####### DIR MANAGEMENT ########
 
