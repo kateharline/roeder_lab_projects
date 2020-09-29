@@ -1,5 +1,8 @@
-sys.path.insert(0,'<project directory>') OR
-sys.path.append('<project directory>')
+
+import sys
+
+sys.path.insert(0,'/home/kate/Desktop/roeder_lab_projects/mgx_scripts')
+
 
 import funcs
 
