@@ -155,11 +155,6 @@ def do_inter_measures(mesh_0, mesh_1):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # set parents active on the alternate mesh
-    root = Tk()
-    w = Label(root, text="Hello, world!")
-    w.pack()
-
-    root.mainloop()
 
     # run desired processes
 
@@ -181,7 +176,12 @@ def do_intra_display(mesh):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # user adjust arrangement
+    window = Tk()
+    frame = Frame(window).pack()
+    lab = Label(frame, text="Done arranging meshes, start a snappin?").pack()
+    button = Button(frame, text="Yes", command=window.destroy()).pack()
 
+    window.mainloop()
 
     # take photos
 
