@@ -29,7 +29,7 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 deployed = True
-inter_measures = True
+inter_measures = False
 intra_measures = False
 distance_measures = False
 inter_display = False
