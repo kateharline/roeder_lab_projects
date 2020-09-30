@@ -178,8 +178,8 @@ def do_intra_display(mesh):
     # user adjust arrangement
     window = Tk()
     frame = Frame(window).pack()
-    lab = Label(frame, text="Done arranging meshes, start a snappin?").pack()
-    button = Button(frame, text="Yes", command=window.destroy()).pack()
+    Label(frame, text="Done arranging meshes, start a snappin?").pack()
+    Button(frame, text="Yes", command=window.destroy).pack()
 
     window.mainloop()
 
