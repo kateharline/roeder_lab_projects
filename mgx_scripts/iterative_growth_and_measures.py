@@ -89,6 +89,13 @@ def do_distance_measures(mesh, types):
     :param types: list of strings, which axes to measure
     :return: none
     """
+    # user adjust arrangement
+    window = Tk()
+    frame = Frame(window).pack()
+    Label(frame, text="Axis cells set, measure distance?").pack()
+    Button(frame, text="Yes", command=window.destroy).pack()
+
+    window.mainloop()
 
     return
 
@@ -194,6 +201,12 @@ def do_inter_display(mesh_0, mesh_1):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # user adjust arrangement
+    window = Tk()
+    frame = Frame(window).pack()
+    Label(frame, text="Done arranging meshes, start a snappin?").pack()
+    Button(frame, text="Yes", command=window.destroy).pack()
+
+    window.mainloop()
 
     # take photos
 
