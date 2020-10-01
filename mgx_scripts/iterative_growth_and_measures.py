@@ -35,9 +35,10 @@ distance_measures = False
 inter_display = False
 intra_display = True
 
+distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files = '202003_0715_analysis'
+data_files = '202003_0715_demo'
 data_files_path = os.path.join('Desktop', data_files)
 
 if deployed:
@@ -80,7 +81,7 @@ for (dirpath, dirnames, filenames) in os.walk(file_path):
 
     dirs_lib[dot_dir] = filenames
 
-######### FUNCTIONS
+######### FUNCTIONS FOR MEASURES #########
 
 def do_distance_measures(mesh, types):
     """
@@ -89,21 +90,35 @@ def do_distance_measures(mesh, types):
     :param types: list of strings, which axes to measure
     :return: none
     """
-    # user adjust arrangement
-    window = Tk()
-    frame = Frame(window).pack()
-    Label(frame, text="Axis cells set, measure distance?").pack()
-    Button(frame, text="Yes", command=window.destroy).pack()
+    # load mesh
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
 
-    window.mainloop()
+    for i in range(0,len(types)):
+        # user define cells
+        window = Tk()
+        frame = Frame(window).pack()
+        Label(frame, text=types[i]+" axis cells set, measure distance?").pack()
+        Button(frame, text="Yes", command=window.destroy).pack()
+
+        window.mainloop()
+        # measure distance
+        Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean')
+        # save as attribute
+        Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double',
+                                                                            types[i] + ' Distance', 'Label',
+                                                                            'Label Heat', 'Active Mesh', 'No')
+    # save the mesh (attributes saved in mesh)
+    #                           filename, transform, mesh number
+    Process.Mesh__System__Save(mesh, 'no', '0')
 
     return
 
 def do_intra_measures(mesh):
     """
     conduct all single mesh measures, then export attribute map to csv
-    :param mesh:
-    :return:
+    :param mesh: string, filepath of the mesh
+    :return: null
     """
     # load mesh
     Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
@@ -162,8 +177,21 @@ def do_inter_measures(mesh_0, mesh_1):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # set parents active on the alternate mesh
+    Process.Stack__System__Set_Current_Stack('Main', '1')
+                                # show surface, surface type, signal type, blend, cull, show mesh, mesh view, show lines,
+                                    # show points, show map, scale, transform, bbox, brightness, opacity
+    # todo "try" load parents with view, if not saved in attributes, then load from csv
+    Process.Mesh__System__View('', 'Parents', '', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    #                                   path, filetype, keep current parents
+    parent_path =
+    Process.Mesh__Lineage_Tracking__Load_Parents(os.path.join(file_path, 'parents', parent_path), 'CSV', 'No')
+    Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
 
     # run desired processes
+    Process.Stack__System__Set_Current_Stack('Main', '1')
+    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Yes', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
+    Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double', 'd_Area', 'Label',
+                                                                        'Label Heat', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
@@ -172,10 +200,12 @@ def do_inter_measures(mesh_0, mesh_1):
 
     return
 
-def do_intra_display(mesh):
+def do_display(mesh, measures, ranges):
     """
     save snapshots for all desired measures
     :param mesh: string, filepath of the mesh
+    :param measures: list of strings, names of measures to be displayed
+    :param ranges: list of tuples, sets of ranges for each measure to be displayed
     :return: null
     """
     # load meshes
@@ -187,41 +217,31 @@ def do_intra_display(mesh):
     frame = Frame(window).pack()
     Label(frame, text="Done arranging meshes, start a snappin?").pack()
     Button(frame, text="Yes", command=window.destroy).pack()
-
     window.mainloop()
 
-    # take photos
+    for i in range(0,len(measures)):
+        #load heatmap
+        Process.Mesh__Heat_Map__Heat_Map_Load(
+            '/home/kate/Desktop/202003_0715_demo/attributes/d1_d2_pAR393xpLH13_mesh_change.csv', '1', '1.0')
+        Process.Mesh__Heat_Map__Heat_Map_Set_Range('0', '7')
+        # take photos
+        Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
+                                       '1.0', '95')
 
     return
 
-def do_inter_display(mesh_0, mesh_1):
-    # load meshes
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_0), 'no', 'no', '0')
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_1), 'no', 'no', '1')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
-
-    # user adjust arrangement
-    window = Tk()
-    frame = Frame(window).pack()
-    Label(frame, text="Done arranging meshes, start a snappin?").pack()
-    Button(frame, text="Yes", command=window.destroy).pack()
-
-    window.mainloop()
-
-    # take photos
-
-    return
-
-############ MEASURES #################
+############ EXECTUE MEASURES #################
 
 # measures single mesh
 for i in range(0,len(dirs_lib['meshes'])):
+    if distance_measures:
+        do_distance_measures(dirs_lib['meshes'][i], distance_measures)
 
     if intra_measures:
         do_intra_measures(dirs_lib['meshes'][i])
 
     if intra_display:
-        do_intra_display(dirs_lib['meshes'][i])
+        do_display(dirs_lib['meshes'][i], intra_measures, intra_ranges)
 
 
     savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
@@ -236,7 +256,7 @@ for i in range(0, len(dirs_lib['meshes'])-1):
         do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
 
     if inter_display:
-        do_inter_display(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+        do_display(dirs_lib['meshes'][i+1], inter_measures, inter_measures)
 
     savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
 
