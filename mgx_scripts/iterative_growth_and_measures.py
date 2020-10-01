@@ -33,7 +33,8 @@ inter_measures = False
 intra_measures = False
 distance_measures = False
 inter_display = False
-intra_display = True
+intra_display = False
+parents_as_csvs = False
 
 distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 
@@ -64,24 +65,36 @@ for i in range(1, len(require_folders)):
 
 ####### FILES ##########
 
-# get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-dirs_lib = {}
+dirs_dict = walk(file_path)
+pprint(dirs_dict)
+attr_dict = walk(os.join(file_path, 'attributes'))
+pprint(attr_dict)
 
-for (dirpath, dirnames, filenames) in os.walk(file_path):
-    # meshes.extend(filenames)
-    dot_dir = dirpath.split(os.sep)[-1]
-    # clean up dirs list so that meshes are in date order and only load those types of files
-    # https://docs.python.org/2/howto/sorting.html
-    filenames.sort()
+######### FUNCTIONS  #########
+def walk(file_path):
+    '''
+    # get list of files in dir https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+    :param file_path: string
+    :return: dictionary of key:folders (string) and values:contents (list of strings)
+    '''
 
-    if 'MorphoGraphX.py' in filenames:
-        filenames.remove('MorphoGraphX.py')
-    ##### option to define additional file selection rules
+    dirs_dict = {}
+
+    for (dirpath, dirnames, filenames) in os.walk(file_path):
+        # meshes.extend(filenames)
+        dot_dir = dirpath.split(os.sep)[-1]
+        # clean up dirs list so that meshes are in date order and only load those types of files
+        # https://docs.python.org/2/howto/sorting.html
+        filenames.sort()
+
+        if 'MorphoGraphX.py' in filenames:
+            filenames.remove('MorphoGraphX.py')
+        ##### option to define additional file selection rules
 
 
-    dirs_lib[dot_dir] = filenames
+        dirs_dict[dot_dir] = filenames
+    return dirs_dict
 
-######### FUNCTIONS FOR MEASURES #########
 
 def do_distance_measures(mesh, types):
     """
@@ -111,6 +124,12 @@ def do_distance_measures(mesh, types):
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh, 'no', '0')
+
+    return
+
+def do_parents_to_attr(parents):
+    Process.Mesh__Lineage_Tracking__Load_Parents(parents[i], 'CSV', 'No')
+    Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
 
     return
 
@@ -182,10 +201,9 @@ def do_inter_measures(mesh_0, mesh_1):
                                     # show points, show map, scale, transform, bbox, brightness, opacity
     # todo "try" load parents with view, if not saved in attributes, then load from csv
     Process.Mesh__System__View('', 'Parents', '', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    # todo make
+    #parent_path =
     #                                   path, filetype, keep current parents
-    parent_path =
-    Process.Mesh__Lineage_Tracking__Load_Parents(os.path.join(file_path, 'parents', parent_path), 'CSV', 'No')
-    Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
 
     # run desired processes
     Process.Stack__System__Set_Current_Stack('Main', '1')
@@ -200,12 +218,13 @@ def do_inter_measures(mesh_0, mesh_1):
 
     return
 
-def do_display(mesh, measures, ranges):
+def do_display(mesh, measures, ranges, attr_dict):
     """
     save snapshots for all desired measures
     :param mesh: string, filepath of the mesh
     :param measures: list of strings, names of measures to be displayed
     :param ranges: list of tuples, sets of ranges for each measure to be displayed
+    :param attr_dict:
     :return: null
     """
     # load meshes
@@ -221,9 +240,11 @@ def do_display(mesh, measures, ranges):
 
     for i in range(0,len(measures)):
         #load heatmap
+        # todo check with new code from Richard
+        #                                                                           filename, column name?, border size
         Process.Mesh__Heat_Map__Heat_Map_Load(
-            '/home/kate/Desktop/202003_0715_demo/attributes/d1_d2_pAR393xpLH13_mesh_change.csv', '1', '1.0')
-        Process.Mesh__Heat_Map__Heat_Map_Set_Range('0', '7')
+            '/home/kate/Desktop/202003_0715_demo/attributes/d1_d2_pAR393xpLH13_mesh_change.csv', measures[i], '1.0')
+        Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
         # take photos
         Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
                                        '1.0', '95')
@@ -232,44 +253,39 @@ def do_display(mesh, measures, ranges):
 
 ############ EXECTUE MEASURES #################
 
-# measures single mesh
-for i in range(0,len(dirs_lib['meshes'])):
+# single mesh measures
+for i in range(0,len(dirs_dict['meshes'])):
     if distance_measures:
-        do_distance_measures(dirs_lib['meshes'][i], distance_measures)
+        do_distance_measures(dirs_dict['meshes'][i], distance_measures)
 
     if intra_measures:
-        do_intra_measures(dirs_lib['meshes'][i])
+        do_intra_measures(dirs_dict['meshes'][i])
+
+    savepath = os.path.join(file_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
+
+    pprint.pprint(savepath)
+    Process.Mesh__Attributes__Save_to_CSV(savepath)
 
     if intra_display:
-        do_display(dirs_lib['meshes'][i], intra_measures, intra_ranges)
+        attr_dict = walk(os.join(file_path, 'attributes'))
+        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict)
 
+if parents_as_csvs:
+    parents_dict = walk(os.join(file_path, 'parents'))
 
-    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
-
-    pprint.pprint(savepath)
-    Process.Mesh__Attributes__Save_to_CSV(savepath)
-
-# lineage tracing measures
-for i in range(0, len(dirs_lib['meshes'])-1):
+# change measures
+for i in range(0, len(dirs_dict['meshes'])-1):
+    if parents_as_csvs:
+        do_parents_to_attr(parents_dict[i])
 
     if inter_measures:
-        do_inter_measures(dirs_lib['meshes'][i],dirs_lib['meshes'][i+1])
+        do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1])
 
-    if inter_display:
-        do_display(dirs_lib['meshes'][i+1], inter_measures, inter_measures)
-
-    savepath = os.path.join(file_path, 'attributes', dirs_lib['meshes'][i][:-5] + '_attr')
+    savepath = os.path.join(file_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
     Process.Mesh__Attributes__Save_to_CSV(savepath)
 
-# todo maybe add a wait in so that user can arrange the
-
-# # todo check that parent file exists, if not save
-
-# # todo check if there is a special axis to load, then load if so
-# # todo for each heat map
-#
-
-# # todo set the parents to active, then stack 0
-
+    if inter_display:
+        attr_dict = walk(os.join(file_path, 'attributes'))
+        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict)
