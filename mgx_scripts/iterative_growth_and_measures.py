@@ -37,6 +37,8 @@ intra_display = False
 parents_as_csvs = True
 
 distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+intra_ranges = []
+inter_ranges = []
 
 # fun fun file management shit between dev env of vm build and windows build
 data_files = '202003_0715_demo'
@@ -48,27 +50,18 @@ if deployed:
     root.mainloop()
     root.filename = tkFileDialog.askdirectory(initialdir = root_path,title = "Select experiment directory")
     print (root.filename)
-    file_path = root.filename
+    main_path = root.filename
 else:
     # main directory
-    file_path = os.path.join(root_path, data_files_path)
+    main_path = os.path.join(root_path, data_files_path)
 
 
 # make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
 require_folders = ['meshes', 'parents', 'attributes', 'snaps']
 
 for i in range(1, len(require_folders)):
-    if not os.path.exists(os.path.join(file_path, require_folders[i])):
-        os.makedirs(os.path.join(file_path, require_folders[i]))
-
-
-
-####### FILES ##########
-
-dirs_dict = walk(file_path)
-pprint(dirs_dict)
-attr_dict = walk(os.join(file_path, 'attributes'))
-pprint(attr_dict)
+    if not os.path.exists(os.path.join(main_path, require_folders[i])):
+        os.makedirs(os.path.join(main_path, require_folders[i]))
 
 ######### FUNCTIONS  #########
 def walk(file_path):
@@ -104,7 +97,7 @@ def do_distance_measures(mesh, types):
     :return: none
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     for i in range(0,len(types)):
@@ -134,7 +127,7 @@ def do_parents_to_attr(parent_file, mesh):
     :return: null
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
     #
     Process.Mesh__Lineage_Tracking__Load_Parents(parent_file, 'CSV', 'No')
@@ -149,7 +142,7 @@ def do_intra_measures(mesh):
     :return: null
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # run desired processes
@@ -198,8 +191,8 @@ def do_inter_measures(mesh_0, mesh_1):
     :return: null
     """
     # load meshes
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_0), 'no', 'no', '0')
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh_1), 'no', 'no', '1')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # set parents active on the alternate mesh
@@ -234,7 +227,7 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
     :return: null
     """
     # load meshes
-    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # user adjust arrangement
@@ -254,7 +247,12 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # take photos
         Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
                                        '1.0', '95')
+####### FILES ##########
 
+dirs_dict = walk(main_path)
+pprint(dirs_dict)
+attr_dict = walk(os.join(main_path, 'attributes'))
+pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
 
@@ -266,17 +264,17 @@ for i in range(0,len(dirs_dict['meshes'])):
     if intra_measures:
         do_intra_measures(dirs_dict['meshes'][i])
 
-    savepath = os.path.join(file_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
+    savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
     Process.Mesh__Attributes__Save_to_CSV(savepath)
 
     if intra_display:
-        attr_dict = walk(os.join(file_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict, file_path)
+        attr_dict = walk(os.join(main_path, 'attributes'))
+        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict, main_path)
 
 if parents_as_csvs:
-    parents_dict = walk(os.join(file_path, 'parents'))
+    parents_dict = walk(os.join(main_path, 'parents'))
     pprint(parents_dict)
 
 # change measures
@@ -287,11 +285,11 @@ for i in range(0, len(dirs_dict['meshes'])-1):
     if inter_measures:
         do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1])
 
-    savepath = os.path.join(file_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
+    savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
     Process.Mesh__Attributes__Save_to_CSV(savepath)
 
     if inter_display:
-        attr_dict = walk(os.join(file_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict, file_path)
+        attr_dict = walk(os.join(main_path, 'attributes'))
+        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict, main_path)
