@@ -29,8 +29,8 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 deployed = False
-inter_measures = False
-intra_measures = False
+inter_measures = []
+intra_measures = []
 distance_measures = False
 inter_display = False
 intra_display = False
@@ -247,11 +247,12 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # take photos
         Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
                                        '1.0', '95')
+
 ####### FILES ##########
 pp = pprint.PrettyPrinter()
 dirs_dict = walk(main_path)
 pp.pprint(dirs_dict)
-attr_dict = walk(os.join(main_path, 'attributes'))
+attr_dict = walk(os.path.join(main_path, 'attributes'))
 pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
@@ -270,17 +271,18 @@ for i in range(0,len(dirs_dict['meshes'])):
     Process.Mesh__Attributes__Save_to_CSV(savepath)
 
     if intra_display:
-        attr_dict = walk(os.join(main_path, 'attributes'))
+        attr_dict = walk(os.path.join(main_path, 'attributes'))
         do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict, main_path)
 
+# for older meshes need to save parents to attr
 if parents_as_csvs:
-    parents_dict = walk(os.join(main_path, 'parents'))
-    pprint(parents_dict)
+    parents_dict = walk(os.path.join(main_path, 'parents'))
+    pp.pprint(parents_dict)
+    for i in range(0, len(dirs_dict['meshes'])-1):
+        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict[i])
 
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):
-    if parents_as_csvs:
-        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict[i])
 
     if inter_measures:
         do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1])
@@ -291,5 +293,5 @@ for i in range(0, len(dirs_dict['meshes'])-1):
     Process.Mesh__Attributes__Save_to_CSV(savepath)
 
     if inter_display:
-        attr_dict = walk(os.join(main_path, 'attributes'))
+        attr_dict = walk(os.path.join(main_path, 'attributes'))
         do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict, main_path)
