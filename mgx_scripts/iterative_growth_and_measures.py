@@ -34,7 +34,7 @@ intra_measures = False
 distance_measures = False
 inter_display = False
 intra_display = False
-parents_as_csvs = False
+parents_as_csvs = True
 
 distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 
@@ -125,13 +125,22 @@ def do_distance_measures(mesh, types):
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh, 'no', '0')
 
-    return
 
-def do_parents_to_attr(parents):
-    Process.Mesh__Lineage_Tracking__Load_Parents(parents[i], 'CSV', 'No')
+def do_parents_to_attr(parent_file, mesh):
+    """
+    function to add parents to attributes, esp for old data before parents were automatically saved to attributes file
+    :param parent_file: stirng, path to parent csv file
+    :param mesh: string, filename of mesh
+    :return: null
+    """
+    # load mesh
+    Process.Mesh__System__Load(os.path.join(file_path, 'meshes', mesh), 'no', 'no', '0')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+    #
+    Process.Mesh__Lineage_Tracking__Load_Parents(parent_file, 'CSV', 'No')
     Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
+    Process.Mesh__System__Save(mesh, 'no', '0')
 
-    return
 
 def do_intra_measures(mesh):
     """
@@ -180,8 +189,6 @@ def do_intra_measures(mesh):
     Process.Mesh__System__Save(mesh, 'no','0')
 
 
-    return
-
 
 def do_inter_measures(mesh_0, mesh_1):
     """
@@ -216,9 +223,8 @@ def do_inter_measures(mesh_0, mesh_1):
     Process.Mesh__System__Save(mesh_0, 'no','0')
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
-    return
 
-def do_display(mesh, measures, ranges, attr_dict):
+def do_display(mesh, measures, ranges, attr_dict, main_path):
     """
     save snapshots for all desired measures
     :param mesh: string, filepath of the mesh
@@ -249,7 +255,6 @@ def do_display(mesh, measures, ranges, attr_dict):
         Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
                                        '1.0', '95')
 
-    return
 
 ############ EXECTUE MEASURES #################
 
@@ -268,15 +273,16 @@ for i in range(0,len(dirs_dict['meshes'])):
 
     if intra_display:
         attr_dict = walk(os.join(file_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict)
+        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict, file_path)
 
 if parents_as_csvs:
     parents_dict = walk(os.join(file_path, 'parents'))
+    pprint(parents_dict)
 
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):
     if parents_as_csvs:
-        do_parents_to_attr(parents_dict[i])
+        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict[i])
 
     if inter_measures:
         do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1])
@@ -288,4 +294,4 @@ for i in range(0, len(dirs_dict['meshes'])-1):
 
     if inter_display:
         attr_dict = walk(os.join(file_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict)
+        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict, file_path)
