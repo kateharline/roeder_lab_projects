@@ -248,11 +248,11 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
                                        '1.0', '95')
 ####### FILES ##########
-
+pp = pprint.PrettyPrinter()
 dirs_dict = walk(main_path)
-pprint(dirs_dict)
+pp.pprint(dirs_dict)
 attr_dict = walk(os.join(main_path, 'attributes'))
-pprint(attr_dict)
+pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
 

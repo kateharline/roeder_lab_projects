@@ -14,9 +14,11 @@
       <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-              <folding />
+            <state relative-caret-position="321">
+              <caret line="254" column="3" lean-forward="false" selection-start-line="254" selection-start-column="3" selection-end-line="254" selection-end-column="3" />
+              <folding>
+                <element signature="e#76#85#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -131,9 +133,11 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="321">
+          <caret line="254" column="3" lean-forward="false" selection-start-line="254" selection-start-column="3" selection-end-line="254" selection-end-column="3" />
+          <folding>
+            <element signature="e#76#85#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
