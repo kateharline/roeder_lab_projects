@@ -103,7 +103,7 @@ def do_distance_measures(mesh, types):
     for i in range(0,len(types)):
         # user define cells
         root = Tk()
-        Message.showinfo(message='Done setting axis')
+        Message(message='Done setting axis')
         root.mainloop()
 
         # measure distance                                      wall weight, restrict connectivity
