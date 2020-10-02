@@ -103,13 +103,10 @@ def do_distance_measures(mesh, types):
     for i in range(0,len(types)):
         # user define cells
         window = Tk()
-        frame = Frame(window).pack()
-        Label(frame, text=types[i]+" axis cells set, measure distance?").pack()
-        Button(frame, text="Yes", command=window.destroy).pack()
-
+        window.messagebox.showinfo(message='Done setting axis')
         window.mainloop()
-        # measure distance
-        Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean')
+        # measure distance                                      wall weight, restrict connectivity
+        Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attribute
         Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double',
                                                                             types[i] + ' Distance', 'Label',
