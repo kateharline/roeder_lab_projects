@@ -34,7 +34,7 @@ intra_measures = []
 distance_measures = False
 inter_display = False
 intra_display = False
-parents_as_csvs = True
+parents_as_csvs = False
 
 distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 intra_ranges = []
@@ -242,10 +242,10 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # todo check with new code from Richard
         #                                                                           filename, column name?, border size
         Process.Mesh__Heat_Map__Heat_Map_Load(
-            '/home/kate/Desktop/202003_0715_demo/attributes/d1_d2_pAR393xpLH13_mesh_change.csv', measures[i], '1.0')
+            attr_dict['attributes'][i], measures[i], '1.0')
         Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
         # take photos
-        Process.Misc__System__Snapshot('/home/kate/Desktop/202003_0715_analysis/snaps/shot.jpg', 'false', '0', '0',
+        Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i], " ".join(measures[i].split())), 'false', '0', '0',
                                        '1.0', '95')
 
 ####### FILES ##########
@@ -279,7 +279,7 @@ if parents_as_csvs:
     parents_dict = walk(os.path.join(main_path, 'parents'))
     pp.pprint(parents_dict)
     for i in range(0, len(dirs_dict['meshes'])-1):
-        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict[i])
+        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict['parents'][i])
 
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):

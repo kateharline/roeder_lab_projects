@@ -14,8 +14,8 @@
       <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="250" column="0" lean-forward="false" selection-start-line="250" selection-start-column="0" selection-end-line="250" selection-end-column="0" />
+            <state relative-caret-position="409">
+              <caret line="267" column="62" lean-forward="false" selection-start-line="267" selection-start-column="58" selection-end-line="267" selection-end-column="62" />
               <folding>
                 <element signature="e#76#85#0" expanded="true" />
               </folding>
@@ -24,6 +24,12 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>walk</find>
+      <find>dict</find>
+    </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -133,8 +139,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="250" column="0" lean-forward="false" selection-start-line="250" selection-start-column="0" selection-end-line="250" selection-end-column="0" />
+        <state relative-caret-position="409">
+          <caret line="267" column="62" lean-forward="false" selection-start-line="267" selection-start-column="58" selection-end-line="267" selection-end-column="62" />
           <folding>
             <element signature="e#76#85#0" expanded="true" />
           </folding>
