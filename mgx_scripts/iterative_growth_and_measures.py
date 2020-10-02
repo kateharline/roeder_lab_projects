@@ -102,9 +102,9 @@ def do_distance_measures(mesh, types):
 
     for i in range(0,len(types)):
         # user define cells
-        window = Tk()
-        window.messagebox.showinfo(message='Done setting axis')
-        window.mainloop()
+
+        tkinter.messagebox.showinfo(message='Done setting axis')
+
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attribute
