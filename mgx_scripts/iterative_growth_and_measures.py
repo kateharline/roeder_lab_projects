@@ -28,8 +28,8 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-deployed = False
-inter_measures = False
+file_selector = True
+inter_measures = True
 intra_measures = True
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
@@ -48,7 +48,7 @@ inter_ranges = []
 data_files = '202003_0715_demo'
 data_files_path = os.path.join('Desktop', data_files)
 
-if deployed:
+if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
     root = Tk()
     root.mainloop()
