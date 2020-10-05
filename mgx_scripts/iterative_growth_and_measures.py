@@ -89,32 +89,32 @@ def walk(file_path):
     return dirs_dict
 
 
-def do_distance_measures(mesh, types):
-    """
-    allow user to input cell based axes for measures of distance within a mesh
-    :param mesh: string denoting path to mesh to be used
-    :param types: list of strings, which axes to measure
-    :return: none
-    """
-    # load mesh
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
-
-    for i in range(0,len(types)):
-        # user define cells
-        root = Tk()
-        Message(message='Done setting axis')
-        root.mainloop()
-
-        # measure distance                                      wall weight, restrict connectivity
-        Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
-        # save as attribute
-        Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double',
-                                                                            types[i] + ' Distance', 'Label',
-                                                                            'Label Heat', 'Active Mesh', 'No')
-    # save the mesh (attributes saved in mesh)
-    #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh, 'no', '0')
+# def do_distance_measures(mesh, types):
+#     """
+#     allow user to input cell based axes for measures of distance within a mesh
+#     :param mesh: string denoting path to mesh to be used
+#     :param types: list of strings, which axes to measure
+#     :return: none
+#     """
+#     # load mesh
+#     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
+#     Process.Stack__System__Set_Current_Stack('Main', '0')
+#
+#     for i in range(0,len(types)):
+#         # user define cells
+#         root = Tk()
+#         Message(message='Done setting axis')
+#         root.mainloop()
+#
+#         # measure distance                                      wall weight, restrict connectivity
+#         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
+#         # save as attribute
+#         Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double',
+#                                                                             types[i] + ' Distance', 'Label',
+#                                                                             'Label Heat', 'Active Mesh', 'No')
+#     # save the mesh (attributes saved in mesh)
+#     #                           filename, transform, mesh number
+#     Process.Mesh__System__Save(mesh, 'no', '0')
 
 
 def do_parents_to_attr(parent_file, mesh):
