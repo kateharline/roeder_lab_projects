@@ -36,8 +36,15 @@ distance_measures = False
 parents_as_csvs = False
 
 # attributes to save
-save_attr = []
+save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance',
+                 '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius',
+                 '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Largest Empty Space', '/Lobeyness/Lobeyness',
+                 '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata',
+                 '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter',
+                 '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors',
+                 '/Shape/Variability Radius']
 
+# which measures to display and how
 inter_display = []
 intra_display = []
 intra_ranges = []
@@ -169,7 +176,6 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Area()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Aspect_Ratio()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Perimeter()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Variability_Radius()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
