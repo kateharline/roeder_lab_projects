@@ -167,7 +167,7 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
 
     Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
+    #Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
