@@ -42,7 +42,7 @@ save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radi
                  '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata',
                  '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter',
                  '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors',
-                 '/Shape/Variability Radius']
+                 '/Shape/Variability Radius', 'd_Area']
 
 # which measures to display and how
 inter_display = []
