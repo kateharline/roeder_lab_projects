@@ -273,7 +273,7 @@ for i in range(0,len(dirs_dict['meshes'])):
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
 
         pprint.pprint(savepath)
-        Process.Mesh__Attributes__Save_to_CSV(savepath, ', '.join(save_attr))
+        Process.Mesh__Attributes__Save_to_CSV(savepath, *save_attr)
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
@@ -295,7 +295,7 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
         pprint.pprint(savepath)
-        Process.Mesh__Attributes__Save_to_CSV(savepath, ', '.join(save_attr))
+        Process.Mesh__Attributes__Save_to_CSV(savepath, *save_attr)
 
     if inter_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
