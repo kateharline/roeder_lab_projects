@@ -200,25 +200,22 @@ def do_inter_measures(mesh_0, mesh_1):
     # load meshes
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
+    # mesh 0 show cell labels, mesh 1 show parent labels
     Process.Stack__System__Set_Current_Stack('Main', '0')
-    # make sure labels displayed on mesh 0
     Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
-
-    # set parents active on the alternate mesh
     Process.Stack__System__Set_Current_Stack('Main', '1')
-                                # show surface, surface type, signal type, blend, cull, show mesh, mesh view, show lines,
-                                    # show points, show map, scale, transform, bbox, brightness, opacity
+    Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+
     # todo "try" load parents with view, if not saved in attributes, then load from csv
-    # show parents on mesh 1
-    Process.Mesh__System__View('', 'Yes', '', '', '', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+
     # todo make
     #parent_path =
     #                                   path, filetype, keep current parents
 
     # run desired processes
-    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
-    Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double', 'd_Area', 'Label',
-                                                                        'Label Heat', 'Active Mesh', 'No')
+    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
