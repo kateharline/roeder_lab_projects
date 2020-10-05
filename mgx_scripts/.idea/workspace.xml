@@ -14,8 +14,8 @@
       <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="798">
-              <caret line="275" column="66" lean-forward="true" selection-start-line="275" selection-start-column="66" selection-end-line="275" selection-end-column="66" />
+            <state relative-caret-position="437">
+              <caret line="38" column="640" lean-forward="false" selection-start-line="38" selection-start-column="640" selection-end-line="38" selection-end-column="640" />
               <folding>
                 <element signature="e#76#85#0" expanded="true" />
               </folding>
@@ -39,10 +39,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="1286" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1151" />
+    <option name="y" value="380" />
     <option name="width" value="1274" />
-    <option name="height" value="1440" />
+    <option name="height" value="1060" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -106,7 +107,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1286" y="0" width="1274" height="1440" extended-state="0" />
+    <frame x="1151" y="380" width="1274" height="1060" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08847403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -141,8 +142,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="275" column="66" lean-forward="true" selection-start-line="275" selection-start-column="66" selection-end-line="275" selection-end-column="66" />
+        <state relative-caret-position="437">
+          <caret line="38" column="640" lean-forward="false" selection-start-line="38" selection-start-column="640" selection-end-line="38" selection-end-column="640" />
           <folding>
             <element signature="e#76#85#0" expanded="true" />
           </folding>
