@@ -33,11 +33,13 @@ inter_measures = True
 intra_measures = True
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
-inter_display = []
-intra_display = []
 parents_as_csvs = False
 
+# attributes to save
+save_attr = []
 
+inter_display = []
+intra_display = []
 intra_ranges = []
 inter_ranges = []
 
@@ -156,7 +158,7 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
     Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
     Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
-    Process.Mesh__Heat_Map__Measures__Geometry__Neighbors()
+
     Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Largest_Empty_Space()
@@ -170,6 +172,7 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Perimeter()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Variability_Radius()
+    Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
     Process.Mesh__Heat_Map__Measures__Shape__Bending()
     Process.Mesh__Heat_Map__Measures__Shape__Common_Bending()
     Process.Mesh__Heat_Map__Measures__Shape__Common_Neighbors()
@@ -269,7 +272,7 @@ for i in range(0,len(dirs_dict['meshes'])):
     savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
-    Process.Mesh__Attributes__Save_to_CSV(savepath)
+    Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
@@ -291,7 +294,7 @@ for i in range(0, len(dirs_dict['meshes'])-1):
     savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
     pprint.pprint(savepath)
-    Process.Mesh__Attributes__Save_to_CSV(savepath)
+    Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
     if inter_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
