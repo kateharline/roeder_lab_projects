@@ -30,7 +30,7 @@ if not hasattr(sys, 'argv'):
 # variables for control flow
 deployed = False
 inter_measures = True
-intra_measures = True
+intra_measures = False
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
