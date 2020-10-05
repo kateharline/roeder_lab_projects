@@ -216,7 +216,6 @@ def do_inter_measures(mesh_0, mesh_1):
     #                                   path, filetype, keep current parents
 
     # run desired processes
-    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Yes', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double', 'd_Area', 'Label',
                                                                         'Label Heat', 'Active Mesh', 'No')
