@@ -32,11 +32,12 @@ deployed = False
 inter_measures = True
 intra_measures = True
 distance_measures = False
+# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 inter_display = []
 intra_display = []
 parents_as_csvs = False
 
-distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+
 intra_ranges = []
 inter_ranges = []
 
