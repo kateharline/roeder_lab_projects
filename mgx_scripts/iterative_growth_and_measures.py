@@ -29,7 +29,7 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-inter_measures = True
+inter_measures = False
 intra_measures = True
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
@@ -162,12 +162,12 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
 
     Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
-    #Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Area()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Aspect_Ratio()
     Process.Mesh__Heat_Map__Measures__Neighborhood__Perimeter()
@@ -181,6 +181,7 @@ def do_intra_measures(mesh):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
+    pprint('is saving working '+mesh)
     Process.Mesh__System__Save(mesh, 'no','0')
 
 
