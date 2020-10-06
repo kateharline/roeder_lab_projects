@@ -28,7 +28,7 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-file_selector = True
+file_selector = False
 inter_measures = True
 intra_measures = True
 distance_measures = False
@@ -197,9 +197,9 @@ def do_inter_measures(mesh_0, mesh_1):
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
     # mesh 0 show cell labels, mesh 1 show parent labels
     Process.Stack__System__Set_Current_Stack('Main', '0')
-    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    #Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
     Process.Stack__System__Set_Current_Stack('Main', '1')
-    Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    #Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
