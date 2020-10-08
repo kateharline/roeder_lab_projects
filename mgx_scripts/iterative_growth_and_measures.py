@@ -49,13 +49,14 @@ data_files_path = os.path.join('Desktop', data_files)
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    # root = Tk()
+    w = Tk()
 
     # root.filename = tkFileDialog.askdirectory(initialdir = root_path,title = "Select experiment directory")
     # print (root.filename)
     # main_path = root.filename
-    filename = tkFileDialog.askdirectory(initialdir=root_path, title="Select experiment directory")
+    filename = tkFileDialog.askdirectory(initialdir=root_path, title="Select experiment directory", command=w.destroy)
     main_path = filename
+    print (main_path)
     # root.mainloop()
 else:
     # main directory
