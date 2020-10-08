@@ -1,6 +1,5 @@
 ######## New MorphoGraphX session v2.0 r1-63-ga635c756: 2020-08-27 18:16:00
 import os
-import logging
 from Tkinter import *
 import tkFileDialog
 import pprint
@@ -181,7 +180,7 @@ def do_intra_measures(mesh):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    pprint('is saving working '+mesh)
+    pp.pprint('is saving working '+mesh)
     Process.Mesh__System__Save(mesh, 'no','0')
 
 
