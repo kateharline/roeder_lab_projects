@@ -27,8 +27,8 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-file_selector = False
-inter_measures = True
+file_selector = True
+inter_measures = False
 intra_measures = False
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
@@ -49,12 +49,14 @@ data_files_path = os.path.join('Desktop', data_files)
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
-    root = Tk()
+    # root = Tk()
 
-    root.filename = tkFileDialog.askdirectory(initialdir = root_path,title = "Select experiment directory")
-    print (root.filename)
-    main_path = root.filename
-    root.mainloop()
+    # root.filename = tkFileDialog.askdirectory(initialdir = root_path,title = "Select experiment directory")
+    # print (root.filename)
+    # main_path = root.filename
+    filename = tkFileDialog.askdirectory(initialdir=root_path, title="Select experiment directory")
+    main_path = filename
+    # root.mainloop()
 else:
     # main directory
     main_path = os.path.join(root_path, data_files_path)
