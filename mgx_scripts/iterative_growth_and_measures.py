@@ -28,8 +28,8 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-inter_measures = False
-intra_measures = True
+inter_measures = True
+intra_measures = False
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
@@ -193,10 +193,10 @@ def do_inter_measures(mesh_0, mesh_1):
     :return: null
     """
     # load meshes
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
+    # Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
     # mesh 0 show cell labels, mesh 1 show parent labels
-    Process.Stack__System__Set_Current_Stack('Main', '0')
+    # Process.Stack__System__Set_Current_Stack('Main', '0')
     #Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
     Process.Stack__System__Set_Current_Stack('Main', '1')
     #Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
@@ -209,11 +209,11 @@ def do_inter_measures(mesh_0, mesh_1):
 
     # run desired processes
     #Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
+    # Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh_0, 'no','0')
+    # Process.Mesh__System__Save(mesh_0, 'no','0')
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
