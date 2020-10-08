@@ -193,8 +193,9 @@ def do_inter_measures(mesh_0, mesh_1):
     :return: null
     """
     # load meshes
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '1')
+
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '0')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '1')
     # mesh 0 show cell labels, mesh 1 show parent labels
     # Process.Stack__System__Set_Current_Stack('Main', '0')
     #Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
