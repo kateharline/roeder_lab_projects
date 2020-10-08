@@ -54,7 +54,7 @@ if file_selector:
     # root.filename = tkFileDialog.askdirectory(initialdir = root_path,title = "Select experiment directory")
     # print (root.filename)
     # main_path = root.filename
-    filename = tkFileDialog.askdirectory(initialdir=root_path, title="Select experiment directory")
+    filename = tkFileDialog.askdirectory(title="Select experiment directory")
     w.destroy()
     main_path = filename
     print (main_path)
