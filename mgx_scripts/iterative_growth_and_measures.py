@@ -199,6 +199,7 @@ def do_inter_measures(mesh_0, mesh_1):
     # Process.Stack__System__Set_Current_Stack('Main', '0')
     #Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
     Process.Stack__System__Set_Current_Stack('Main', '1')
+    Process.Stack__System__Set_Current_Stack('Main', '1')
     #Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
