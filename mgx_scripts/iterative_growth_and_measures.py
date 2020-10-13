@@ -208,16 +208,25 @@ def do_inter_measures(mesh_0, mesh_1):
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
-    # todo make
     #parent_path =
     #                                   path, filetype, keep current parents
 
     # run desired processes
+
+    # Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
+    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
+    Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('No')
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferation'+, 'Label',
+                                                               'Label Heat', 'Active Mesh', 'No')
+
+    Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Check_Correspondence('No', 'No', 'No')
-    Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
-    # Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
-    # Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
-    #
+    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
+    Process.Stack__System__Set_Current_Stack('Main', '1')
+    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
+    Process.Mesh__Cell_Axis__PDG__Compute_Growth_Directions()
+
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh_0, 'no','0')
@@ -254,6 +263,13 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # take photos
         Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i], " ".join(measures[i].split())), 'false', '0', '0',
                                        '1.0', '95')
+
+        # if PDG
+        # Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor /Cell Axis PDG')
+                                                         # heatmap, scaleheat, heat min, max, show axis, color +, color -
+        # Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'Both', 'white', 'red',
+                                             # line width, line scale, line offset, threshold, custon dir, min dist vtx
+        #                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
 
 ####### FILES ##########
 pp = pprint.PrettyPrinter()
