@@ -29,7 +29,7 @@ if not hasattr(sys, 'argv'):
 # variables for control flow
 file_selector = False
 inter_measures = True
-intra_measures = False
+intra_measures = True
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
@@ -38,7 +38,7 @@ parents_as_csvs = False
 save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 
 # which measures to display and how
-inter_display = []
+inter_display = {'heats':[],'pdg':False}
 intra_display = []
 intra_ranges = []
 inter_ranges = []
@@ -150,6 +150,7 @@ def do_intra_measures(mesh):
     # load mesh
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
+    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # run desired processes
     Process.Mesh__Heat_Map__Measures__Geometry__Area()
@@ -270,6 +271,7 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'Both', 'white', 'red',
                                              # line width, line scale, line offset, threshold, custon dir, min dist vtx
         #                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
+        # Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
 
 ####### FILES ##########
 pp = pprint.PrettyPrinter()
@@ -315,6 +317,6 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         pprint.pprint(savepath)
         # Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
-    if inter_display:
+    if inter_display['heats']:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i+1], inter_measures, inter_measures, attr_dict, main_path)
+        do_display(dirs_dict['meshes'][i+1], inter_display, inter_ranges, attr_dict, main_path)
