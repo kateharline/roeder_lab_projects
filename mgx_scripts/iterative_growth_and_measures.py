@@ -190,7 +190,7 @@ def do_intra_measures(mesh):
 
 
 
-def do_inter_measures(mesh_0, mesh_1):
+def do_inter_measures(mesh_0, mesh_1, i_0):
     """
     run processes that track changes between meshes
     :param mesh_0: string, filepath of the first mesh (t)
@@ -218,7 +218,7 @@ def do_inter_measures(mesh_0, mesh_1):
     Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('No')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferation'+, 'Label',
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferationd'+(i_0+1)+ 'd'+(i_0+2), 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
@@ -293,7 +293,7 @@ for i in range(0,len(dirs_dict['meshes'])):
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
 
         pprint.pprint(savepath)
-        # Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
+        Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
@@ -310,12 +310,12 @@ if parents_as_csvs:
 for i in range(0, len(dirs_dict['meshes'])-1):
 
     if inter_measures:
-        do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1])
+        do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1], i)
 
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
         pprint.pprint(savepath)
-        # Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
+        Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
     if inter_display['heats']:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
