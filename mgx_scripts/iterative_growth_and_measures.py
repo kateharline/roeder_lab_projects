@@ -27,9 +27,9 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-file_selector = True
+file_selector = False
 inter_measures = True
-intra_measures = True
+intra_measures = False
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
@@ -165,7 +165,7 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
 
     Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
-    # Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
+    Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
@@ -198,13 +198,12 @@ def do_inter_measures(mesh_0, mesh_1):
     """
     # load meshes
 
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '0')
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '1')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
     # mesh 0 show cell labels, mesh 1 show parent labels
-    # Process.Stack__System__Set_Current_Stack('Main', '0')
-    #Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
-    # Process.Stack__System__Set_Current_Stack('Main', '1')
-
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    Process.Stack__System__Set_Current_Stack('Main', '1')
     Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
@@ -214,13 +213,15 @@ def do_inter_measures(mesh_0, mesh_1):
     #                                   path, filetype, keep current parents
 
     # run desired processes
-    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
-
+    Process.Mesh__Cell_Axis__PDG__Check_Correspondence('No', 'No', 'No')
+    Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
+    # Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
+    # Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
+    #
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    # Process.Mesh__System__Save(mesh_0, 'no','0')
-    Process.Mesh__System__Save(mesh_1, 'no', '0')
+    Process.Mesh__System__Save(mesh_0, 'no','0')
+    Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
 def do_display(mesh, measures, ranges, attr_dict, main_path):
