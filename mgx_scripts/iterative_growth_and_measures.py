@@ -218,7 +218,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('No')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferationd'+(i_0+1)+ 'd'+(i_0+2), 'Label',
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferationd'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
