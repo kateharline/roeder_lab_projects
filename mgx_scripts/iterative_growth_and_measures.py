@@ -205,6 +205,12 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     :param mesh_1: string, filepath of the second mesh (t+1)
     :return: null
     """
+
+    # if there are parent csvs in the parents folder
+    if dirs_dict['parents']:
+        print('saving parents to attr')
+        do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
+
     # load meshes
 
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
@@ -217,10 +223,6 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
-    # if there are parent csvs in the parents folder
-    if dirs_dict['parents']:
-        print('saving parents to attr')
-        do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
     # run desired processes
 
     # Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
