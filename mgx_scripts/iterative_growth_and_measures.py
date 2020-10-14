@@ -96,14 +96,13 @@ def walk(file_path):
         dirs_dict[dot_dir] = filenames
     return dirs_dict
 
-class UserDialog(Frame):
+def user_dialog(root, message):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
-    def __init__(self, message):
-        w = Toplevel()
-        Label(w, text=message).pack()
-        Button(w, text='Yes', command=w.destroy).pack()
-        w.focus_set()
-        w.wait_window()
+
+    Label(root, text=message).pack()
+    Button(root, text='Yes', command=w.destroy).pack()
+    root.focus_set()
+    root.wait_window()
 
 
 def do_distance_measures(mesh, types):
@@ -290,10 +289,11 @@ attr_dict = walk(os.path.join(main_path, 'attributes'))
 pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
+done = False
 root = Tk()
-UserDialog(message='Hello').pack()
+done = user_dialog('Hi')
 root.mainloop()
-print('After user dialog')
+print('After user dialog '+done)
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
     if distance_measures:
