@@ -247,7 +247,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(mesh, measures, ranges, attr_dict, main_path):
+def do_display(mesh_0, mesh_1, measures, ranges, attr_dict, main_path):
     """
     save snapshots for all desired measures
     :param mesh: string, filepath of the mesh
@@ -257,8 +257,14 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
     :return: null
     """
     # load meshes
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
+
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
+    # mesh 0 show cell labels, mesh 1 show parent labels
     Process.Stack__System__Set_Current_Stack('Main', '0')
+    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    Process.Stack__System__Set_Current_Stack('Main', '1')
+    Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # user adjust arrangement
     user_dialog('Done arranging meshes, start a snappin?')
@@ -331,4 +337,4 @@ for i in range(0, len(dirs_dict['meshes'])-1):
 
     if inter_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i+1], inter_display, inter_ranges, attr_dict, main_path)
+        do_display(dirs_dict['meshes'][i], dirs_dict['meshes'][i+1], inter_display, inter_ranges, attr_dict, main_path)
