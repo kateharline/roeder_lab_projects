@@ -30,8 +30,8 @@ if not hasattr(sys, 'argv'):
 file_selector = True
 inter_measures = False
 intra_measures = False
-distance_measures = []
-# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+# distance_measures = []
+distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
 
 # attributes to save
