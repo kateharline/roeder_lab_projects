@@ -16,7 +16,7 @@ if o_s == 'posix':
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
 sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
 
-import funcs as f
+# import funcs as f
 
 # todo add root for windows
 
@@ -28,8 +28,8 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-inter_measures = True
-intra_measures = True
+inter_measures = False
+intra_measures = False
 distance_measures = False
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
@@ -96,6 +96,15 @@ def walk(file_path):
         dirs_dict[dot_dir] = filenames
     return dirs_dict
 
+class UserDialog(Frame):
+    # https://docstore.mik.ua/orelly/other/python2/1.7.htm
+    def __init__(self, message):
+        w = Toplevel()
+        Label(w, text='HI').pack()
+        Button(w, text='Yes', command=w.destroy).pack()
+        w.focus_set()
+        w.wait_window()
+
 
 def do_distance_measures(mesh, types):
     """
@@ -110,9 +119,9 @@ def do_distance_measures(mesh, types):
 
     for i in range(0,len(types)):
         # user define cells
-        # root = Tk()
-        # Message(message='Done setting axis')
-        # root.mainloop()
+        root = Tk()
+        Message(message='Done setting axis?')
+        root.destroy()
 
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
@@ -281,6 +290,7 @@ attr_dict = walk(os.path.join(main_path, 'attributes'))
 pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
+UserDialog.mainloop()
 
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
