@@ -101,7 +101,7 @@ def user_dialog(message):
     root = Tk()
     Label(root, text=message).pack()
     Button(root, text='Yes', command=root.destroy).pack()
-    root.focus_set()
+    # root.focus_set()
     root.wait_window()
     root.mainloop()
 
@@ -124,9 +124,11 @@ def do_distance_measures(mesh, types):
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attribute
-        Process.Mesh__Heat_Map__Transform_Heat__Heat_Map_Export_to_Attr_Map('Measure Label Double',
-                                                                            types[i] + ' Distance', 'Label',
-                                                                            'Label Heat', 'Active Mesh', 'No')
+                                                                  'Label Heat', 'Active Mesh', 'No')
+
+        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', types[i] + '_Distance', 'Label',
+                                                               'Label Heat', 'Active Mesh', 'No')
+
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh, 'no', '0')
