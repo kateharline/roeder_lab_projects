@@ -96,13 +96,14 @@ def walk(file_path):
         dirs_dict[dot_dir] = filenames
     return dirs_dict
 
-def user_dialog(root, message):
+def user_dialog(message):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
-
+    root = Tk()
     Label(root, text=message).pack()
     Button(root, text='Yes', command=root.destroy).pack()
     root.focus_set()
     root.wait_window()
+    root.mainloop()
 
 
 def do_distance_measures(mesh, types):
@@ -118,9 +119,7 @@ def do_distance_measures(mesh, types):
 
     for i in range(0,len(types)):
         # user define cells
-        root = Tk()
-        Message(message='Done setting axis?')
-        root.destroy()
+        user_dialog('Done setting axis?')
 
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
@@ -256,11 +255,8 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # user adjust arrangement
-    window = Tk()
-    frame = Frame(window).pack()
-    Label(frame, text="Done arranging meshes, start a snappin?").pack()
-    Button(frame, text="Yes", command=window.destroy).pack()
-    window.mainloop()
+    user_dialog(root, 'Done arranging meshes, start a snappin?')
+
 
     for i in range(0,len(measures)):
         #load heatmap
@@ -289,11 +285,7 @@ attr_dict = walk(os.path.join(main_path, 'attributes'))
 pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
-done = False
-root = Tk()
-done = user_dialog(root, 'Hi')
-root.mainloop()
-print('After user dialog '+done)
+
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
     if distance_measures:
