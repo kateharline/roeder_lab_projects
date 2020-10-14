@@ -291,7 +291,7 @@ pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
 UserDialog.mainloop()
-
+print('After user dialog')
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
     if distance_measures:
