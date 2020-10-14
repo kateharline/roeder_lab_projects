@@ -269,10 +269,10 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # todo check with new code from Richard
         #                                                                           filename, column name?, border size
         Process.Mesh__Heat_Map__Heat_Map_Load(
-            os.path.join(main_path, 'attributes', attr_dict['attributes'][i]), measures[i], '1.0')
+            os.path.join(main_path, 'attributes', attr_dict['attributes'][i+1]), measures[i], '1.0')
         Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
         # take photos
-        Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i], " ".join(measures[i].split())), 'false', '0', '0',
+        Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1], " ".join(measures[i].split())), 'false', '0', '0',
                                        '1.0', '95')
 
         # if PDG
@@ -327,6 +327,6 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         pprint.pprint(savepath)
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
-    if inter_display['heats']:
+    if inter_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
         do_display(dirs_dict['meshes'][i+1], inter_display, inter_ranges, attr_dict, main_path)
