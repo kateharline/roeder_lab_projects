@@ -123,8 +123,7 @@ def do_distance_measures(mesh, types):
 
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
-        # save as attribute
-                                                                  'Label Heat', 'Active Mesh', 'No')
+        # save as attributes
 
         Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', types[i] + '_Distance', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
