@@ -100,7 +100,7 @@ def user_dialog(root, message):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
 
     Label(root, text=message).pack()
-    Button(root, text='Yes', command=w.destroy).pack()
+    Button(root, text='Yes', command=root.destroy).pack()
     root.focus_set()
     root.wait_window()
 
