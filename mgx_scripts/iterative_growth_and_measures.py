@@ -27,9 +27,9 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-file_selector = False
+file_selector = True
 inter_measures = False
-intra_measures = True
+intra_measures = False
 distance_measures = []
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
