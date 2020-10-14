@@ -27,7 +27,7 @@ if not hasattr(sys, 'argv'):
 ######### USER INPUT ##########
 
 # variables for control flow
-file_selector = True
+file_selector = False
 inter_measures = False
 intra_measures = False
 # distance_measures = []
@@ -98,7 +98,7 @@ def walk(file_path):
 
 def user_dialog(message):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
-    root = Tk()
+    root = Toplevel()
     Label(root, text=message).pack()
     Button(root, text='Yes', command=root.destroy).pack()
     # root.focus_set()
