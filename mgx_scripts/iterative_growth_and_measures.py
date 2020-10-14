@@ -100,7 +100,7 @@ class UserDialog(Frame):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
     def __init__(self, message):
         w = Toplevel()
-        Label(w, text='HI').pack()
+        Label(w, text=message).pack()
         Button(w, text='Yes', command=w.destroy).pack()
         w.focus_set()
         w.wait_window()
@@ -291,7 +291,8 @@ pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
 root = Tk()
-root.mainloop(UserDialog)
+UserDialog(message='Hello').pack()
+root.mainloop()
 print('After user dialog')
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
