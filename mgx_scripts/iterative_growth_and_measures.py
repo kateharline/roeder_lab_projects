@@ -28,7 +28,7 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-inter_measures = True
+inter_measures = False
 intra_measures = False
 distance_measures = []
 # distance_measures = ['Proximal-Distal', 'Medial-Lateral']
@@ -38,10 +38,11 @@ parents_as_csvs = False
 save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 
 # which measures to display and how
-inter_display = {'heats':[],'pdg':False}
-intra_display = []
-intra_ranges = []
-inter_ranges = []
+inter_display = ['d_Area']
+inter_ranges = [[1,3]]
+intra_display = ['/Geometry/Area']
+intra_ranges = [[0,1900]]
+
 
 # fun fun file management shit between dev env of vm build and windows build
 data_files = '202003_0715_demo'
@@ -268,7 +269,7 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
         # todo check with new code from Richard
         #                                                                           filename, column name?, border size
         Process.Mesh__Heat_Map__Heat_Map_Load(
-            attr_dict['attributes'][i], measures[i], '1.0')
+            os.path.join(main_path, 'attributes', attr_dict['attributes'][i]), measures[i], '1.0')
         Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
         # take photos
         Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i], " ".join(measures[i].split())), 'false', '0', '0',
@@ -306,7 +307,7 @@ for i in range(0,len(dirs_dict['meshes'])):
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i], intra_ranges, intra_ranges, attr_dict, main_path)
+        do_display(dirs_dict['meshes'][i], intra_display, intra_ranges, attr_dict, main_path)
 
 # for older meshes need to save parents to attr
 if parents_as_csvs:
