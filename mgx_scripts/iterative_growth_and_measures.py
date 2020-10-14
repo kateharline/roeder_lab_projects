@@ -98,7 +98,7 @@ def walk(file_path):
 
 def user_dialog(message):
     # https://docstore.mik.ua/orelly/other/python2/1.7.htm
-    root = Toplevel()
+    root = Tk()
     Label(root, text=message).pack()
     Button(root, text='Yes', command=root.destroy).pack()
     root.focus_set()
