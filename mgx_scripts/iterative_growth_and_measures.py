@@ -290,7 +290,8 @@ attr_dict = walk(os.path.join(main_path, 'attributes'))
 pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
-win = UserDialog.pack()
+root = Tk()
+root.mainloop(UserDialog)
 print('After user dialog')
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
