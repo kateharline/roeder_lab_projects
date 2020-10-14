@@ -217,9 +217,10 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
-    #parent_path =
-    #                                   path, filetype, keep current parents
-
+    # if there are parent csvs in the parents folder
+    if dirs_dict['parents']:
+        print('saving parents to attr')
+        do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
     # run desired processes
 
     # Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
@@ -256,7 +257,7 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
     Process.Stack__System__Set_Current_Stack('Main', '0')
 
     # user adjust arrangement
-    user_dialog(root, 'Done arranging meshes, start a snappin?')
+    user_dialog('Done arranging meshes, start a snappin?')
 
 
     for i in range(0,len(measures)):
