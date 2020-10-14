@@ -144,8 +144,8 @@ def do_parents_to_attr(parent_file, mesh):
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
     Process.Stack__System__Set_Current_Stack('Main', '0')
     #
-    print(parent_file)
-    Process.Mesh__Lineage_Tracking__Load_Parents(parent_file, 'CSV', 'No')
+
+    Process.Mesh__Lineage_Tracking__Load_Parents(os.path.join(main_path, 'parents', parent_file), 'CSV', 'No')
     Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
     Process.Mesh__System__Save(mesh, 'no', '0')
 
