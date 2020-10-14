@@ -30,8 +30,8 @@ if not hasattr(sys, 'argv'):
 file_selector = False
 inter_measures = False
 intra_measures = False
-distance_measures = False
-# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+# distance_measures = True
+distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
 
 # attributes to save
@@ -301,7 +301,7 @@ for i in range(0,len(dirs_dict['meshes'])):
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i], intra_measures, intra_ranges, attr_dict, main_path)
+        do_display(dirs_dict['meshes'][i], intra_ranges, intra_ranges, attr_dict, main_path)
 
 # for older meshes need to save parents to attr
 if parents_as_csvs:
