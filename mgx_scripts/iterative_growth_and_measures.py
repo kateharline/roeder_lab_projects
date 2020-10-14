@@ -101,7 +101,7 @@ def user_dialog(message):
     root = Toplevel()
     Label(root, text=message).pack()
     Button(root, text='Yes', command=root.destroy).pack()
-    # root.focus_set()
+    root.focus_set()
     root.wait_window()
     root.mainloop()
 
