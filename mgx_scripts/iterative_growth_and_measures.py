@@ -272,6 +272,7 @@ def do_display(mesh, measures, ranges, attr_dict, main_path):
             os.path.join(main_path, 'attributes', attr_dict['attributes'][i+1]), measures[i], '1.0')
         Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
         # take photos
+        print('Path '+os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1], " ".join(measures[i].split())))
         Process.Misc__System__Snapshot(os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1], " ".join(measures[i].split())), 'false', '0', '0',
                                        '1.0', '95')
 
