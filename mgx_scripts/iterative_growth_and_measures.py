@@ -291,7 +291,7 @@ pp.pprint(attr_dict)
 ############ EXECTUE MEASURES #################
 done = False
 root = Tk()
-done = user_dialog('Hi')
+done = user_dialog(root, 'Hi')
 root.mainloop()
 print('After user dialog '+done)
 # single mesh measures
