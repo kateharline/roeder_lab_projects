@@ -40,7 +40,7 @@ save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radi
 # which measures to display and how
 # inter_display = ['d_Area']
 inter_display = []
-# inter_ranges = [[1,3]]
+inter_ranges = [[1,3]]
 intra_display = ['/Geometry/Area']
 intra_ranges = [[0,1900]]
 
@@ -286,7 +286,7 @@ def do_display(measures, ranges, attr_dict, main_path, d, pdg=None):
             Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
                                        '', '-1', '-1')
             Process.Mesh__Cell_Axis__Cell_Axis_Clear()
-            
+
         # take photos
         snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][d][:-8]+"_".join(measures[i].split('/'))+'.png')
         print('Path '+snap_path)
@@ -319,7 +319,7 @@ for i in range(0,len(dirs_dict['meshes'])):
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
         load_mesh(dirs_dict['meshes'][i], 0, 'No')
-        do_display(intra_display, intra_ranges, attr_dict, main_path)
+        do_display(intra_display, intra_ranges, attr_dict, main_path, i)
 
 # for older meshes need to save parents to attr
 if parents_as_csvs:
