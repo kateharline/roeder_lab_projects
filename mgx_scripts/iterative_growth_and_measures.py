@@ -253,10 +253,10 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 def do_display(measures, ranges, attr_dict, main_path):
     """
     save snapshots for all desired measures
-    :param mesh: string, filepath of the mesh
     :param measures: list of strings, names of measures to be displayed
     :param ranges: list of tuples, sets of ranges for each measure to be displayed
-    :param attr_dict:
+    :param attr_dict: string, path to attributes file
+    :param main_path: string, path to top dir for saving
     :return: null
     """
 
