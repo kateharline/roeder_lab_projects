@@ -11,7 +11,8 @@ import sys
 o_s = os.name
 if o_s == 'posix':
     root_path = '/home/kate'
-# elif os == '':
+# elif os == 'nt':
+    root_path = '/c/Users/katha'
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
 sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
