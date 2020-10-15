@@ -118,7 +118,7 @@ def load_mesh(mesh, stack, parents):
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
     Process.Stack__System__Set_Current_Stack('Main', stack)
     Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
-
+    Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 
 def do_distance_measures(mesh, types):
@@ -285,7 +285,7 @@ def do_display(measures, ranges, attr_dict, main_path, d, pdg=None):
             # nice viz parameters
             Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
                                        '', '-1', '-1')
-            Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+
 
         # take photos
         snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][d][:-8]+"_".join(measures[i].split('/'))+'.png')
