@@ -106,6 +106,19 @@ def user_dialog(message):
     root.wait_window()
     root.mainloop()
 
+def load_mesh(mesh, stack, parents):
+    '''
+    utility function to load mesh into a standard view
+    :param mesh: string, filename of mesh
+    :param stack: int 0 or 1, which stack to load mesh into
+    :param parents: str yes or no, display parents or cell labels
+    :return:
+    '''
+    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
+    Process.Stack__System__Set_Current_Stack('Main', stack)
+    Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+
+
 
 def do_distance_measures(mesh, types):
     """
@@ -115,8 +128,7 @@ def do_distance_measures(mesh, types):
     :return: none
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
+    load_mesh(mesh, 0, 'No')
 
     for i in range(0,len(types)):
         # user define cells
@@ -142,8 +154,8 @@ def do_parents_to_attr(parent_file, mesh):
     :return: null
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
+    load_mesh(mesh, 0, 'Yes')
+
     #
 
     Process.Mesh__Lineage_Tracking__Load_Parents(os.path.join(main_path, 'parents', parent_file), 'CSV', 'No')
@@ -158,10 +170,7 @@ def do_intra_measures(mesh):
     :return: null
     """
     # load mesh
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', '0')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
-    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
-
+    load_mesh(mesh, 0, 'No')
     # run desired processes
     Process.Mesh__Heat_Map__Measures__Geometry__Area()
     Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
@@ -214,14 +223,8 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
         do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
 
     # load meshes
-
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_0), 'no', 'no', '0')
-    # mesh 0 show cell labels, mesh 1 show parent labels
-    Process.Stack__System__Set_Current_Stack('Main', '0')
-    Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
-    Process.Stack__System__Set_Current_Stack('Main', '1')
-    Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    load_mesh(mesh_0, 0, 'No')
+    load_mesh(mesh_1, 1, 'Yes')
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
@@ -247,7 +250,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(mesh_1, measures, ranges, attr_dict, main_path):
+def do_display(measures, ranges, attr_dict, main_path):
     """
     save snapshots for all desired measures
     :param mesh: string, filepath of the mesh
@@ -256,29 +259,12 @@ def do_display(mesh_1, measures, ranges, attr_dict, main_path):
     :param attr_dict:
     :return: null
     """
-    # load meshes
-
-    Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh_1), 'no', 'no', '1')
-
-    Process.Stack__System__Set_Current_Stack('Main', '1')
-    Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
 
     # user adjust arrangement
     user_dialog('Done arranging meshes, start a snappin?')
 
 
     for i in range(0,len(measures)):
-        #load heatmap
-        # todo check with new code from Richard
-        #                                                                           filename, column name?, border size
-        Process.Mesh__Heat_Map__Heat_Map_Load(
-            os.path.join(main_path, 'attributes', attr_dict['attributes'][i+1]), measures[i], '1.0')
-        Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
-        # take photos
-        snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1][:-4]+" ".join(measures[i].split()),'.png')
-        print('Path '+snap_path)
-        Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
-                                       '1.0', '95')
 
         # if PDG
         # Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor /Cell Axis PDG')
@@ -287,6 +273,19 @@ def do_display(mesh_1, measures, ranges, attr_dict, main_path):
                                              # line width, line scale, line offset, threshold, custon dir, min dist vtx
         #                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
         # Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+        # else
+        #load heatmap
+        # todo check with new code from Richard
+        #                                                                           filename, column name?, border size
+        Process.Mesh__Heat_Map__Heat_Map_Load(
+            os.path.join(main_path, 'attributes', attr_dict['attributes'][i+1]), measures[i], '1.0')
+        Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+        # take photos
+        snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1][:-4]+'_'+" ".join(measures[i].split())+'.png')
+        print('Path '+snap_path)
+        Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
+                                       '1.0', '95')
+
 
 ####### FILES ##########
 pp = pprint.PrettyPrinter()
@@ -312,7 +311,8 @@ for i in range(0,len(dirs_dict['meshes'])):
 
     if intra_display:
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i], intra_display, intra_ranges, attr_dict, main_path)
+        load_mesh(dirs_dict['meshes'][i], 0, 'No')
+        do_display(intra_display, intra_ranges, attr_dict, main_path)
 
 # for older meshes need to save parents to attr
 if parents_as_csvs:
@@ -333,9 +333,7 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
     if inter_display:
-        Process.Mesh__System__Load(os.path.join(main_path, 'meshes', dirs_dict['meshes'][i]), 'no', 'no', '0')
-        # mesh 0 show cell labels, mesh 1 show parent labels
-        Process.Stack__System__Set_Current_Stack('Main', '0')
-        Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+        load_mesh(dirs_dict['meshes'][i], 0, 'No')
+        load_mesh(dirs_dict['meshes'][i+1], 1, 'Yes')
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(dirs_dict['meshes'][i+1], inter_display, inter_ranges, attr_dict, main_path)
+        do_display(inter_display, inter_ranges, attr_dict, main_path)
