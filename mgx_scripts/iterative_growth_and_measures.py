@@ -251,13 +251,15 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(measures, ranges, attr_dict, main_path):
+def do_display(measures, ranges, attr_dict, main_path, d, pdg=None):
     """
     save snapshots for all desired measures
     :param measures: list of strings, names of measures to be displayed
     :param ranges: list of tuples, sets of ranges for each measure to be displayed
     :param attr_dict: string, path to attributes file
     :param main_path: string, path to top dir for saving
+    :param d: int, the day from the prev loop
+    :param pdg: list can pass for special pdg display values
     :return: null
     """
 
@@ -266,23 +268,27 @@ def do_display(measures, ranges, attr_dict, main_path):
 
 
     for i in range(0,len(measures)):
-
-        # if PDG
-        # Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor /Cell Axis PDG')
-                                                         # heatmap, scaleheat, heat min, max, show axis, color +, color -
-        # Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'Both', 'white', 'red',
-                                             # line width, line scale, line offset, threshold, custon dir, min dist vtx
-        #                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
-        # Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
-        # else
-        #load heatmap
-        # todo check with new code from Richard
-        #                                                                           filename, column name?, border size
-        Process.Mesh__Heat_Map__Heat_Map_Load(
-            os.path.join(main_path, 'attributes', attr_dict['attributes'][i+1]), measures[i], '1.0')
-        Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+        if measures[i] == 'Cell Axis PDG':
+            # todo make dynamic
+            Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
+                                                             # heatmap, scaleheat, heat min, max, show axis, color +, color -
+            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'Both', 'white', 'red',
+                                                 # line width, line scale, line offset, threshold, custon dir, min dist vtx
+                                                                    '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
+            Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+        else:
+            #load heatmap
+            #                                                                           filename, column name?, border size
+            Process.Mesh__Heat_Map__Heat_Map_Load(
+                os.path.join(main_path, 'attributes', attr_dict['attributes'][d]), measures[i], '1.0')
+            Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+            # nice viz parameters
+            Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
+                                       '', '-1', '-1')
+            Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+            
         # take photos
-        snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][i+1][:-8]+"_".join(measures[i].split('/'))+'.png')
+        snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][d][:-8]+"_".join(measures[i].split('/'))+'.png')
         print('Path '+snap_path)
         Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
                                        '1.0', '95')
@@ -337,4 +343,4 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         load_mesh(dirs_dict['meshes'][i], 0, 'No')
         load_mesh(dirs_dict['meshes'][i+1], 1, 'Yes')
         attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(inter_display, inter_ranges, attr_dict, main_path)
+        do_display(inter_display, inter_ranges, attr_dict, main_path, i)
