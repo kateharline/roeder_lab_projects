@@ -1,9 +1,11 @@
 
 import sys
+import Tkinter
 
-sys.path.insert(0,'/home/kate/Desktop/roeder_lab_projects/mgx_scripts')
+for p in sys.path:
+    print(p)
 
+if not hasattr(sys, 'argv'):
+    sys.argv  = ['']
 
-print('Hello world')
-
-
+Tkinter._test()
