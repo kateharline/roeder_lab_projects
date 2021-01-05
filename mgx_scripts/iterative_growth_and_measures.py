@@ -38,7 +38,7 @@ parents_as_csvs = False
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 #save_attr = []
-save_attr = '/Geometry/Area'
+save_attr = 'Label Double Geometry/Area'
 
 # which measures to display and how
 # inter_display = ['d_Area']
@@ -227,17 +227,18 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
         do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
 
     # load meshes
-    load_mesh(mesh_0, 0, 'No')
     load_mesh(mesh_1, 1, 'Yes')
+    load_mesh(mesh_0, 0, 'No')
+
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
     # run desired processes
 
     # Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
-    Process.Mesh__Heat_Map__Heat_Map('/Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'No', 'Yes')
+    Process.Mesh__Heat_Map__Heat_Map('Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
-    Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('No')
+    Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('Yes')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferationd'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
