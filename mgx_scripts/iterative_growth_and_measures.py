@@ -239,7 +239,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Heat_Map__Heat_Map('Geometry/Area', 'No', 'Sum', 'Yes', 'Decreasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('Yes')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'Proliferationd'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
@@ -247,6 +247,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
     Process.Stack__System__Set_Current_Stack('Main', '1')
     Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
+    Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Compute_Growth_Directions()
 
     # save the mesh (attributes saved in mesh)
