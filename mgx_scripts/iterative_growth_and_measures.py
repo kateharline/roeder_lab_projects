@@ -2,7 +2,7 @@
 import os
 #from Tkinter import *
 #import tkFileDialog
-#import pprint
+import pprint
 import sys
 
 ####### DIR MANAGEMENT ########
@@ -12,7 +12,7 @@ o_s = os.name
 if o_s == 'posix':
     root_path = '/home/kate'
 elif o_s == 'nt':
-    root_path = '/c/Users/katha'
+    root_path = 'C:\\Users\\katha\\'
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
 sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
@@ -350,6 +350,7 @@ def do_display(measures, ranges, attr_dict, main_path, d, pdg=None):
 
 ####### FILES ##########
 pp = pprint.PrettyPrinter()
+print(main_path)
 dirs_dict = walk(main_path)
 pp.pprint(dirs_dict)
 attr_dict = walk(os.path.join(main_path, 'attributes'))
