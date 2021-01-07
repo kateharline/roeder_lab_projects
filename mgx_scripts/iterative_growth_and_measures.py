@@ -144,7 +144,7 @@ def step_check(path, filename):
 
     else:
         with open(filename, 'w') as f:
-            f.write(step)
+            f.write(str(step))
 
     return step
 
