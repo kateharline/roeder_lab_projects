@@ -124,7 +124,34 @@ def load_mesh(mesh, stack, parents):
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 
-def do_distance_measures(mesh, types):
+def record_step(track_name, message, num_steps):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param track_name: string, name of the process, should be unique to make tracking file
+    :param message: string, message to print to console so user knows how to proceed
+    :return: none
+    '''
+
+    filename = track_name + '.txt'
+
+    if os.path.exists(os.path.join(path, filename)):
+        with open(filename, 'r') as f:
+            step = f.read()
+        with open(filename, 'w') as f:
+            print(step)
+            f.write(str(int(step) + 1))
+
+
+    else:
+        with open(filename, 'w') as f:
+            f.write('1')
+
+    if step < num_steps:
+        sys.exit(message)
+
+
+
+def do_distance_measures(mesh, types, num_repeats, path ):
     """
     allow user to input cell based axes for measures of distance within a mesh
     :param mesh: string denoting path to mesh to be used
@@ -136,7 +163,9 @@ def do_distance_measures(mesh, types):
 
     for i in range(0,len(types)):
         # user define cells
-        user_dialog('Done setting axis?')
+        # old dialog method
+        # user_dialog('Done setting axis?')
+        record_step(types[i], 'Select cells for'+ types[i]+ 'measure then run script again', num_repeats)
 
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
@@ -311,7 +340,7 @@ pp.pprint(attr_dict)
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
     if distance_measures:
-        do_distance_measures(dirs_dict['meshes'][i], distance_measures)
+        do_distance_measures(dirs_dict['meshes'][i], distance_measures, len(dirs_dict['meshes']))
 
     if intra_measures:
         do_intra_measures(dirs_dict['meshes'][i])

@@ -25,9 +25,15 @@ dirs_dict ={'meshes': ['d', 'd2', 'd3']}
 # if decide to remove the dialog and include the pauses for snapping
 # + if inter_display + if intra_display
 
-def record_step(process, message):
+def record_step(track_name, message):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param track_name: string, name of the process, should be unique to make tracking file
+    :param message: string, message to print to console so user knows how to proceed
+    :return: none
+    '''
 
-    filename = process + '.txt'
+    filename = track_name + '.txt'
 
     if os.path.exists(os.path.join(path, filename)):
         with open(filename, 'r') as f:

@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/pKH1xpAR393xpLH13_screen_nicole'
+input_path = '/Users/kateharline/workspace/20201125_jawDxpAR169xpAR229_live'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
@@ -21,9 +21,9 @@ def process(filename, output_path):
     # the number of channels is one (orig image) less than the number of images opened
     curr_img = WM.getCurrentImage()
         # add scale bar to image
-    IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    #IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     # save scale bar to stack
-    IJ.run("Flatten");
+    #IJ.run("Flatten");
     IJ.saveAs("Tiff", os.path.join(output_path, 'w_scale_' + filename))
     curr_img.close()
     return
