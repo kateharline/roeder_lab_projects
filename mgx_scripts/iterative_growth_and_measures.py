@@ -160,9 +160,12 @@ def do_distance_measures(meshes, types, path):
     """
     # old dialog method
     # user_dialog('Done setting axis?')
+    print('whats main path '+path)
 
     # check files
     step = step_check(path, 'distance_steps.txt')
+    print('what is step returning '+str(step))
+
     total_steps = len(meshes)*len(types)
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
