@@ -167,35 +167,33 @@ def do_distance_measures(meshes, types, path):
     meshes_path = os.path.join(path, 'meshes')
 
     total_steps = len(meshes)*len(types)
-
-    print('what is step returning '+str(step))
-    print('total steps '+ str(total_steps))
-    print('step % len(types) '+ str(step % len(types)))
-    print ('types[step % len(types)] ' + types[step % len(types)])
-    print('step // len(types) '+ str(step // len(types)))
     # print ('meshes[step // len(types)] ' + meshes[step // len(types)])
 
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
     if step == 0:
+        print ('step 0')
         load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
+        print ('loading '+ meshes[step])
         sys.exit('Select cells for '+ types[step % len(types)]+ ' axis then re-run script')
 
     elif (step > 0) and (step < total_steps):
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attributes
-
+        print ('export heat save as '+ types[(step - 1) % len(types)])
         Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', types[(step - 1) % len(types)] + '_Distance', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
         # save the mesh (attributes saved in mesh)
         #                           filename, transform, mesh number
         Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[(step - 1) // len(types)]), 'no', '0')
+        print('mesh save name '+meshes[(step - 1) // len(types)])
 
 
-        if not (step % len(types)):
+        if (step % len(types)):
+            print('open new mesh '+ meshes[(step+1) // len(types)])
             # load new mesh because done all measures
-            load_mesh(os.path.join(meshes_path, meshes[step // len(types)]), 0, 'No')
+            load_mesh(os.path.join(meshes_path, meshes[(step+1) // len(types)]), 0, 'No')
 
         sys.exit('Select cells for ' + types[step % len(types)] + ' axis then re-run script')
     else:
