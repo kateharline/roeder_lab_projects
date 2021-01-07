@@ -1,8 +1,8 @@
 ######## New MorphoGraphX session v2.0 r1-63-ga635c756: 2020-08-27 18:16:00
 import os
-from Tkinter import *
-import tkFileDialog
-import pprint
+#from Tkinter import *
+#import tkFileDialog
+#import pprint
 import sys
 
 ####### DIR MANAGEMENT ########
@@ -11,7 +11,7 @@ import sys
 o_s = os.name
 if o_s == 'posix':
     root_path = '/home/kate'
-elif os == 'nt':
+elif o_s == 'nt':
     root_path = '/c/Users/katha'
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
