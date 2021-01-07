@@ -169,10 +169,10 @@ def do_distance_measures(meshes, types, path):
     total_steps = len(meshes)*len(types)
 
     print('what is step returning '+str(step))
-    print('total steps '+total_steps)
-    print('step % len(types)'+ step % len(types))
+    print('total steps '+ str(total_steps))
+    print('step % len(types)'+ str(step % len(types)))
     print ('types[step % len(types)] ' + types[step % len(types)])
-    print('step // total_steps'+ step // total_steps)
+    print('step // total_steps'+ str(step // total_steps))
     print ('meshes[step // total_steps] ' + meshes[step // total_steps])
 
 
