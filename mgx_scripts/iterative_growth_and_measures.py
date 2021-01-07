@@ -29,10 +29,10 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-inter_measures = True
-intra_measures = True
-distance_measures = []
-# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+inter_measures = False
+intra_measures = False
+# distance_measures = []
+distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
 
 # attributes to save
@@ -124,59 +124,75 @@ def load_mesh(mesh, stack, parents):
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 
-def record_step(track_name, message, num_steps):
+def step_check(path, filename):
     '''
     function to track where you are in a process to exit and re-enter
-    :param track_name: string, name of the process, should be unique to make tracking file
-    :param message: string, message to print to console so user knows how to proceed
+    :param path: string path to data files, where step tracking file will be saved
+    :param filename: string, name of the file where the step will be tracked
     :return: none
     '''
 
-    filename = track_name + '.txt'
+    step = 1
 
     if os.path.exists(os.path.join(path, filename)):
         with open(filename, 'r') as f:
-            step = f.read()
+            last_step = f.read()
+            step = int(last_step) + 1
         with open(filename, 'w') as f:
-            print(step)
-            f.write(str(int(step) + 1))
+            f.write(step)
 
 
     else:
         with open(filename, 'w') as f:
-            f.write('1')
+            f.write(step)
 
-    if step < num_steps:
-        sys.exit(message)
-
+    return step
 
 
-def do_distance_measures(mesh, types, num_repeats, path ):
+
+def do_distance_measures(meshes, types, path):
     """
     allow user to input cell based axes for measures of distance within a mesh
-    :param mesh: string denoting path to mesh to be used
+    :param meshes: list of strings denoting path to meshes to be used
     :param types: list of strings, which axes to measure
-    :return: none
+    :param path: string data files path where the status txt file should be saved
+    :return: bool, there are measures left?
     """
-    # load mesh
-    load_mesh(mesh, 0, 'No')
+    # old dialog method
+    # user_dialog('Done setting axis?')
 
-    for i in range(0,len(types)):
-        # user define cells
-        # old dialog method
-        # user_dialog('Done setting axis?')
-        record_step(types[i], 'Select cells for'+ types[i]+ 'measure then run script again', num_repeats)
+    # check files
+    step = step_check(path, 'distance_steps.txt')
+    total_steps = len(meshes)*len(types)
 
+    # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
+    if step == 1:
+        load_mesh(meshes[0], 0, 'No')
+        sys.exit('Select cells for '+ types[total_steps % step]+ ' axis then re-run script')
+
+    elif step < total_steps:
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attributes
 
-        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', types[i] + '_Distance', 'Label',
+        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', types[total_steps % step] + '_Distance', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
+        # save the mesh (attributes saved in mesh)
+        #                           filename, transform, mesh number
+        Process.Mesh__System__Save(os.path.join(path, meshes[step // total_steps]), 'no', '0')
 
-    # save the mesh (attributes saved in mesh)
-    #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh, 'no', '0')
+
+        if not step % len(types):
+            # load new mesh because done all measures
+            load_mesh(meshes[step // total_steps], 0, 'No')
+
+        sys.exit('Select cells for ' + types[total_steps % (step+1)] + ' axis then re-run script')
+    else:
+        os.remove(os.path.join(path, 'distance_steps.txt'))
+
+    # when done doing steps, return empty types list so this function will be skipped over
+    return types[:]
+
 
 
 def do_parents_to_attr(parent_file, mesh):
@@ -337,10 +353,13 @@ pp.pprint(attr_dict)
 
 ############ EXECTUE MEASURES #################
 
+if distance_measures:
+    distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, data_files_path)
+
+# todo ? set distance_measures to empty list so this gets skipped once done
+
 # single mesh measures
 for i in range(0,len(dirs_dict['meshes'])):
-    if distance_measures:
-        do_distance_measures(dirs_dict['meshes'][i], distance_measures, len(dirs_dict['meshes']))
 
     if intra_measures:
         do_intra_measures(dirs_dict['meshes'][i])

@@ -46,7 +46,7 @@ def record_step(track_name, message):
     else:
         with open(filename, 'w') as f:
             f.write('1')
-
+    #https://www.geeksforgeeks.org/python-exit-commands-quit-exit-sys-exit-and-os-_exit/
     sys.exit(message)
 
 
