@@ -131,19 +131,20 @@ def step_check(path, filename):
     :param filename: string, name of the file where the step will be tracked
     :return: none
     '''
+    step_file = os.path.join(path, filename)
 
     step = 1
 
-    if os.path.exists(os.path.join(path, filename)):
-        with open(filename, 'r') as f:
+    if os.path.exists():
+        with open(step_file, 'r') as f:
             last_step = f.read()
             step = int(last_step) + 1
-        with open(filename, 'w') as f:
+        with open(step_file, 'w') as f:
             f.write(step)
 
 
     else:
-        with open(filename, 'w') as f:
+        with open(step_file, 'w') as f:
             f.write(str(step))
 
     return step
