@@ -135,7 +135,7 @@ def step_check(path, filename):
 
     step = 1
 
-    if os.path.exists():
+    if os.path.exists(step_file):
         with open(step_file, 'r') as f:
             last_step = f.read()
             step = int(last_step) + 1
