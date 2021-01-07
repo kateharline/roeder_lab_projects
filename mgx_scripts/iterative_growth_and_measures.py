@@ -173,7 +173,7 @@ def do_distance_measures(meshes, types, path):
     print('step % len(types) '+ str(step % len(types)))
     print ('types[step % len(types)] ' + types[step % len(types)])
     print('step // len(types) '+ str(step // len(types)))
-    print ('meshes[step // len(types)] ' + meshes[step // len(types)])
+    # print ('meshes[step // len(types)] ' + meshes[step // len(types)])
 
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
