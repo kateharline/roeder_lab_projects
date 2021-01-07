@@ -354,7 +354,7 @@ pp.pprint(attr_dict)
 ############ EXECTUE MEASURES #################
 
 if distance_measures:
-    distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, data_files_path)
+    distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, main_path)
 
 # todo ? set distance_measures to empty list so this gets skipped once done
 
