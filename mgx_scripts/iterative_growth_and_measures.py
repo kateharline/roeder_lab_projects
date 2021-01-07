@@ -164,6 +164,7 @@ def do_distance_measures(meshes, types, path):
 
     # check files
     step = step_check(path, 'distance_steps.txt')
+    meshes_path = os.path.join(path, 'meshes')
 
     total_steps = len(meshes)*len(types)
 
@@ -177,7 +178,7 @@ def do_distance_measures(meshes, types, path):
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
     if step == 1:
-        load_mesh(meshes[0], 0, 'No')
+        load_mesh(os.path.join(meshes_path, meshes[0]), 0, 'No')
         sys.exit('Select cells for '+ types[step % len(types)]+ ' axis then re-run script')
 
     elif step < total_steps:
@@ -194,7 +195,7 @@ def do_distance_measures(meshes, types, path):
 
         if not step % len(types):
             # load new mesh because done all measures
-            load_mesh(meshes[step // total_steps], 0, 'No')
+            load_mesh(os.path.join(meshes_path, meshes[step // total_steps]), 0, 'No')
 
         sys.exit('Select cells for ' + types[(step +1) % len(types)] + ' axis then re-run script')
     else:
