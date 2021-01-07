@@ -172,13 +172,10 @@ def do_distance_measures(meshes, types, path):
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
     if step == 0:
-        print ('step 0')
         load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
-        print ('loading '+ meshes[step])
         sys.exit('Select cells for '+ types[step % len(types)]+ ' axis then re-run script')
 
-    elif (step > 0) and (step < total_steps):
-        print (step)
+    else:
         # measure distance                                      wall weight, restrict connectivity
         Process.Mesh__Heat_Map__Measures__Location__Cell_Distance('Euclidean', 'No')
         # save as attributes
@@ -188,15 +185,14 @@ def do_distance_measures(meshes, types, path):
         #                           filename, transform, mesh number
         Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[(step - 1) // len(types)]), 'no', '0')
 
+        if step < total_steps:
+            if not (step % len(types)):
+                # load new mesh because done all measures
+                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // len(types)]), 0, 'No')
 
-        if not(step % len(types)):
-            print('open new mesh '+ meshes[(step+1) // len(types)])
-            # load new mesh because done all measures
-            load_mesh(os.path.join(meshes_path, meshes[(step+1) // len(types)]), 0, 'No')
-
-        sys.exit('Select cells for ' + types[step % len(types)] + ' axis then re-run script')
-    else:
-        os.remove(os.path.join(path, 'distance_steps.txt'))
+            sys.exit('Select cells for ' + types[step % len(types)] + ' axis then re-run script')
+        else:
+            os.remove(os.path.join(path, 'distance_steps.txt'))
 
     # when done doing steps, return empty types list so this function will be skipped over
     return types[:]
