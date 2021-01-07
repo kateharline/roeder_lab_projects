@@ -140,7 +140,7 @@ def step_check(path, filename):
             last_step = f.read()
             step = int(last_step) + 1
         with open(step_file, 'w') as f:
-            f.write(step)
+            f.write(str(step))
 
 
     else:
