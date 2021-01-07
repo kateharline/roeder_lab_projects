@@ -133,19 +133,15 @@ def step_check(path, filename):
     '''
     step_file = os.path.join(path, filename)
 
-    step = 1
-
-    if os.path.exists(step_file):
-        with open(step_file, 'r') as f:
-            last_step = f.read()
+    with open(step_file, 'r') as f:
+        last_step = f.read()
+        if last_step == "":
+            step = 1
+        else:
             step = int(last_step) + 1
-        with open(step_file, 'w') as f:
-            f.write(str(step))
+    with open(step_file, 'w') as f:
+        f.write(str(step))
 
-
-    else:
-        with open(step_file, 'w') as f:
-            f.write(str(step))
 
     return step
 
