@@ -133,7 +133,7 @@ def step_check(path, filename):
     '''
     step_file = os.path.join(path, filename)
 
-    step = 1
+    step = 0
 
     if os.path.exists(step_file):
         with open(step_file, 'r') as f:
@@ -170,15 +170,15 @@ def do_distance_measures(meshes, types, path):
 
     print('what is step returning '+str(step))
     print('total steps '+ str(total_steps))
-    print('step % len(types)'+ str(step % len(types)))
+    print('step % len(types) '+ str(step % len(types)))
     print ('types[step % len(types)] ' + types[step % len(types)])
-    print('step // total_steps'+ str(step // total_steps))
-    print ('meshes[step // total_steps] ' + meshes[step // total_steps])
+    print('step // len(types) '+ str(step // len(types)))
+    print ('meshes[step // len(types)] ' + meshes[step // len(types)])
 
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
-    if step == 1:
-        load_mesh(os.path.join(meshes_path, meshes[0]), 0, 'No')
+    if step == 0:
+        load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
         sys.exit('Select cells for '+ types[step % len(types)]+ ' axis then re-run script')
 
     elif step < total_steps:
@@ -190,12 +190,12 @@ def do_distance_measures(meshes, types, path):
                                                                'Label Heat', 'Active Mesh', 'No')
         # save the mesh (attributes saved in mesh)
         #                           filename, transform, mesh number
-        Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[step // total_steps]), 'no', '0')
+        Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[step // len(types)]), 'no', '0')
 
 
         if not step % len(types):
             # load new mesh because done all measures
-            load_mesh(os.path.join(meshes_path, meshes[step // total_steps]), 0, 'No')
+            load_mesh(os.path.join(meshes_path, meshes[step // len(types)]), 0, 'No')
 
         sys.exit('Select cells for ' + types[(step +1) % len(types)] + ' axis then re-run script')
     else:
