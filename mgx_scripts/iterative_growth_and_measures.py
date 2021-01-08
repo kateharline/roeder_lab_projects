@@ -331,8 +331,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
     total_steps = len(meshes)*2
 
     if step == 0:
-        load_mesh(dirs_dict['meshes'][step], 0, 'No')
         load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+        load_mesh(dirs_dict['meshes'][step], 0, 'No')
+
         # todo set main mesh
         sys.exit('Arrange meshes as desired for image then re-run script')
 
@@ -340,7 +341,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
 
         for i in range(0,len(measures)):
             if measures[i] == 'Cell Axis PDG':
-                # todo make dynamic
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
                                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
                 Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'Both', 'white', 'red',
@@ -365,9 +365,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
         if step < total_steps:
             if not (step % 2):
                 # load new mesh because done all measures
-                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 0, 'No')
                 load_mesh(os.path.join(meshes_path, meshes[(step + 2) // 2]), 1, 'Yes')
-                # todo set main mesh
+                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 0, 'No')
 
             sys.exit('Arrange meshes as desired for image then re-run script')
         else:
@@ -382,9 +381,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
 pp = pprint.PrettyPrinter()
 print(main_path)
 dirs_dict = walk(main_path)
-pp.pprint(dirs_dict)
 attr_dict = walk(os.path.join(main_path, 'attributes'))
-pp.pprint(attr_dict)
+parents_dict = walk(os.path.join(main_path, 'parents'))
+
 
 ############ EXECTUE MEASURES #################
 
@@ -404,10 +403,10 @@ for i in range(0,len(dirs_dict['meshes'])):
         pprint.pprint(savepath)
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
+# for older meshes need to save parents to attr
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):
-    # for older meshes need to save parents to attr
-    parents_dict = walk(os.path.join(main_path, 'parents'))
+
     if parents_as_csvs:
         do_parents_to_attr(dirs_dict['meshes'][i + 1], parents_dict['parents'][i])
 
@@ -422,10 +421,7 @@ for i in range(0, len(dirs_dict['meshes'])-1):
 # displaying meshes
 
 if intra_display:
-    attr_dict = walk(os.path.join(main_path, 'attributes'))
-    load_mesh(dirs_dict['meshes'][i], 0, 'No')
-    do_display(intra_display, intra_ranges, attr_dict, main_path, i)
+    do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path)
 
 if inter_display:
-    attr_dict = walk(os.path.join(main_path, 'attributes'))
     do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path)
