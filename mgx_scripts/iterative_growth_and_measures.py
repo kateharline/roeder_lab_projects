@@ -31,8 +31,8 @@ if not hasattr(sys, 'argv'):
 file_selector = False
 inter_measures = False
 intra_measures = False
-# distance_measures = []
-distance_measures = ['Proximal-Distal', 'Medial-Lateral']
+distance_measures = []
+# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
 parents_as_csvs = False
 
 # attributes to save
@@ -41,8 +41,8 @@ parents_as_csvs = False
 save_attr = 'Label Double Geometry/Area'
 
 # which measures to display and how
-# inter_display = ['d_Area']
-inter_display = []
+inter_display = ['d_Area']
+# inter_display = []
 inter_ranges = [[1,3]]
 intra_display = []
 intra_ranges = [[0,1900]]
@@ -305,47 +305,77 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(measures, ranges, attr_dict, main_path, d, pdg=None):
+def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
     """
     save snapshots for all desired measures
+    :param meshes: list of strings, paths to meshes
     :param measures: list of strings, names of measures to be displayed
     :param ranges: list of tuples, sets of ranges for each measure to be displayed
     :param attr_dict: string, path to attributes file
-    :param main_path: string, path to top dir for saving
-    :param d: int, the day from the prev loop
+    :param path: string, path to top dir for saving
     :param pdg: list can pass for special pdg display values
     :return: null
     """
 
     # user adjust arrangement
-    user_dialog('Done arranging meshes, start a snappin?')
 
+    # old dialog strategy
+    # user_dialog('Done arranging meshes, start a snappin?')
 
-    for i in range(0,len(measures)):
-        if measures[i] == 'Cell Axis PDG':
-            # todo make dynamic
-            Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
-                                                             # heatmap, scaleheat, heat min, max, show axis, color +, color -
-            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'Both', 'white', 'red',
-                                                 # line width, line scale, line offset, threshold, custon dir, min dist vtx
-                                                                    '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
-            Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+    # new strategy based on writing to file
+
+    # check files
+    step = step_check(path, 'display_steps.txt')
+    meshes_path = os.path.join(path, 'meshes')
+
+    total_steps = len(meshes)*2
+
+    if step == 0:
+        load_mesh(dirs_dict['meshes'][step], 0, 'No')
+        load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+        # todo set main mesh
+        sys.exit('Arrange meshes as desired for image then re-run script')
+
+    else:
+
+        for i in range(0,len(measures)):
+            if measures[i] == 'Cell Axis PDG':
+                # todo make dynamic
+                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
+                                                                 # heatmap, scaleheat, heat min, max, show axis, color +, color -
+                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'Both', 'white', 'red',
+                                                     # line width, line scale, line offset, threshold, custon dir, min dist vtx
+                                                                        '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
+                Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+            else:
+                #load heatmap
+                #                                                                           filename, column name?, border size
+                Process.Mesh__Heat_Map__Heat_Map_Load(
+                    os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2]), measures[i], '1.0')
+                Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+                # nice viz parameters
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
+                                           '', '-1', '-1')
+            # take photos
+            snap_path = os.path.join(path, 'snaps',
+                                     attr_dict['attributes'][step -1][:-8] + "_".join(measures[i].split('/')) + '.png')
+            Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
+                                           '1.0', '95')
+
+        if step < total_steps:
+            if not (step % 2):
+                # load new mesh because done all measures
+                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 0, 'No')
+                load_mesh(os.path.join(meshes_path, meshes[(step + 2) // 2]), 1, 'Yes')
+                # todo set main mesh
+
+            sys.exit('Arrange meshes as desired for image then re-run script')
         else:
-            #load heatmap
-            #                                                                           filename, column name?, border size
-            Process.Mesh__Heat_Map__Heat_Map_Load(
-                os.path.join(main_path, 'attributes', attr_dict['attributes'][d]), measures[i], '1.0')
-            Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
-            # nice viz parameters
-            Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
-                                       '', '-1', '-1')
+            os.remove(os.path.join(path, 'display_steps.txt'))
 
+        # when done doing steps, return empty types list so this function will be skipped over
+        return measures[:]
 
-        # take photos
-        snap_path = os.path.join(main_path, 'snaps', attr_dict['attributes'][d][:-8]+"_".join(measures[i].split('/'))+'.png')
-        print('Path '+snap_path)
-        Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
-                                       '1.0', '95')
 
 
 ####### FILES ##########
@@ -374,20 +404,12 @@ for i in range(0,len(dirs_dict['meshes'])):
         pprint.pprint(savepath)
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
-    if intra_display:
-        attr_dict = walk(os.path.join(main_path, 'attributes'))
-        load_mesh(dirs_dict['meshes'][i], 0, 'No')
-        do_display(intra_display, intra_ranges, attr_dict, main_path, i)
-
-# for older meshes need to save parents to attr
-if parents_as_csvs:
-    parents_dict = walk(os.path.join(main_path, 'parents'))
-    pp.pprint(parents_dict)
-    for i in range(0, len(dirs_dict['meshes'])-1):
-        do_parents_to_attr(dirs_dict['meshes'][i+1], parents_dict['parents'][i])
-
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):
+    # for older meshes need to save parents to attr
+    parents_dict = walk(os.path.join(main_path, 'parents'))
+    if parents_as_csvs:
+        do_parents_to_attr(dirs_dict['meshes'][i + 1], parents_dict['parents'][i])
 
     if inter_measures:
         do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1], i)
@@ -397,8 +419,13 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         pprint.pprint(savepath)
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
-    if inter_display:
-        load_mesh(dirs_dict['meshes'][i], 0, 'No')
-        load_mesh(dirs_dict['meshes'][i+1], 1, 'Yes')
-        attr_dict = walk(os.path.join(main_path, 'attributes'))
-        do_display(inter_display, inter_ranges, attr_dict, main_path, i)
+# displaying meshes
+
+if intra_display:
+    attr_dict = walk(os.path.join(main_path, 'attributes'))
+    load_mesh(dirs_dict['meshes'][i], 0, 'No')
+    do_display(intra_display, intra_ranges, attr_dict, main_path, i)
+
+if inter_display:
+    attr_dict = walk(os.path.join(main_path, 'attributes'))
+    do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path)
