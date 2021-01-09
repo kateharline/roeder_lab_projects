@@ -38,7 +38,7 @@ parents_as_csvs = False
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 #save_attr = []
-save_attr = 'Label Double d_Area' 
+save_attr = ['Label Double d_Area']
 
 # which measures to display and how
 #inter_display = ['d_Area']
@@ -416,6 +416,10 @@ for i in range(0, len(dirs_dict['meshes'])):
         do_intra_measures(dirs_dict['meshes'][i])
 
     if save_attr:
+        # load mesh only when it isn't already loaded
+        if not intra_measures:
+            load_mesh(dirs_dict['meshes'][i], 0, 'No')
+
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
