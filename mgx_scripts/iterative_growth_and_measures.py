@@ -41,10 +41,11 @@ parents_as_csvs = False
 save_attr = ['Label Double d_Area', 'Label Double /Geometry/Area'] 
 
 # which measures to display and how
-inter_display = ['d_Area']
-# inter_display = []
+#inter_display = ['d_Area']
+inter_display = []
 inter_ranges = [[1,3]]
-intra_display = ['Geometry/Area']
+#intra_display = ['Geometry/Area']
+intra_display = []
 intra_ranges = [[0,1900]]
 
 
