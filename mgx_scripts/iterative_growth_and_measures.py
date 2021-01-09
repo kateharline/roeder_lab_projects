@@ -334,10 +334,14 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
         total_steps = len(meshes)
 
     if step == 0:
+
         if is_inter:
             load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+            print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step+1])
 
+            
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
+        print('dirs_dict[meshes][step] '+dirs_dict['meshes'][step])
 
         # todo set main mesh
         sys.exit('Arrange meshes as desired for image of' + measures[0] + 'then re-run script')
