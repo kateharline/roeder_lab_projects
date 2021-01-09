@@ -399,17 +399,6 @@ if distance_measures:
 
 # todo ? set distance_measures to empty list so this gets skipped once done
 
-# single mesh measures
-for i in range(0,len(dirs_dict['meshes'])):
-
-    if intra_measures:
-        do_intra_measures(dirs_dict['meshes'][i])
-
-        savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
-
-        pprint.pprint(savepath)
-        Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
-
 # for older meshes need to save parents to attr
 # change measures
 for i in range(0, len(dirs_dict['meshes'])-1):
@@ -423,10 +412,24 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr')
 
         pprint.pprint(savepath)
+
+
+# single mesh measures
+for i in range(0, len(dirs_dict['meshes'])):
+
+    if intra_measures:
+        do_intra_measures(dirs_dict['meshes'][i])
+
+        savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
+
+        pprint.pprint(savepath)
+
+    if save_attr:
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
 # displaying meshes
 attr_dict = walk(os.path.join(main_path, 'attributes'))
+
 
 if intra_display:
     do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
