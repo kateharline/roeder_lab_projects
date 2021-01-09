@@ -19,7 +19,7 @@
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="520">
-                      <caret line="423" column="0" lean-forward="false" selection-start-line="423" selection-start-column="0" selection-end-line="423" selection-end-column="0" />
+                      <caret line="415" column="0" lean-forward="false" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -66,8 +66,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="209">
-                      <caret line="429" column="0" lean-forward="true" selection-start-line="429" selection-start-column="0" selection-end-line="429" selection-end-column="0" />
+                    <state relative-caret-position="188">
+                      <caret line="414" column="49" lean-forward="false" selection-start-line="414" selection-start-column="49" selection-end-line="414" selection-end-column="49" />
                       <folding />
                     </state>
                   </provider>
@@ -80,8 +80,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="214">
-                      <caret line="289" column="37" lean-forward="true" selection-start-line="289" selection-start-column="37" selection-end-line="289" selection-end-column="37" />
+                    <state relative-caret-position="19">
+                      <caret line="276" column="0" lean-forward="true" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -242,9 +242,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#76#85#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -252,9 +250,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#76#85#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -262,9 +258,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#76#85#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -272,9 +266,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#76#85#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -290,11 +282,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="289" column="37" lean-forward="true" selection-start-line="289" selection-start-column="37" selection-end-line="289" selection-end-column="37" />
-          <folding>
-            <element signature="e#76#85#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="188">
+          <caret line="414" column="49" lean-forward="false" selection-start-line="414" selection-start-column="49" selection-end-line="414" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
