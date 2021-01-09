@@ -328,7 +328,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
     step = step_check(path, 'display_steps.txt')
     meshes_path = os.path.join(path, 'meshes')
 
-    total_steps = len(meshes)*2
+    total_steps = (len(meshes)-1)*2
 
     if step == 0:
         load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
