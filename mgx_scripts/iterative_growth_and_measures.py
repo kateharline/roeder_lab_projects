@@ -371,9 +371,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
 
             # load new mesh because done all measures
             if is_inter:
-                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 1, 'Yes')
+                load_mesh(os.path.join(meshes_path, meshes[step+1]), 1, 'Yes')
 
-            load_mesh(os.path.join(meshes_path, meshes[step  // 2]), 0, 'No')
+            load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
 
             sys.exit('Arrange meshes as desired for image of ' + measures[i] + ' then re-run script')
         else:
