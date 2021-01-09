@@ -305,7 +305,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
+def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
     """
     save snapshots for all desired measures
     :param meshes: list of strings, paths to meshes
@@ -314,6 +314,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
     :param attr_dict: string, path to attributes file
     :param path: string, path to top dir for saving
     :param pdg: list can pass for special pdg display values
+    param: inter: bool displaying intermeasures or intra
     :return: null
     """
 
@@ -328,10 +329,15 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
     step = step_check(path, 'display_steps.txt')
     meshes_path = os.path.join(path, 'meshes')
 
-    total_steps = (len(meshes)-1)*2
+    total_steps = len(meshes) + 1
+
+    if is_inter:
+        total_steps = len(meshes)
 
     if step == 0:
-        load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+        if is_inter:
+            load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
 
         # todo set main mesh
@@ -363,10 +369,12 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
                                            '1.0', '95')
 
         if step < total_steps:
-            if not (step % 2):
-                # load new mesh because done all measures
+
+            # load new mesh because done all measures
+            if is_inter:
                 load_mesh(os.path.join(meshes_path, meshes[(step + 2) // 2]), 1, 'Yes')
-                load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 0, 'No')
+
+            load_mesh(os.path.join(meshes_path, meshes[(step + 1) // 2]), 0, 'No')
 
             sys.exit('Arrange meshes as desired for image then re-run script')
         else:
@@ -381,7 +389,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, pdg=None):
 pp = pprint.PrettyPrinter()
 print(main_path)
 dirs_dict = walk(main_path)
-attr_dict = walk(os.path.join(main_path, 'attributes'))
 parents_dict = walk(os.path.join(main_path, 'parents'))
 
 
@@ -419,9 +426,10 @@ for i in range(0, len(dirs_dict['meshes'])-1):
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
 # displaying meshes
+attr_dict = walk(os.path.join(main_path, 'attributes'))
 
 if intra_display:
-    do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path)
+    do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
 
 if inter_display:
-    do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path)
+    do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path, True)
