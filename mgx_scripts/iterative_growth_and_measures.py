@@ -423,15 +423,13 @@ for i in range(0, len(dirs_dict['meshes'])):
         savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
 
         pprint.pprint(savepath)
-        
+
     if save_attr:
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
 # displaying meshes
 attr_dict = walk(os.path.join(main_path, 'attributes'))
 
-# turn off other functions so these can run in peace
-#
 
 if intra_display:
     do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
