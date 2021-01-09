@@ -379,8 +379,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
         else:
             os.remove(os.path.join(path, 'display_steps.txt'))
 
-        # when done doing steps, return empty types list so this function will be skipped over
-        return measures[:]
+    # when done doing steps, return empty types list so this function will be skipped over
+    return measures[:]
 
 
 
