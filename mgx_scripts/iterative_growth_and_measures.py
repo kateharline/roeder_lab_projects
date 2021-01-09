@@ -328,10 +328,10 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
     step = step_check(path, 'display_steps.txt')
     meshes_path = os.path.join(path, 'meshes')
 
-    total_steps = len(meshes) + 1
+    total_steps = len(meshes)
 
     if is_inter:
-        total_steps = len(meshes)
+        total_steps = len(meshes) -1
 
     if step == 0:
         if is_inter:
