@@ -276,9 +276,8 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
         do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
 
     # load meshes
-    load_mesh(mesh_1, 1, 'Yes')
     load_mesh(mesh_0, 0, 'No')
-
+    load_mesh(mesh_1, 1, 'Yes')
 
     # todo "try" load parents with view, if not saved in attributes, then load from csv
 
