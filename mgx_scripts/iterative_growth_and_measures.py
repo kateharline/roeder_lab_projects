@@ -29,6 +29,7 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
+gen_measures = False
 inter_measures = False
 intra_measures = False
 distance_measures = []
@@ -198,6 +199,22 @@ def do_distance_measures(meshes, types, path):
     # when done doing steps, return empty types list so this function will be skipped over
     return types[:]
 
+def do_gen_measures(meshes, parents, main_path, intra_measures, parents_as_csvs, inter_measures, save_attr):
+    for i in range(0, len(meshes)):
+        # load mesh
+        load_mesh(meshes[i], 0, 'Yes')
+
+        if intra_measures:
+            do_intra_measures(meshes[i])
+
+        if i < len(meshes) - 1:
+            if inter_measures:
+                load_mesh(meshes[i+1], 0, 'Yes')
+                do_inter_measures(meshes[i], meshes[i + 1], i)
+
+        if save_attr:
+            savepath = os.path.join(main_path, 'attributes',meshes[i][:-5] + '_attr.csv')
+            Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
 
 def do_parents_to_attr(parent_file, mesh):
@@ -207,14 +224,11 @@ def do_parents_to_attr(parent_file, mesh):
     :param mesh: string, filename of mesh
     :return: null
     """
-    # load mesh
-    load_mesh(mesh, 0, 'Yes')
-
     #
 
     Process.Mesh__Lineage_Tracking__Load_Parents(os.path.join(main_path, 'parents', parent_file), 'CSV', 'No')
     Process.Mesh__Lineage_Tracking__Parent_Export_to_Attr_Map('Measure Label Int', 'Parents')
-    Process.Mesh__System__Save(mesh, 'no', '0')
+    Process.Mesh__System__Save(mesh, 'no', '1')
 
 
 def do_intra_measures(mesh):
@@ -223,8 +237,7 @@ def do_intra_measures(mesh):
     :param mesh: string, filepath of the mesh
     :return: null
     """
-    # load mesh
-    load_mesh(mesh, 0, 'No')
+
     # run desired processes
     Process.Mesh__Heat_Map__Measures__Geometry__Area()
     Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
@@ -258,7 +271,6 @@ def do_intra_measures(mesh):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    pp.pprint('is saving working '+mesh)
     Process.Mesh__System__Save(mesh, 'no','0')
 
 
@@ -273,21 +285,15 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 
     # if there are parent csvs in the parents folder
     if dirs_dict['parents']:
-        print('saving parents to attr')
         do_parents_to_attr(dirs_dict['parents'][i_0], mesh_1)
 
-    # load meshes
-    load_mesh(mesh_1, 1, 'Yes')
-    load_mesh(mesh_0, 0, 'No')
-    # todo "try" load parents with view, if not saved in attributes, then load from csv
-
     # run desired processes
-
+    Process.Stack__System__Set_Current_Stack('Main', '0')
     # Process.Mesh__Heat_Map__Analysis__Growth_Analysis_2D('pAR393xpLH13', 'd1', 'd2', 'No')
     Process.Mesh__Heat_Map__Heat_Map('Geometry/Area', 'No', 'Sum', 'Yes', 'Increasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('Yes')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation_d'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
@@ -398,47 +404,26 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
 pp = pprint.PrettyPrinter()
 print(main_path)
 dirs_dict = walk(main_path)
-parents_dict = walk(os.path.join(main_path, 'parents'))
 
 
 ############ EXECTUE MEASURES #################
+# todo create file tracking system for each of these 4 major steps
+# todo check that I didn't totally fuck gen measures
 
 if distance_measures:
     distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, main_path)
 
-# todo ? set distance_measures to empty list so this gets skipped once done
 
-# for older meshes need to save parents to attr
-# change measures
-for i in range(0, len(dirs_dict['meshes'])-1):
+# measures
+if gen_measures:
+    do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, intra_measures, parents_as_csvs, inter_measures, save_attr)
 
-    if parents_as_csvs:
-        do_parents_to_attr(dirs_dict['meshes'][i + 1], parents_dict['parents'][i])
-
-    if inter_measures:
-        do_inter_measures(dirs_dict['meshes'][i],dirs_dict['meshes'][i+1], i)
-
-
-# single mesh measures
-for i in range(0, len(dirs_dict['meshes'])):
-
-    if intra_measures:
-        do_intra_measures(dirs_dict['meshes'][i])
-
-    if save_attr:
-        # load mesh only when it isn't already loaded
-        if not intra_measures:
-            load_mesh(dirs_dict['meshes'][i], 0, 'No')
-
-        savepath = os.path.join(main_path, 'attributes', dirs_dict['meshes'][i][:-5] + '_attr.csv')
-        Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
-
-# displaying meshes
+# recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
 
-
+# displaying meshes
 if intra_display:
-    do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
+    intra_display = do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
 
 if inter_display:
-    do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path, True)
+    inter_display = do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path, True)
