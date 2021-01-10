@@ -339,12 +339,12 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
             load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
             print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step+1])
 
-            
+
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
         print('dirs_dict[meshes][step] '+dirs_dict['meshes'][step])
 
         # todo set main mesh
-        sys.exit('Arrange meshes as desired for image of' + measures[0] + 'then re-run script')
+        sys.exit('Arrange meshes as desired for image of ' + measures[0] + ' then re-run script')
 
     else:
 
@@ -358,7 +358,11 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
                 Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
             else:
                 #load heatmap
-                #                                                                           filename, column name?, border size
+                #
+                #                                                                      filename, column name?, border size
+
+                print('step '+step)
+                print()
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2]), measures[i], '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
@@ -376,8 +380,10 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
             # load new mesh because done all measures
             if is_inter:
                 load_mesh(os.path.join(meshes_path, meshes[step+1]), 1, 'Yes')
+                print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step + 1])
 
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
+            print('dirs_dict[meshes][step] ' + dirs_dict['meshes'][step])
 
             sys.exit('Arrange meshes as desired for image of ' + measures[i] + ' then re-run script')
         else:
