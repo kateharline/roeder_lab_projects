@@ -447,6 +447,8 @@ if params_dict['distance_measures']:
     params_dict['distance_measures'] = do_distance_measures(dirs_dict['meshes'], params_dict['distance_measures'], main_path, step)
     set_params(main_path, 'params.txt',params_dict)
 
+params_dict = get_params(main_path,'params.txt',params_dict)
+
 # measures
 if params_dict['gen_measures']:
     params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['parents_as_csvs'], params_dict['inter_measures'], params_dict['save_attr'])
@@ -455,6 +457,8 @@ if params_dict['gen_measures']:
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
 
+params_dict = get_params(main_path,'params.txt',params_dict)
+
 # displaying meshes
 if params_dict['intra_display']:
     step = int(params_dict['intra_display_step'])
@@ -462,6 +466,8 @@ if params_dict['intra_display']:
     set_params(main_path, 'params.txt', params_dict)
     params_dict['intra_display'] = do_display(dirs_dict['meshes'], params_dict['intra_display'], params_dict['intra_ranges'], attr_dict, main_path, False, step)
     set_params(main_path, 'params.txt', params_dict)
+
+params_dict = get_params(main_path,'params.txt',params_dict)
 
 if params_dict['inter_display']:
     step = params_dict['inter_display_step']
