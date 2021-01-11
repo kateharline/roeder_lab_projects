@@ -370,8 +370,10 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
 
     total_steps = len(meshes)
 
+    type_message = 'intra-mesh'
     if is_inter:
         total_steps = len(meshes) - 1
+        type_message = 'inter-mesh'
 
     if step == 0:
 
@@ -381,7 +383,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
 
         # todo set main mesh
-        sys.exit('Arrange meshes as desired for image of ' + measures[0] + ' then re-run script')
+        sys.exit('Arrange mesh(es) as desired for ' + type_message + ' measures then re-run script')
 
     else:
 
@@ -416,12 +418,12 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 load_mesh(os.path.join(meshes_path, meshes[step+1]), 1, 'Yes')
                 print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step + 1])
 
+
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
             print('dirs_dict[meshes][step] ' + dirs_dict['meshes'][step])
 
-            sys.exit('Arrange meshes as desired for image of ' + measures[i] + ' then re-run script')
-        else:
-            os.remove(os.path.join(path, 'display_steps.txt'))
+            sys.exit('Arrange mesh(es) as desired for ' + type_message + ' measures then re-run script')
+
 
     # when done doing steps, return empty types list so this function will be skipped over
     return measures[:]
