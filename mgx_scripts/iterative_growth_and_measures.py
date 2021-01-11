@@ -226,8 +226,6 @@ def do_distance_measures(meshes, types, path, step):
                 load_mesh(os.path.join(meshes_path, meshes[(step + 1) // len(types)]), 0, 'No')
 
             sys.exit('Select cells for ' + types[step % len(types)] + ' axis then re-run script')
-        else:
-            os.remove(os.path.join(path, 'distance_steps.txt'))
 
     # when done doing steps, return empty types list so this function will be skipped over
     return types[:]
