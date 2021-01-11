@@ -228,7 +228,7 @@ def do_distance_measures(meshes, types, path, step):
             sys.exit('Select cells for ' + types[step % len(types)] + ' axis then re-run script')
 
     # when done doing steps, return empty types list so this function will be skipped over
-    return types[:]
+    return []
 
 def do_gen_measures(meshes, parents, main_path, intra_measures, parents_as_csvs, inter_measures, save_attr):
     for i in range(0, len(meshes)):
@@ -424,7 +424,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
 
 
     # when done doing steps, return empty types list so this function will be skipped over
-    return measures[:]
+    return []
 
 
 
