@@ -438,7 +438,7 @@ dirs_dict = walk(main_path)
 # todo create file tracking system for each of these 4 major steps
 # todo check that I didn't totally fuck gen measures
 
-get_params(main_path,'params.txt',params_dict)
+params_dict = get_params(main_path,'params.txt',params_dict)
 
 if params_dict['distance_measures']:
     step = params_dict['distance_measure_step']
