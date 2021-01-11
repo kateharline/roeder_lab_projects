@@ -59,9 +59,7 @@ params_dict = {'gen_measures': False,
                'intra_display': ['Geometry/Area'],
                'distance_measure_step':0,
                'intra_display_step':0,
-               'inter_display_step':0
-
-}
+               'inter_display_step':0}
 
 # make sure read/write as proper data types
 

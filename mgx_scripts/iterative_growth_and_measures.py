@@ -457,7 +457,7 @@ attr_dict = walk(os.path.join(main_path, 'attributes'))
 
 # displaying meshes
 if params_dict['intra_display']:
-    step = params_dict['intra_display_step']
+    step = int(params_dict['intra_display_step'])
     params_dict['intra_display_step'] = step + 1
     set_params(main_path, 'params.txt', params_dict)
     params_dict['intra_display'] = do_display(dirs_dict['meshes'], params_dict['intra_display'], params_dict['intra_ranges'], attr_dict, main_path, False, step)
