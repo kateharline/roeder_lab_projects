@@ -18,7 +18,7 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="385">
+                    <state relative-caret-position="310">
                       <caret line="47" column="39" lean-forward="false" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
@@ -34,8 +34,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="442">
-                      <caret line="470" column="0" lean-forward="true" selection-start-line="470" selection-start-column="0" selection-end-line="470" selection-end-column="0" />
+                    <state relative-caret-position="510">
+                      <caret line="62" column="96" lean-forward="true" selection-start-line="62" selection-start-column="96" selection-end-line="62" selection-end-column="96" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -54,8 +54,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="154">
-                      <caret line="440" column="14" lean-forward="false" selection-start-line="440" selection-start-column="14" selection-end-line="440" selection-end-column="14" />
+                    <state relative-caret-position="179">
+                      <caret line="462" column="26" lean-forward="false" selection-start-line="462" selection-start-column="26" selection-end-line="462" selection-end-column="26" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -70,7 +70,7 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="152">
+                    <state relative-caret-position="-1700">
                       <caret line="224" column="57" lean-forward="true" selection-start-line="224" selection-start-column="57" selection-end-line="224" selection-end-column="57" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
@@ -300,8 +300,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="470" column="0" lean-forward="true" selection-start-line="470" selection-start-column="0" selection-end-line="470" selection-end-column="0" />
+        <state relative-caret-position="179">
+          <caret line="462" column="26" lean-forward="false" selection-start-line="462" selection-start-column="26" selection-end-line="462" selection-end-column="26" />
           <folding>
             <element signature="e#76#85#0" expanded="true" />
           </folding>
