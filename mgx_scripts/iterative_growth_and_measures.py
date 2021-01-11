@@ -216,6 +216,8 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, parents_as_csvs,
             savepath = os.path.join(main_path, 'attributes',meshes[i][:-5] + '_attr.csv')
             Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
 
+    return False
+
 
 def do_parents_to_attr(parent_file, mesh):
     """
@@ -413,10 +415,9 @@ dirs_dict = walk(main_path)
 if distance_measures:
     distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, main_path)
 
-
 # measures
 if gen_measures:
-    do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, intra_measures, parents_as_csvs, inter_measures, save_attr)
+    gen_measures = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, intra_measures, parents_as_csvs, inter_measures, save_attr)
 
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))

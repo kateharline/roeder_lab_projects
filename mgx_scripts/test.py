@@ -50,4 +50,39 @@ def record_step(track_name, message):
     sys.exit(message)
 
 
-record_step('Proximal-Distal', 'Select cells for Proximal-Distal measure then run script again')
+#record_step('Proximal-Distal', 'Select cells for Proximal-Distal measure then run script again')
+
+# practice with writing to master file
+params_dict = {'gen_measures': False,
+               'distance_measures': [],
+               'inter_display': ['d_Area'],
+               'intra_display': ['Geometry/Area']
+
+}
+
+# make sure read/write as proper data types
+
+
+def master_step_check(path, filename, *args):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param path: string path to data files, where step tracking file will be saved
+    :param filename: string, name of the file where the step will be tracked
+    :return: none
+    '''
+    step_file = os.path.join(path, filename)
+
+
+    if os.path.exists(step_file):
+        with open(step_file, 'r') as f:
+            last_step = f.readline()
+            step = int(last_step) + 1
+        with open(step_file, 'w') as f:
+            f.write(str(step))
+
+
+    else:
+        with open(step_file, 'w') as f:
+            f.write(str(step))
+
+    return step
