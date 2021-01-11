@@ -408,7 +408,7 @@ print(main_path)
 dirs_dict = walk(main_path)
 
 
-############ EXECTUE MEASURES #################
+############ EXECUTE MEASURES #################
 # todo create file tracking system for each of these 4 major steps
 # todo check that I didn't totally fuck gen measures
 

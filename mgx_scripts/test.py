@@ -62,27 +62,48 @@ params_dict = {'gen_measures': False,
 
 # make sure read/write as proper data types
 
+import json
+import pprint
 
-def master_step_check(path, filename, *args):
+path = os.path.abspath(os.getcwd())
+
+
+def master_step_get(path, filename, params_dict):
     '''
     function to track where you are in a process to exit and re-enter
     :param path: string path to data files, where step tracking file will be saved
-    :param filename: string, name of the file where the step will be tracked
+    :param filename: string, name of the file where the params dict will be tracked
+    :param params_dict: dict of params
     :return: none
     '''
     step_file = os.path.join(path, filename)
 
-
     if os.path.exists(step_file):
         with open(step_file, 'r') as f:
-            last_step = f.readline()
-            step = int(last_step) + 1
-        with open(step_file, 'w') as f:
-            f.write(str(step))
-
+            params_dict = json.load(f)
 
     else:
-        with open(step_file, 'w') as f:
-            f.write(str(step))
+        master_step_set(path, filename, params_dict)
 
-    return step
+    return params_dict
+
+
+def master_step_set(path, filename, params_dict):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param path: string path to data files, where step tracking file will be saved
+    :param filename: string, name of the file where the params dict will be tracked
+    :param params_dict: dict of params
+    :return: none
+    '''
+    step_file = os.path.join(path, filename)
+
+    with open(step_file, 'w') as f:
+        json.dump(params_dict, f)
+
+pp = pprint.PrettyPrinter()
+pp.pprint(params_dict)
+params_dict = master_step_get(path, 'test.txt', params_dict)
+pp.pprint(params_dict)
+master_step_set(path, 'test.txt', params_dict)
+pp.pprint(params_dict)
