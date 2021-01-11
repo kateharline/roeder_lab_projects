@@ -56,7 +56,10 @@ def record_step(track_name, message):
 params_dict = {'gen_measures': False,
                'distance_measures': [],
                'inter_display': ['d_Area'],
-               'intra_display': ['Geometry/Area']
+               'intra_display': ['Geometry/Area'],
+               'distance_measure_step':0,
+               'intra_display_step':0,
+               'inter_display_step':0
 
 }
 

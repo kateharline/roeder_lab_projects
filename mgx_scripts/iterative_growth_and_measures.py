@@ -4,6 +4,7 @@ import os
 #import tkFileDialog
 import pprint
 import sys
+import json
 
 ####### DIR MANAGEMENT ########
 
@@ -29,25 +30,26 @@ if not hasattr(sys, 'argv'):
 
 # variables for control flow
 file_selector = False
-gen_measures = False
-inter_measures = False
-intra_measures = False
-distance_measures = []
-# distance_measures = ['Proximal-Distal', 'Medial-Lateral']
-parents_as_csvs = False
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
-save_attr = []
 #save_attr = 'Label Double d_Area, Label Double Geometry/Area'
 
 # which measures to display and how
-inter_display = ['d_Area']
-#inter_display = []
-inter_ranges = [[1,3]]
-intra_display = ['Geometry/Area']
-#intra_display = []
-intra_ranges = [[0,1900]]
+
+params_dict = {'gen_measures': False,
+               'inter_measures':False,
+               'intra_measures':False,
+               'distance_measures': [],
+               'save_attr':'',
+               'inter_display': ['d_Area'],
+               'inter_ranges':[],
+               'intra_display': ['Geometry/Area'],
+               'intra_ranges':[],
+               'distance_measure_step':0,
+               'intra_display_step':0,
+               'inter_display_step':0,
+}
 
 
 # fun fun file management shit between dev env of vm build and windows build
@@ -151,9 +153,42 @@ def step_check(path, filename):
 
     return step
 
+def get_params(path, filename, params_dict):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param path: string path to data files, where step tracking file will be saved
+    :param filename: string, name of the file where the params dict will be tracked
+    :param params_dict: dict of params
+    :return: none
+    '''
+    step_file = os.path.join(path, filename)
+
+    if os.path.exists(step_file):
+        with open(step_file, 'r') as f:
+            params_dict = json.load(f)
+
+    else:
+        set_params(path, filename, params_dict)
+
+    return params_dict
 
 
-def do_distance_measures(meshes, types, path):
+def set_params(path, filename, params_dict):
+    '''
+    function to track where you are in a process to exit and re-enter
+    :param path: string path to data files, where step tracking file will be saved
+    :param filename: string, name of the file where the params dict will be tracked
+    :param params_dict: dict of params
+    :return: none
+    '''
+    step_file = os.path.join(path, filename)
+
+    with open(step_file, 'w') as f:
+        json.dump(params_dict, f)
+
+
+
+def do_distance_measures(meshes, types, path, step):
     """
     allow user to input cell based axes for measures of distance within a mesh
     :param meshes: list of strings denoting path to meshes to be used
@@ -165,12 +200,10 @@ def do_distance_measures(meshes, types, path):
     # user_dialog('Done setting axis?')
 
     # check files
-    step = step_check(path, 'distance_steps.txt')
     meshes_path = os.path.join(path, 'meshes')
 
     total_steps = len(meshes)*len(types)
     # print ('meshes[step // len(types)] ' + meshes[step // len(types)])
-
 
     # branch - save location exit python, run cell distance and save heat then load new mesh or just load first mesh
     if step == 0:
@@ -312,7 +345,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__System__Save(mesh_1, 'no', '1')
 
 
-def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
+def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=None):
     """
     save snapshots for all desired measures
     :param meshes: list of strings, paths to meshes
@@ -333,7 +366,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
     # new strategy based on writing to file
 
     # check files
-    step = step_check(path, 'display_steps.txt')
     meshes_path = os.path.join(path, 'meshes')
 
     total_steps = len(meshes)
@@ -345,11 +377,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
 
         if is_inter:
             load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
-            print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step+1])
-
 
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
-        print('dirs_dict[meshes][step] '+dirs_dict['meshes'][step])
 
         # todo set main mesh
         sys.exit('Arrange meshes as desired for image of ' + measures[0] + ' then re-run script')
@@ -368,9 +397,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, pdg=None):
                 #load heatmap
                 #
                 #                                                                      filename, column name?, border size
-
-                print('step '+str(step))
-                print()
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2]), measures[i], '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
@@ -412,19 +438,34 @@ dirs_dict = walk(main_path)
 # todo create file tracking system for each of these 4 major steps
 # todo check that I didn't totally fuck gen measures
 
-if distance_measures:
-    distance_measures = do_distance_measures(dirs_dict['meshes'], distance_measures, main_path)
+get_params(main_path,'params.txt',params_dict)
+
+if params_dict['distance_measures']:
+    step = params_dict['distance_measure_step']
+    params_dict['distance_measure_step'] = step + 1
+    set_params(main_path, 'params.txt',params_dict)
+    params_dict['distance_measures'] = do_distance_measures(dirs_dict['meshes'], params_dict['distance_measures'], main_path, step)
+    set_params(main_path, 'params.txt',params_dict)
 
 # measures
-if gen_measures:
-    gen_measures = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, intra_measures, parents_as_csvs, inter_measures, save_attr)
+if params_dict['gen_measures']:
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['parents_as_csvs'], params_dict['inter_measures'], params_dict['save_attr'])
+    set_params(main_path, 'params.txt', params_dict)
 
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
 
 # displaying meshes
-if intra_display:
-    intra_display = do_display(dirs_dict['meshes'], intra_display, intra_ranges, attr_dict, main_path, False)
+if params_dict['intra_display']:
+    step = params_dict['intra_display_step']
+    params_dict['intra_display_step'] = step + 1
+    set_params(main_path, 'params.txt', params_dict)
+    params_dict['intra_display'] = do_display(dirs_dict['meshes'], params_dict['intra_display'], params_dict['intra_ranges'], attr_dict, main_path, False, step)
+    set_params(main_path, 'params.txt', params_dict)
 
-if inter_display:
-    inter_display = do_display(dirs_dict['meshes'], inter_display, inter_ranges, attr_dict, main_path, True)
+if params_dict['inter_display']:
+    step = params_dict['inter_display_step']
+    params_dict['inter_display_step'] = step + 1
+    set_params(main_path, 'params.txt', params_dict)
+    params_dict['inter_display'] = do_display(dirs_dict['meshes'], params_dict['inter_display'], params_dict['inter_ranges'], attr_dict, main_path, True, step)
+    set_params(main_path, 'params.txt', params_dict)
