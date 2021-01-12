@@ -230,7 +230,7 @@ def do_distance_measures(meshes, types, path, step):
     # when done doing steps, return empty types list so this function will be skipped over
     return []
 
-def do_gen_measures(meshes, parents, main_path, intra_measures, parents_as_csvs, inter_measures, save_attr):
+def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
     for i in range(0, len(meshes)):
         # load mesh
         load_mesh(meshes[i], 0, 'Yes')
@@ -449,7 +449,7 @@ if params_dict['distance_measures']:
 
 # measures
 if params_dict['gen_measures']:
-    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['parents_as_csvs'], params_dict['inter_measures'], params_dict['save_attr'])
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'])
     set_params(main_path, 'params.txt', params_dict)
 
 # recalculate attr if saved
