@@ -231,6 +231,8 @@ def do_distance_measures(meshes, types, path, step):
     return []
 
 def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
+    # todo fix the saving of the meshes, load views
+
     for i in range(0, len(meshes)):
         # load mesh
         load_mesh(meshes[i], 0, 'Yes')
@@ -240,7 +242,7 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
 
         if i < len(meshes) - 1:
             if inter_measures:
-                load_mesh(meshes[i+1], 0, 'Yes')
+                load_mesh(meshes[i+1], 1, 'Yes')
                 do_inter_measures(meshes[i], meshes[i + 1], i)
 
         if save_attr:
