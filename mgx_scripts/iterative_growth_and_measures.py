@@ -124,7 +124,7 @@ def load_mesh(mesh, stack, parents):
     '''
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
     Process.Stack__System__Set_Current_Stack('Main', stack)
-    Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1', '-1')
+    Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', 'Selected', '', '', '', '', '', '', '-1', '-1')
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 

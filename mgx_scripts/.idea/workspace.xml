@@ -34,7 +34,7 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="326">
+                    <state relative-caret-position="330">
                       <caret line="237" column="35" lean-forward="false" selection-start-line="237" selection-start-column="35" selection-end-line="237" selection-end-column="35" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
@@ -70,8 +70,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="-228">
-                      <caret line="310" column="0" lean-forward="true" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
+                    <state relative-caret-position="178">
+                      <caret line="126" column="87" lean-forward="false" selection-start-line="126" selection-start-column="87" selection-end-line="126" selection-end-column="87" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -104,8 +104,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="217" />
-    <option name="y" value="182" />
+    <option name="x" value="313" />
+    <option name="y" value="174" />
     <option name="width" value="2084" />
     <option name="height" value="1193" />
   </component>
@@ -195,7 +195,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="217" y="182" width="2084" height="1193" extended-state="0" />
+    <frame x="313" y="174" width="2084" height="1193" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10871694" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -300,8 +300,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="237" column="35" lean-forward="false" selection-start-line="237" selection-start-column="35" selection-end-line="237" selection-end-column="35" />
+        <state relative-caret-position="178">
+          <caret line="126" column="87" lean-forward="false" selection-start-line="126" selection-start-column="87" selection-end-line="126" selection-end-column="87" />
           <folding>
             <element signature="e#76#85#0" expanded="true" />
           </folding>
