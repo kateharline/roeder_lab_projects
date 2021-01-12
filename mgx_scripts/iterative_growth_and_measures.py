@@ -357,7 +357,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
     param: inter: bool displaying intermeasures or intra
     :return: null
     """
-
+    # reset meshes for clean images
+    Process.Mesh__System__Reset('0')
+    Process.Mesh__System__Reset('1')
     # user adjust arrangement
 
     # old dialog strategy
@@ -383,7 +385,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
 
         # todo set main mesh
-        sys.exit('Arrange mesh(es) as desired for ' + type_message + ' measures then re-run script')
+        sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
 
     else:
 
@@ -422,7 +424,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
             print('dirs_dict[meshes][step] ' + dirs_dict['meshes'][step])
 
-            sys.exit('Arrange mesh(es) as desired for ' + type_message + ' measures then re-run script')
+            sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
 
 
     # when done doing steps, return empty types list so this function will be skipped over
