@@ -37,11 +37,11 @@ file_selector = False
 
 # which measures to display and how
 
-params_dict = {'gen_measures': False,
-               'inter_measures':False,
-               'intra_measures':False,
-               'distance_measures': [],
-               'save_attr':'',
+params_dict = {'gen_measures': True,
+               'inter_measures':True,
+               'intra_measures':True,
+               'distance_measures': ['Proximal-Distal', 'Medial-Lateral'],
+               'save_attr':'Label Double d_Area, Label Double Geometry/Area',
                'inter_display': ['d_Area'],
                'inter_ranges':[[0,3]],
                'intra_display': ['Geometry/Area'],
