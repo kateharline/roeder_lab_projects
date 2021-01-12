@@ -235,7 +235,7 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
 
     for i in range(0, len(meshes)):
         # load mesh
-        load_mesh(meshes[i], 0, 'Yes')
+        load_mesh(meshes[i], 0, 'no')
 
         if intra_measures:
             do_intra_measures(meshes[i])
