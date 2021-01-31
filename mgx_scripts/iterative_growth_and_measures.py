@@ -40,12 +40,12 @@ file_selector = False
 params_dict = {'gen_measures': True,
                'inter_measures':True,
                'intra_measures':True,
-               'distance_measures': ['Proximal-Distal', 'Medial-Lateral'],
-               'save_attr':'Label Double d_Area, Label Double Geometry/Area',
-               'inter_display': ['d_Area'],
-               'inter_ranges':[[0,3]],
-               'intra_display': ['Geometry/Area'],
-               'intra_ranges':[[0, 1900]],
+               'distance_measures': [],
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
+               'inter_display': [],
+               'inter_ranges':[],
+               'intra_display': [],
+               'intra_ranges':[],
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
@@ -328,7 +328,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Heat_Map__Heat_Map('Geometry/Area', 'No', 'Sum', 'Yes', 'Increasing', 'Ratio', 'Yes', 'No')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Area', 'Label', 'Label Heat', 'Active Mesh', 'No')
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('Yes')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation_d'+str(i_0+1)+ 'd'+str(i_0+2), 'Label',
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
