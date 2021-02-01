@@ -5,18 +5,25 @@ import os
 import pprint
 import sys
 import json
+import platform
 
 ####### DIR MANAGEMENT ########
 
 # https://docs.python.org/2/library/os.html
 o_s = os.name
 if o_s == 'posix':
+	# if vmware
     root_path = '/home/kate'
+
+    if platform.release() == '4.15.0-118-generic':
+	    # mgx1
+	    root_path = '/home/aroeder'
+	    
 elif o_s == 'nt':
     root_path = 'C:\\Users\\katha\\'
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
-sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
+# sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
 
 # import funcs as f
 
@@ -40,7 +47,7 @@ file_selector = False
 params_dict = {'gen_measures': True,
                'inter_measures':True,
                'intra_measures':True,
-               'distance_measures': [],
+               'distance_measures': ['Proximal-Distal', 'Medial-Lateral'],
                'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
                'inter_display': [],
                'inter_ranges':[],
