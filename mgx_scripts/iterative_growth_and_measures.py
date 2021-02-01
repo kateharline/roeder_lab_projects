@@ -13,14 +13,14 @@ import platform
 o_s = os.name
 if o_s == 'posix':
 	# if vmware
-    root_path = '/home/kate'
+    root_path = '/home/kate/Desktop'
 
     if platform.release() == '4.15.0-118-generic':
 	    # mgx1
-	    root_path = '/home/aroeder'
-	    
+	    root_path = '/home/aroeder/Desktop/Kate'
+
 elif o_s == 'nt':
-    root_path = 'C:\\Users\\katha\\'
+    root_path = 'C:\\Users\\katha\\Desktop'
 
 # hack add current dir to sys path so python can import personal modules https://stackoverflow.com/questions/338768/python-error-importerror-no-module-named
 # sys.path.insert(0,os.path.join(root_path, 'Desktop', 'roeder_lab_projects', 'mgx_scripts'))
@@ -60,8 +60,7 @@ params_dict = {'gen_measures': True,
 
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files = '202003_0715_demo'
-data_files_path = os.path.join('Desktop', data_files)
+data_files = '20200307_07_15_processed'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
