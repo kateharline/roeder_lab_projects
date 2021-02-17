@@ -6,11 +6,11 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/comparing_wt_jawD'
+input_path = '/Users/kateharline/Desktop/20210129_screening_jawDxpMZ12'
 
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.tif'
+start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):

@@ -15,8 +15,8 @@ if o_s == 'posix':
 	# if vmware
     root_path = '/home/kate/Desktop'
 
-    if platform.release() == ('4.15.0-118-generic' || '4.15.0-20-generic'):
-	    # mgx1
+    if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
+        # mgx1
 	    root_path = '/home/aroeder/Desktop/Kate'
 
 elif o_s == 'nt':
