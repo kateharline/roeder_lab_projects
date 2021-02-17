@@ -305,14 +305,14 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Network__Neighbors()
 
 
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Neighborhood__Aspect_Ratio()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Neighborhood__Perimeter()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Neighborhood__Variability_Radius()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Neighborhood__Neighbors()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Shape__Bending()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Shape__Common_Bending()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Shape__Common_Neighbors()
-    Process.Mesh__Heat_Map__Measures__ToBeDeleted__Measures__Shape__Variability_Radius()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Aspect_Ratio()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Perimeter()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Variability_Radius()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Neighbors()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Bending()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Bending()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Neighbors()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
 
 
     # save the mesh (attributes saved in mesh)
