@@ -41,13 +41,14 @@ file_selector = False
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 #save_attr = 'Label Double d_Area, Label Double Geometry/Area'
+# if distance measures 'Proximal-Distal', 'Medial-Lateral'
 
 # which measures to display and how
 
 params_dict = {'gen_measures': True,
                'inter_measures':True,
                'intra_measures':True,
-               'distance_measures': ['Proximal-Distal', 'Medial-Lateral'],
+               'distance_measures': [],
                'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
                'inter_display': [],
                'inter_ranges':[],
@@ -284,9 +285,9 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
     Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
                                                             # min or max, direct junctions (yes) or also neighbors (no)
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No')
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No', 'Yes')
     # todo check that it will measure and save both as attributes
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No')
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No', 'Yes')
     Process.Mesh__Heat_Map__Measures__Geometry__Length_Major_Axis()
     Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
     Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
