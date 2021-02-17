@@ -60,7 +60,7 @@ params_dict = {'gen_measures': True,
 
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files_path = '20201125_jawDxpAR169xpAR229_live'
+data_files_path = '20201125_jawDxpAR169xpAR229'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
