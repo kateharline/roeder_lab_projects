@@ -45,7 +45,7 @@ file_selector = False
 
 # which measures to display and how
 
-params_dict = {'gen_measures': False,
+params_dict = {'gen_measures': True,
                'inter_measures':False,
                'intra_measures':False,
                'distance_measures': [],
