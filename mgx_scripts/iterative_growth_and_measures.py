@@ -369,8 +369,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
     :return: null
     """
     # reset meshes for clean images
-    Process.Mesh__System__Reset('0')
-    Process.Mesh__System__Reset('1')
+    # Process.Mesh__System__Reset('0')
+    # Process.Mesh__System__Reset('1')
     # user adjust arrangement
 
     # old dialog strategy
