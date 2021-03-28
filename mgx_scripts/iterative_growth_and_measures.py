@@ -414,6 +414,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 #                                                                      filename, column name?, border size
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2]), measures[i], '1.0')
+                print('path issue?' + pprint(os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2])))
+                print('measures issue?' +measures[i])
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
                 # nice viz parameters
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
