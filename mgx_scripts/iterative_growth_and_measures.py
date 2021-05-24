@@ -423,7 +423,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
 
 
             elif measures[i] == 'mesh_signal':
-                print 'Helllloooooo'
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
                                            '','','-1', '-1')
 
@@ -440,7 +439,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 # manage
                 if dirs_dict.has_key('stacks'):
                     if len(dirs_dict['stacks']) == len(meshes):
-
+                        Process.Stack__System__Clear_Main_Stack('0')
                         Process.Stack__System__Open(os.path.join(main_path, 'stacks', dirs_dict['stacks'][step-1]),
                     'Main', '0', '/label')
                         Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', '', '', '', '', '', '', '', '-1',
