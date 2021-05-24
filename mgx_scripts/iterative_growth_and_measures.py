@@ -401,6 +401,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
             load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
 
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
+        Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
+                                   '', '', '-1', '-1')
 
         # todo set main mesh
         sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
@@ -422,7 +424,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
 
             elif measures[i] == 'mesh_signal':
                 print 'Helllloooooo'
-                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
                                            '','','-1', '-1')
 
 
