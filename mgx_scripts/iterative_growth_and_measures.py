@@ -406,6 +406,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
     else:
 
         for i in range(0,len(measures)):
+
+            print (measures[i] == 'mesh_signal')
+            
             if measures[i] == 'Cell Axis PDG':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
                                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
@@ -414,6 +417,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
                 Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
             # snap basic features of mesh
+
+
             elif measures[i] == 'mesh_signal':
                 print 'Helllloooooo'
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
