@@ -137,6 +137,8 @@ def load_mesh(mesh, stack, parents):
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
     Process.Stack__System__Set_Current_Stack('Main', stack)
     Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', 'Selected', '', '', '', '', '', '', '-1', '-1')
+    Process.Mesh__Selection__Select_All()
+    Process.Mesh__Selection__Invert_Selection()
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 
@@ -407,8 +409,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
 
         for i in range(0,len(measures)):
 
-            print (measures[i] == 'mesh_signal')
-            
+
             if measures[i] == 'Cell Axis PDG':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
                                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
@@ -423,16 +424,16 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 print 'Helllloooooo'
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
                                            '','','-1', '-1')
-                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+
 
             elif measures[i] == 'mesh_border':
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '',
                                            '','', '-1', '-1')
-                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+
             elif measures[i] == 'mesh_cells':
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Cells', '', '', '', '',
                                            '', '', '-1', '-1')
-                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+
             elif measures[i] == 'stack':
                 # manage
                 if dirs_dict.has_key('stacks'):
@@ -452,7 +453,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 #load heatmap
                 #
                 #                                                                      filename, column name?, border size
-                print ('why am I here '+measures[i])
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), measures[i], '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
@@ -471,11 +471,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
             # load new mesh because done all measures
             if is_inter:
                 load_mesh(os.path.join(meshes_path, meshes[step+1]), 1, 'Yes')
-                print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step + 1])
-
 
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
-            print('dirs_dict[meshes][step] ' + dirs_dict['meshes'][step])
 
             sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
 
