@@ -415,7 +415,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
             # snap basic features of mesh
             if measures[i] == 'mesh_signal':
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
-                                           '','-1', '-1')
+                                           '','','-1', '-1')
                 Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
             if measures[i] == 'mesh_border':
