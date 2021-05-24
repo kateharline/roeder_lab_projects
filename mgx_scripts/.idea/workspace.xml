@@ -15,7 +15,7 @@
   <component name="FileEditorManager">
     <splitter split-orientation="vertical" split-proportion="0.58954394">
       <split-first>
-        <splitter split-orientation="horizontal" split-proportion="0.5">
+        <splitter split-orientation="horizontal" split-proportion="0.38765928">
           <split-first>
             <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
@@ -37,8 +37,8 @@
               <file leaf-file-name="iterative_growth_and_measures.py" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="296">
-                      <caret line="451" column="0" lean-forward="false" selection-start-line="451" selection-start-column="0" selection-end-line="452" selection-end-column="0" />
+                    <state relative-caret-position="315">
+                      <caret line="440" column="43" lean-forward="true" selection-start-line="440" selection-start-column="43" selection-end-line="440" selection-end-column="43" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
                       </folding>
@@ -58,13 +58,13 @@
                 <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="220">
-                      <caret line="506" column="86" lean-forward="false" selection-start-line="506" selection-start-column="86" selection-end-line="506" selection-end-column="86" />
+                      <caret line="507" column="86" lean-forward="false" selection-start-line="507" selection-start-column="86" selection-end-line="507" selection-end-column="86" />
                       <folding>
                         <element signature="e#76#85#0" expanded="true" />
-                        <marker date="1621872213700" expanded="true" signature="17353:20685" ph="..." />
-                        <marker date="1621872213700" expanded="true" signature="18246:18421" ph="..." />
-                        <marker date="1621872213700" expanded="true" signature="18526:18700" ph="..." />
-                        <marker date="1621872213700" expanded="true" signature="18803:18977" ph="..." />
+                        <marker date="1621874883879" expanded="true" signature="17353:20738" ph="..." />
+                        <marker date="1621874883879" expanded="true" signature="18246:18421" ph="..." />
+                        <marker date="1621874883879" expanded="true" signature="18526:18700" ph="..." />
+                        <marker date="1621874883879" expanded="true" signature="18803:18977" ph="..." />
                       </folding>
                     </state>
                   </provider>
@@ -124,10 +124,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="124" />
-    <option name="y" value="89" />
-    <option name="width" value="1771" />
-    <option name="height" value="1193" />
+    <option name="y" value="23" />
+    <option name="width" value="1809" />
+    <option name="height" value="1417" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -237,15 +236,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="124" y="89" width="1771" height="1193" extended-state="0" />
+    <frame x="0" y="23" width="1809" height="1417" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13765182" sideWeight="0.49635702" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13469157" sideWeight="0.49635702" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18123862" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1505295" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.110675804" sideWeight="0.503643" order="2" side_tool="true" content_ui="tabs" />
@@ -417,8 +416,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iterative_growth_and_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="65" column="30" lean-forward="false" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+        <state relative-caret-position="315">
+          <caret line="440" column="43" lean-forward="true" selection-start-line="440" selection-start-column="43" selection-end-line="440" selection-end-column="43" />
           <folding>
             <element signature="e#76#85#0" expanded="true" />
           </folding>

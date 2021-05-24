@@ -446,6 +446,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 #load heatmap
                 #
                 #                                                                      filename, column name?, border size
+                print ('why am I here '+measures[i])
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), measures[i], '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
