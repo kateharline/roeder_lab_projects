@@ -61,6 +61,8 @@ params_dict = {'gen_measures': False,
                'inter_display_step':0,
 }
 
+#hack add to end
+params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen display']
 
 # fun fun file management shit between dev env of vm build and windows build
 data_files_path = '20201125_jawDxpAR169xpAR229'

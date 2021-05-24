@@ -63,8 +63,11 @@ params_dict = {'gen_measures': False,
                'inter_display_step':0}
 
 # make sure read/write as proper data types
+print params_dict['intra_display']
 
-print params_dict['intra_display'] +params_dict['gen display']
+params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen display']
+
+print params_dict['intra_display']
 
 print params_dict.has_key('non') & params_dict['non']
 
