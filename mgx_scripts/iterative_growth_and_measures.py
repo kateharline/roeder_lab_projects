@@ -414,21 +414,21 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
                 Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
             # snap basic features of mesh
-            if measures[i] == 'mesh_signal':
+            elif measures[i] == 'mesh_signal':
                 print 'Helllloooooo'
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
                                            '','','-1', '-1')
                 Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
-            if measures[i] == 'mesh_border':
+            elif measures[i] == 'mesh_border':
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '',
                                            '','', '-1', '-1')
                 Process.Mesh__Cell_Axis__Cell_Axis_Clear()
-            if measures[i] == 'mesh_cells':
+            elif measures[i] == 'mesh_cells':
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Cells', '', '', '', '',
                                            '', '', '-1', '-1')
                 Process.Mesh__Cell_Axis__Cell_Axis_Clear()
-            if measures[i] == 'stack':
+            elif measures[i] == 'stack':
                 # manage
                 if dirs_dict.has_key('stacks'):
                     if len(dirs_dict['stacks']) == len(meshes):
