@@ -438,10 +438,11 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                 # manage
                 if dirs_dict.has_key('stacks'):
                     if len(dirs_dict['stacks']) == len(meshes):
+
+                        Process.Stack__System__Open(os.path.join(main_path, 'stacks', dirs_dict['stacks'][step-1]),
+                    'Main', '0', '/label')
                         Process.Mesh__System__View('No', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '-1',
                                                    '-1')
-                        Process.Stack__System__Open(os.path.join(main_path, 'stacks', dirs_dict['stacks'][step]),
-                    'Main', '0', '/label')
                     else:
                         print ('Wrong number of stacks')
                 else:
