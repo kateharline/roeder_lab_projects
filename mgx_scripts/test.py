@@ -66,10 +66,14 @@ params_dict = {'gen_measures': False,
 print params_dict['intra_display']
 
 params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen display']
+params_dict['gen display'] = ''
 
 print params_dict['intra_display']
 
-print params_dict.has_key('non') & params_dict['non']
+import pprint
+print pprint.pprint(params_dict)
+
+print params_dict.has_key('non')
 
 import json
 import pprint
