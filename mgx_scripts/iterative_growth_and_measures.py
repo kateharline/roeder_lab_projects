@@ -54,6 +54,7 @@ params_dict = {'gen_measures': False,
                'inter_display': ['d_Area', 'd_Proliferation'],
                'inter_ranges':[[0,4],[1,5]],
                'intra_display': [],
+               'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells', 'stack'],
                'intra_ranges':[],
                'distance_measure_step':0,
                'intra_display_step':0,
@@ -239,7 +240,7 @@ def do_distance_measures(meshes, types, path, step):
     return []
 
 def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
-    # todo fix the saving of the meshes, load views
+
 
     for i in range(0, len(meshes)):
         # load mesh
@@ -409,14 +410,41 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                                      # line width, line scale, line offset, threshold, custon dir, min dist vtx
                                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
                 Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+            # snap basic features of mesh
+            if measures[i] == 'mesh_signal':
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', '', '', '', '', '', '',
+                                           '','-1', '-1')
+                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+
+            if measures[i] == 'mesh_border':
+                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '',
+                                           '','', '-1', '-1')
+                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+            if measures[i] == 'mesh_cells':
+                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Cells', '', '', '', '',
+                                           '', '', '-1', '-1')
+                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+            if measures[i] == 'stack':
+                # manage
+                if dirs_dict.has_key('stacks'):
+                    if len(dirs_dict['stacks']) == len(meshes):
+                        Process.Mesh__System__View('No', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '-1',
+                                                   '-1')
+                        Process.Stack__System__Open(os.path.join(main_path, 'stacks', dirs_dict['stacks'][step]),
+                    'Main', '0', '/label')
+                    else:
+                        print ('Wrong number of stacks')
+                else:
+                    print('Missing stacks')
+
+
+
             else:
                 #load heatmap
                 #
                 #                                                                      filename, column name?, border size
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), measures[i], '1.0')
-                print('path issue?' + path + 'attributes' + attr_dict['attributes'][step -1])
-                print('measures issue?' +measures[i])
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
                 # nice viz parameters
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
@@ -426,6 +454,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                      attr_dict['attributes'][step -1][:-8] + "_".join(measures[i].split('/')) + '.png')
             Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
                                            '1.0', '95')
+            Process.Stack__System__Clear_Main_Stack('0')
 
         if step < total_steps:
 
@@ -453,8 +482,6 @@ dirs_dict = walk(main_path)
 
 
 ############ EXECUTE MEASURES #################
-# todo create file tracking system for each of these 4 major steps
-# todo check that I didn't totally fuck gen measures
 
 params_dict = get_params(main_path,'params.txt',params_dict)
 
@@ -472,6 +499,9 @@ if params_dict['gen_measures']:
 
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
+
+# add gen display to end so don't have to be too careful with range indices for other intra_display
+params_dict['intra_display'] = params_dict['intra_display'] + params_dict['gen_display']
 
 # displaying meshes
 if params_dict['intra_display']:
