@@ -66,7 +66,7 @@ params_dict = {'gen_measures': False,
 print params_dict['intra_display']
 
 params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen display']
-params_dict['gen display'] = ''
+params_dict['gen display'] = []
 
 print params_dict['intra_display']
 
