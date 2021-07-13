@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/comparing_wt_jawD'
+input_path = 'C:\\Users\\katha\\Desktop\\temp2'
 
 
 # probably don't change -- unless you are changing code functionality

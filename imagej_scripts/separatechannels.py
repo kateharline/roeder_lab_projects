@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/home/aroeder/Desktop/Kate/20190125_leaf1_pfd_fix_dissect'
+input_path = 'C:\\Users\\katha\\Desktop\\first_leaf_analy'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'

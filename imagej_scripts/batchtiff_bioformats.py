@@ -6,14 +6,15 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = 'D:\leaf1_day_stacks\channels_separated'
+input_path = 'C:\\Users\\katha\\Desktop\\demo'
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.tif'
+start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):
-    IJ.open(path)
+    IJ.run("Bio-Formats Importer", "open="+path+" autoscale color_mode=Default display_ome-xml rois_import=[ROI manager] split_channels view=Hyperstack stack_order=XYCZT");
+
     img = WM.getCurrentImage()
     return img
 
@@ -24,11 +25,16 @@ def process(filename, output_path):
     #IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     # save scale bar to stack
     #IJ.run("Flatten");
-    IJ.saveAs("Tiff", os.path.join(output_path, 'w_scale_' + filename))
-    #IJ.run("Image...  ", "outputfile=D:\\leaf1_day_stacks\\C2-pAR393xpLH13_1_2_d1a-3.tif display=C2-pAR393xpLH13_1_2_d1a-3.tif")
-    curr_img.close()
+
+    num_channels = WM.getImageCount()
+    for i in range(0, num_channels):
+        curr_img = WM.getCurrentImage()
+        IJ.run("Bio-Formats Exporter", "save="+ os.path.join(output_path, '_channel_'+str(i)+'_' + filename[:-4]+new_extension)+" write_each_channel export compression=Uncompressed");
+
+        curr_img.close()
     return
 
+    
 def batch_process(extension, source_dir):
     for folder, subs, files in os.walk(source_dir):
         output_path = os.path.join(folder, 'scale_tiffs')
@@ -38,7 +44,8 @@ def batch_process(extension, source_dir):
                     os.makedirs(output_path)
                 img = load(os.path.join(folder, filename))
                 process(filename, output_path)
-                img.close()
     return
 
 batch_process(start_extension, input_path)
+
+
