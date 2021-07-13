@@ -15,8 +15,8 @@ if o_s == 'posix':
 	# if vmware
     root_path = '/home/kate/Desktop'
 
-    if platform.release() == '4.15.0-118-generic':
-	    # mgx1
+    if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
+        # mgx1
 	    root_path = '/home/aroeder/Desktop/Kate'
 
 elif o_s == 'nt':
@@ -41,26 +41,32 @@ file_selector = False
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 #save_attr = 'Label Double d_Area, Label Double Geometry/Area'
+# if distance measures 'Medial-Lateral','Proximal-Distal','Proximal-Distal_sp'
 
 # which measures to display and how
 
-params_dict = {'gen_measures': True,
-               'inter_measures':True,
-               'intra_measures':True,
-               'distance_measures': ['Proximal-Distal', 'Medial-Lateral'],
-               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
-               'inter_display': [],
-               'inter_ranges':[],
+params_dict = {'gen_measures': False,
+               'inter_measures':False,
+               'intra_measures':False,
+               'distance_measures': [],
+               # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance_Distance, Label Double Proximal-Distal_Distance_sp_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
+               'inter_display': ['d_Area', 'd_Proliferation'],
+               'inter_ranges':[[0,4],[1,5]],
                'intra_display': [],
+               'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells', 'stack'],
                'intra_ranges':[],
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
 }
 
+#hack add to end
+params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen_display']
+params_dict['gen_display'] = []
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files_path = '20200307_07_15_processed'
+data_files_path = '20201125_jawDxpAR169xpAR229'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
@@ -131,6 +137,8 @@ def load_mesh(mesh, stack, parents):
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
     Process.Stack__System__Set_Current_Stack('Main', stack)
     Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', 'Selected', '', '', '', '', '', '', '-1', '-1')
+    Process.Mesh__Selection__Select_All()
+    Process.Mesh__Selection__Invert_Selection()
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
 
 
@@ -237,7 +245,7 @@ def do_distance_measures(meshes, types, path, step):
     return []
 
 def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
-    # todo fix the saving of the meshes, load views
+
 
     for i in range(0, len(meshes)):
         # load mesh
@@ -284,9 +292,9 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
     Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
                                                             # min or max, direct junctions (yes) or also neighbors (no)
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No')
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No', 'Yes')
     # todo check that it will measure and save both as attributes
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No')
+    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No', 'Yes')
     Process.Mesh__Heat_Map__Measures__Geometry__Length_Major_Axis()
     Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
     Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
@@ -299,15 +307,19 @@ def do_intra_measures(mesh):
     Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
     Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Area()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Aspect_Ratio()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Perimeter()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Variability_Radius()
-    Process.Mesh__Heat_Map__Measures__Neighborhood__Neighbors()
-    Process.Mesh__Heat_Map__Measures__Shape__Bending()
-    Process.Mesh__Heat_Map__Measures__Shape__Common_Bending()
-    Process.Mesh__Heat_Map__Measures__Shape__Common_Neighbors()
-    Process.Mesh__Heat_Map__Measures__Shape__Variability_Radius()
+
+
+    Process.Mesh__Heat_Map__Measures__Network__Neighbors()
+
+
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Aspect_Ratio()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Perimeter()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Variability_Radius()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Neighbors()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Bending()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Bending()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Neighbors()
+    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
 
 
     # save the mesh (attributes saved in mesh)
@@ -364,8 +376,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
     :return: null
     """
     # reset meshes for clean images
-    Process.Mesh__System__Reset('0')
-    Process.Mesh__System__Reset('1')
+    # Process.Mesh__System__Reset('0')
+    # Process.Mesh__System__Reset('1')
     # user adjust arrangement
 
     # old dialog strategy
@@ -389,6 +401,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
             load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
 
         load_mesh(dirs_dict['meshes'][step], 0, 'No')
+        Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
+                                   '', '', '-1', '-1')
 
         # todo set main mesh
         sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
@@ -396,6 +410,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
     else:
 
         for i in range(0,len(measures)):
+
+
             if measures[i] == 'Cell Axis PDG':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
                                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
@@ -403,12 +419,44 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                                      # line width, line scale, line offset, threshold, custon dir, min dist vtx
                                                                         '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
                 Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+            # snap basic features of mesh
+
+
+            elif measures[i] == 'mesh_signal':
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
+                                           '','','-1', '-1')
+
+
+            elif measures[i] == 'mesh_border':
+                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '',
+                                           '','', '-1', '-1')
+
+            elif measures[i] == 'mesh_cells':
+                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Cells', '', '', '', '',
+                                           '', '', '-1', '-1')
+
+            elif measures[i] == 'stack':
+                # manage
+                if dirs_dict.has_key('stacks'):
+                    if len(dirs_dict['stacks']) == len(meshes):
+                        Process.Stack__System__Clear_Main_Stack('0')
+                        Process.Stack__System__Open(os.path.join(main_path, 'stacks', dirs_dict['stacks'][step-1]),
+                    'Main', '0', '/label')
+                        Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', '', '', '', '', '', '', '', '-1',
+                                                   '-1')
+                    else:
+                        print ('Wrong number of stacks')
+                else:
+                    print('Missing stacks')
+
+
+
             else:
                 #load heatmap
                 #
                 #                                                                      filename, column name?, border size
                 Process.Mesh__Heat_Map__Heat_Map_Load(
-                    os.path.join(path, 'attributes', attr_dict['attributes'][(step -1) % 2]), measures[i], '1.0')
+                    os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), measures[i], '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
                 # nice viz parameters
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '', '',
@@ -418,17 +466,15 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
                                      attr_dict['attributes'][step -1][:-8] + "_".join(measures[i].split('/')) + '.png')
             Process.Misc__System__Snapshot(snap_path, 'false', '0', '0',
                                            '1.0', '95')
+            Process.Stack__System__Clear_Main_Stack('0')
 
         if step < total_steps:
 
             # load new mesh because done all measures
             if is_inter:
                 load_mesh(os.path.join(meshes_path, meshes[step+1]), 1, 'Yes')
-                print('dirs_dict[meshes][step+1] ' + dirs_dict['meshes'][step + 1])
-
 
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
-            print('dirs_dict[meshes][step] ' + dirs_dict['meshes'][step])
 
             sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
 
@@ -445,8 +491,6 @@ dirs_dict = walk(main_path)
 
 
 ############ EXECUTE MEASURES #################
-# todo create file tracking system for each of these 4 major steps
-# todo check that I didn't totally fuck gen measures
 
 params_dict = get_params(main_path,'params.txt',params_dict)
 
@@ -464,6 +508,9 @@ if params_dict['gen_measures']:
 
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
+
+# add gen display to end so don't have to be too careful with range indices for other intra_display
+params_dict['intra_display'] = params_dict['intra_display'] + params_dict['gen_display']
 
 # displaying meshes
 if params_dict['intra_display']:

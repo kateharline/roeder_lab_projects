@@ -6,11 +6,15 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
+<<<<<<< HEAD
 input_path = 'C:\\Users\\katha\\Desktop\\temp2'
+=======
+input_path = '/Users/kateharline/Desktop/20210129_screening_jawDxpMZ12'
+>>>>>>> fdc7804c533b6f781600532f5e67d5bdb6574253
 
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.tif'
+start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):
