@@ -6,7 +6,7 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/home/aroeder/Desktop/Kate/20190125_leaf1_pfd_fix_dissect'
+input_path = '/Volumes/SHARE/leaf1_day_stacks'
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'
@@ -24,6 +24,8 @@ def process(filename, output_path):
     for i in range(0, num_channels):
         curr_img = WM.getCurrentImage()
         IJ.saveAs("Tiff", os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename))
+        #IJ.run("Image...  ", "outputfile=" + os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename[:-4] + ".tif") + " display="+filename[:-4]+ ".tif")
+        #print( "outputfile=" + os.path.join(output_path, 'C-'+ str(i+1) + '_' + filename[:-4] + ".tif") + " display="+filename[:-4]+ ".tif")
         curr_img.close()
     return
 
@@ -40,3 +42,10 @@ def batch_process(extension, source_dir):
     return
 
 batch_process(start_extension, input_path)
+
+
+# open("/Volumes/SHARE/leaf1_day_stacks/pAR393xpLH13_3_5_d1a.lsm");
+#run("Split Channels");
+#selectWindow("C2-pAR393xpLH13_3_5_d1a.lsm");
+#run("Image...  ", "outputfile=/Volumes/SHARE/leaf1_day_stacks/C2-pAR393xpLH13_3_5_d1a_test.tif display=C2-pAR393xpLH13_3_5_d1a_test.tif");
+#saveAs("Tiff", "/Volumes/SHARE/leaf1_day_stacks/d1a_test.tif");

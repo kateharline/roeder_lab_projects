@@ -6,11 +6,11 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-input_path = '/Users/kateharline/Desktop/20210129_screening_jawDxpMZ12'
+input_path = '/Users/kateharline/Desktop/temp'
 
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.lsm'
+start_extension = '.tif'
 new_extension = '.tif'
 
 def load(path):
@@ -29,7 +29,7 @@ def process(filename, output_path):
     # save scale bar to stack
     IJ.run("Flatten");
     
-    IJ.saveAs("Tiff", os.path.join(output_path, 'maxint_w_scale' + filename))
+    IJ.saveAs("JPG", os.path.join(output_path, 'maxint_w_scale' + filename))
     # close all the images 
     num_channels = WM.getImageCount()
     for i in range(0, num_channels):
@@ -40,6 +40,7 @@ def process(filename, output_path):
 def batch_process(extension, source_dir):
     for folder, subs, files in os.walk(source_dir):
         output_path = os.path.join(folder, 'max_int_w_scale')
+        #output_path = '/Users/kateharline/Desktop/temp'
         for filename in files:
             if filename.endswith(extension):
                 if not os.path.exists(output_path):
