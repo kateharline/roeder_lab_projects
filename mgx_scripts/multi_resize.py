@@ -31,7 +31,7 @@ def resize(stack, voxel_sizes, stacks_path):
 	Process.Stack__System__Save(os.path.join(stacks_path, stack), 'Main', '0', '5', '/label')
 
 
-def resizer(stacks, voxel_sizes, main_path):
+def resizer(stacks, voxel_sizes, stacks_path):
 	for s in stacks:
 		resize(s, voxel_sizes, stacks_path)
 
@@ -65,4 +65,4 @@ stacks = walk(os.path.join(main_path, stacks_path))
 print(stacks)
 
 # iterate through files and resize
-resizer(stacks['stacks'], voxel_sizes, os.path.join(main_path, stacks_path))
+resizer(stacks[stacks_path], voxel_sizes, os.path.join(main_path, stacks_path))
