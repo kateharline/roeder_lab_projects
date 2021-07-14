@@ -47,8 +47,8 @@
           <file leaf-file-name="multi_resize.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/multi_resize.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="27" column="42" lean-forward="false" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+                <state relative-caret-position="960">
+                  <caret line="64" column="12" lean-forward="false" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
                   <folding>
                     <element signature="e#1#10#0" expanded="true" />
                   </folding>
@@ -421,8 +421,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/multi_resize.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="42" lean-forward="false" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+        <state relative-caret-position="960">
+          <caret line="64" column="12" lean-forward="false" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
           <folding>
             <element signature="e#1#10#0" expanded="true" />
           </folding>

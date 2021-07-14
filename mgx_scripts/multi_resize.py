@@ -62,6 +62,7 @@ def walk(file_path):
 
 # get file names
 stacks = walk(os.path.join(main_path, stacks_path))
+print(stacks)
 
 # iterate through files and resize
-resizer(stacks, voxel_sizes, os.path.join(main_path, stacks_path))
+resizer(stacks['stacks'], voxel_sizes, os.path.join(main_path, stacks_path))
