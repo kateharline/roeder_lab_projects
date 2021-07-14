@@ -18,12 +18,12 @@ if o_s == 'posix':
 elif o_s == 'nt':
 	root_path = 'C:\\Users\\katha\\Desktop'
 
-data_files_path = '20201125_jawDxpAR169xpAR229'
+data_files_path = 'demo'
 stacks_path = 'scale_tiffs'
 
 main_path = os.path.join(root_path, data_files_path)
 
-voxel_sizes = ['0.5930470172141393', '0.5930470172141393', '1.0']
+voxel_sizes = ['0.5930470172141393', '0.5930470172141393', '0.5']
 
 def resize(stack, voxel_sizes, stacks_path):
 	Process.Stack__System__Open(os.path.join(stacks_path, stack), 'Main', '0', '')
