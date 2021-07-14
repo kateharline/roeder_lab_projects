@@ -6,7 +6,11 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
+<<<<<<< HEAD
 input_path = '/Volumes/SHARE/leaf1_day_stacks'
+=======
+input_path = 'C:\\Users\\katha\\Desktop\\first_leaf_analy'
+>>>>>>> 371182f7b1e4c6f6618e84e82a7f4b0975743e83
 
 # probably don't change -- unless you are changing code functionality
 start_extension = '.lsm'

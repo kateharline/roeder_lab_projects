@@ -6,49 +6,38 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-<<<<<<< HEAD
-input_path = '/Users/kateharline/Desktop/temp'
-=======
-<<<<<<< HEAD
-input_path = 'C:\\Users\\katha\\Desktop\\temp2'
-=======
-input_path = '/Users/kateharline/Desktop/20210129_screening_jawDxpMZ12'
->>>>>>> fdc7804c533b6f781600532f5e67d5bdb6574253
->>>>>>> 371182f7b1e4c6f6618e84e82a7f4b0975743e83
-
+input_path = 'C:\\Users\\katha\\Desktop\\demo'
 
 # probably don't change -- unless you are changing code functionality
-start_extension = '.tif'
+start_extension = '.lsm'
 new_extension = '.tif'
 
 def load(path):
-    IJ.open(path)
+    IJ.run("Bio-Formats Importer", "open="+path+" autoscale color_mode=Default display_ome-xml rois_import=[ROI manager] split_channels view=Hyperstack stack_order=XYCZT");
+
     img = WM.getCurrentImage()
     return img
 
 def process(filename, output_path):
-	# if multiple channels
-    #IJ.run("Make Composite");
-    IJ.run("Z Project...", "projection=[Max Intensity]");
     # the number of channels is one (orig image) less than the number of images opened
-    
-    # add scale bar to image
-    IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    curr_img = WM.getCurrentImage()
+        # add scale bar to image
+    #IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
     # save scale bar to stack
-    IJ.run("Flatten");
-    
-    IJ.saveAs("JPG", os.path.join(output_path, 'maxint_w_scale' + filename))
-    # close all the images 
+    #IJ.run("Flatten");
+
     num_channels = WM.getImageCount()
     for i in range(0, num_channels):
-    	curr_img = WM.getCurrentImage()
-    	curr_img.close()
+        curr_img = WM.getCurrentImage()
+        IJ.run("Bio-Formats Exporter", "save="+ os.path.join(output_path, '_channel_'+str(i)+'_' + filename[:-4]+new_extension)+" write_each_channel export compression=Uncompressed");
+
+        curr_img.close()
     return
 
+    
 def batch_process(extension, source_dir):
     for folder, subs, files in os.walk(source_dir):
-        output_path = os.path.join(folder, 'max_int_w_scale')
-        #output_path = '/Users/kateharline/Desktop/temp'
+        output_path = os.path.join(folder, 'scale_tiffs')
         for filename in files:
             if filename.endswith(extension):
                 if not os.path.exists(output_path):
@@ -58,3 +47,5 @@ def batch_process(extension, source_dir):
     return
 
 batch_process(start_extension, input_path)
+
+
