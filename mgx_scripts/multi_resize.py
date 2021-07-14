@@ -29,7 +29,7 @@ def resize(stack, voxel_sizes, stacks_path):
 	Process.Stack__System__Open(os.path.join(stacks_path, stack), 'Main', '0', '')
 	Process.Stack__Canvas__Change_Voxel_Size(voxel_sizes[0], voxel_sizes[1], voxel_sizes[2])
 	Process.Stack__System__Save(os.path.join(stacks_path, stack), 'Main', '0', '5', '/label')
-    Process.Stack__System__Clear_Main_Stack('0')
+	Process.Stack__System__Clear_Main_Stack('0')
 
 
 def resizer(stacks, voxel_sizes, stacks_path):
