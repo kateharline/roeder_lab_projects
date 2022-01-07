@@ -362,9 +362,9 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 
     Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Check_Correspondence('No', 'No', 'No')
-    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
+    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG'+mesh_0[:-5], 'Label', 'Label Axis', 'Active Mesh', 'No')
     Process.Stack__System__Set_Current_Stack('Main', '1')
-    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG')
+    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG', 'Label', 'Label Axis', 'Active Mesh', 'No')
     Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Compute_Growth_Directions()
 
