@@ -6,15 +6,9 @@ from ij import IJ
 from ij import WindowManager as WM
 
 # change these w each run #
-<<<<<<< HEAD
-input_path = '/Users/kateharline/Desktop/temp'
-=======
-<<<<<<< HEAD
-input_path = 'C:\\Users\\katha\\Desktop\\temp2'
-=======
-input_path = '/Users/kateharline/Desktop/20210129_screening_jawDxpMZ12'
->>>>>>> fdc7804c533b6f781600532f5e67d5bdb6574253
->>>>>>> 371182f7b1e4c6f6618e84e82a7f4b0975743e83
+
+input_path = '/Users/kateharline/workspace/temp/20210728_live_imaging_jawd_wtxpAR169xpAR229'
+
 
 
 # probably don't change -- unless you are changing code functionality
