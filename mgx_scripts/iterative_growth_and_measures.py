@@ -18,6 +18,9 @@ if o_s == 'posix':
     if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
         # mgx1
 	    root_path = '/home/aroeder/Desktop/Kate'
+    if platform.release() in ['5.11.0-43-generic']:
+        # mgx3
+	    root_path = '/home/aroeder/Kate/finals'
 
 elif o_s == 'nt':
     root_path = 'C:\\Users\\katha\\Desktop'
@@ -66,7 +69,7 @@ params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen_di
 params_dict['gen_display'] = []
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files_path = '20201125_jawDxpAR169xpAR229'
+data_files_path = 'wt_2-4'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
