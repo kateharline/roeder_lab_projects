@@ -60,8 +60,9 @@ params_dict = {'gen_measures': True,
                'inter_display': [],
                'inter_ranges':[[0,4],[1,5]],
                'intra_display': [],
-               'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells', 'stack'],
                'intra_ranges':[],
+               #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells', 'stack'],
+               'gen_display':[],
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
@@ -72,7 +73,7 @@ params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen_di
 params_dict['gen_display'] = []
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files_path = 'wt_2-4'
+data_files_path = 'jawD_2-2'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
@@ -142,7 +143,7 @@ def load_mesh(mesh, stack, parents):
     '''
     Process.Mesh__System__Load(os.path.join(main_path, 'meshes', mesh), 'no', 'no', stack)
     Process.Stack__System__Set_Current_Stack('Main', stack)
-    Process.Mesh__System__View('', parents, 'Cells', '', 'Label', '', '', '', 'Selected', '', '', '', '', '', '', '-1', '-1')
+    Process.Mesh__System__View('Yes', parents, 'Cells', '', 'Wall Heat', '', '', 'Yes', 'Cells', '', '', '', '', '', '', '-1', '-1')
     Process.Mesh__Selection__Select_All()
     Process.Mesh__Selection__Invert_Selection()
     Process.Mesh__Cell_Axis__Cell_Axis_Clear()
@@ -360,13 +361,9 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
 
-    Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Check_Correspondence('No', 'No', 'No')
-    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG'+mesh_0[:-5], 'Label', 'Label Axis', 'Active Mesh', 'No')
-    Process.Stack__System__Set_Current_Stack('Main', '1')
-    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG', 'Label', 'Label Axis', 'Active Mesh', 'No')
-    Process.Stack__System__Set_Current_Stack('Main', '0')
     Process.Mesh__Cell_Axis__PDG__Compute_Growth_Directions()
+    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG'+mesh_0[:-5], 'Label', 'Label Axis', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
@@ -502,6 +499,7 @@ dirs_dict = walk(main_path)
 
 
 ############ EXECUTE MEASURES #################
+
 
 params_dict = get_params(main_path,'params.txt',params_dict)
 
