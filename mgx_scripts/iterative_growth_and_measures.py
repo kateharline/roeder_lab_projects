@@ -73,7 +73,7 @@ params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen_di
 params_dict['gen_display'] = []
 
 # fun fun file management shit between dev env of vm build and windows build
-data_files_path = 'jawD_2-2'
+data_files_path = 'wt_1-5'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
@@ -369,6 +369,7 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh_0, 'no','0')
     Process.Mesh__System__Save(mesh_1, 'no', '1')
+    Process.Mesh__System__Reset('1')
 
 
 def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=None):
