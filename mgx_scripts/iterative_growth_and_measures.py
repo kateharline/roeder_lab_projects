@@ -18,9 +18,9 @@ if o_s == 'posix':
     if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
         # mgx1
 	    root_path = '/home/aroeder/Desktop/Kate'
-    if platform.release() in ['5.11.0-43-generic']:
+    if platform.release() in ['5.13.0-28-generic']:
         # mgx3
-	    root_path = '/home/aroeder/Kate/finals'
+	    root_path = '/home/kh694/Desktop/Kate/finals'
 
 elif o_s == 'nt':
     root_path = 'C:\\Users\\katha\\Desktop'
@@ -41,6 +41,10 @@ if not hasattr(sys, 'argv'):
 # variables for control flow
 file_selector = False
 
+
+# fun fun file management between dev env of vm build and windows build
+data_files_path = 'jawD_2-7'
+
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
 #save_attr = 'Label Double d_Area, Label Double Geometry/Area'
@@ -48,21 +52,21 @@ file_selector = False
 
 # which measures to display and how
 
-params_dict = {'gen_measures': True,
-               'inter_measures':True,
-               'intra_measures':True,
+params_dict = {'gen_measures': False,
+               'inter_measures':False,
+               'intra_measures':False,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
                'distance_measures': [],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
-               'save_attr':'',
-               #'inter_display': ['d_Area', 'd_Proliferation'],
-               'inter_display': [],
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
+               #'save_attr':'',
+               'inter_display': ['d_Area', 'd_Proliferation'],
+               #'inter_display': [],
                'inter_ranges':[[0,4],[1,5]],
                'intra_display': [],
                'intra_ranges':[],
-               #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells', 'stack'],
-               'gen_display':[],
+               'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
+               #'gen_display':[],
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
@@ -72,8 +76,6 @@ params_dict = {'gen_measures': True,
 params_dict['intra_display'] = params_dict['intra_display'] +params_dict['gen_display']
 params_dict['gen_display'] = []
 
-# fun fun file management shit between dev env of vm build and windows build
-data_files_path = 'wt_1-5'
 
 if file_selector:
     # allow user dialogue to pick path when ready https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
@@ -269,7 +271,7 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
                 do_inter_measures(meshes[i], meshes[i + 1], i)
 
         if save_attr:
-            savepath = os.path.join(main_path, 'attributes',meshes[i][:-5] + '_attr.csv')
+            savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
             #Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
             Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
 
@@ -501,6 +503,7 @@ dirs_dict = walk(main_path)
 
 ############ EXECUTE MEASURES #################
 
+pp.pprint(dirs_dict)
 
 params_dict = get_params(main_path,'params.txt',params_dict)
 
@@ -538,3 +541,6 @@ if params_dict['inter_display']:
     set_params(main_path, 'params.txt', params_dict)
     params_dict['inter_display'] = do_display(dirs_dict['meshes'], params_dict['inter_display'], params_dict['inter_ranges'], attr_dict, main_path, True, step)
     set_params(main_path, 'params.txt', params_dict)
+    
+# done, delete params_dict
+os.remove(os.path.join(main_path,'params.txt'))
