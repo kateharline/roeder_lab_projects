@@ -1,18 +1,51 @@
 import pandas as pd
 
-lineage_df = pd.read_csv('/Users/kateharline/workspace/finals/all_parents.csv', index_col=False)
+def get_parent(lineage_df, parent, sample_id):
+    '''
 
-def get_family(lineage_df, time_span, sample_id, save_csv=False):
+    :param lineage_df: dataframe of a lineage for a given base time
+    :param parent: int timepoint to retrieve parents for
+    :param sample_id: str
+    :return: df w giben timepoint's parent selected
+    '''
     # select for sample, time span
-    lineage = lineage_df.loc[lineage_df['sample_id'] == sample_id,time_span]
-    if save_csv:
-        lineage.to_csv('/Users/kateharline/workspace/finals/'+str(sample_id)+'_d'+str(time_span[0])+'_d'+str(time_span[1]))
+    lineage = lineage_df[lineage_df['sample_id'] == sample_id][[str(parent)]]
+    lineage.rename(columns={str(parent): 'Parent_d_'+str(parent)}, inplace=True)
     return lineage
 
-def get_family_h(lineage_df, time_spans, sample_ids, save_csv=False):
+def get_family(lineage_df, time, parents, sample_ids, save_csv=False):
+    '''
+
+    :param lineage_df: dataframe from all_parents with lineage backtracked
+    :param time: int youngest time point
+    :param parents: list of ints older time points to retrieve parents
+    :param sample_ids: list of strings samples to survey
+    :param save_csv: bool whether or not to export given family df
+    :return:
+    '''
+    families = pd.DataFrame()
     for sample_id in sample_ids:
-        for s in range(len(time_spans)):
-            get_family(lineage_df, time_spans[s], sample_id, save_csv)
+        # make nice columns for use with R dataframes
+
+        lineage = lineage_df[lineage_df['sample_id'] == sample_id][['sample_id', str(time)]]
+        lineage['sample_id'] = sample_id
+        lineage['time'] = time
+        lineage.rename(columns={str(time): 'Label'}, inplace=True)
+        for p in parents:
+            # lookup each prev time parent
+            p_lineage = get_parent(lineage_df, p, sample_id)
+            # add column
+            lineage = pd.concat([lineage, p_lineage], axis=1)
+
+        # add rows
+        print(families)
+        families = pd.concat([families, lineage], axis=0)
+        print(families)
+
+    if save_csv:
+        families.to_csv('/Users/kateharline/workspace/finals/families_d'+str(time) + '_to_ds'+str('_'.join(parents)))
     return
 
-get_family(lineage_df, [3,5], 'jawD_2-7')
+lineage_df = pd.read_csv('/Users/kateharline/workspace/finals/all_parents.csv', index_col=False)
+
+get_family(lineage_df, 5, [3], ['jawD_2-7', 'wt_1-5'])
