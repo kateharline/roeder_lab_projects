@@ -62,8 +62,8 @@ params_dict = {'gen_measures': False,
                #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
                'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation'],
-               'inter_display': [],
-               'inter_ranges':[[0,4],[1,5]],
+               'inter_display': ['PDGs', 'PD-PDG_align'],
+               'inter_ranges':[['1','3'],['1','3']],
                'intra_display': [],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
@@ -71,7 +71,8 @@ params_dict = {'gen_measures': False,
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
-               'custom_axis_spec':['Proximal-Distal_Distance', 'max']
+               #'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
+               'custom_axis_spec':[]
 }
 
 #hack add to end
