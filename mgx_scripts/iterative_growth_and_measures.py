@@ -389,14 +389,14 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
     :param attrs: list of attr file names
     :return: False when done so this will be skipped when complete
     '''
-    for step in range(0, len(meshes) -1):
+    for i in range(0, len(meshes) -1):
         load_mesh(meshes[i], 0, 'no')
         load_mesh(meshes[i + 1], 1, 'Yes')
 
         Process.Stack__System__Set_Current_Stack('Main', '0')
         Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
         # load directions
-        Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(path, 'attributes', attrs[step -1]), custom_spec[0], '1.0')
+        Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(path, 'attributes', attrs[i]), custom_spec[0], '1.0')
         Process.Mesh__Cell_Axis__Custom__Create_Heatmap_Directions('Yes', 'no')
         # redisplay PDGs for calc
         if custom_spec[1] == 'max':
