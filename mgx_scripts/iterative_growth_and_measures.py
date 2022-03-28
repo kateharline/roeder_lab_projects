@@ -496,7 +496,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                                                                         'black', 'red',
                                                                         '3', '4', '0.1', '1', 'No', '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Load(
-                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle', '1.0')
+                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
 
