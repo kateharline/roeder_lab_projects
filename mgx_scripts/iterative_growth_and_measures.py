@@ -279,6 +279,22 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
 
     return False
 
+def do_save_attr(meshes, main_path, save_attr):
+    '''
+
+    :param meshes: list of mesh filenames
+    :param main_path: string save path
+    :param save_attr: string of attribute names to save
+    :return:
+    '''
+    for i in range(0, len(meshes)):
+        # load mesh
+        load_mesh(meshes[i], 0, 'no')
+        savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
+        Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
+        # Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
+
+    return ''
 
 def do_parents_to_attr(parent_file, mesh):
     """
@@ -419,7 +435,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
         Process.Mesh__System__Save(meshes[i+1], 'no', '1')
         Process.Mesh__System__Reset('1')
 
-        return False
+        return []
 
 
 def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None):
@@ -573,15 +589,22 @@ if params_dict['distance_measures']:
 
 # measures
 if params_dict['gen_measures']:
-    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'])
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'])
     set_params(main_path, 'params.txt', params_dict)
 
+
 # recalculate attr if saved
+# ordering currently a bit weird bc you would need to save attr in order to do custom axis
+# but the save attr doesn't work entirely as expected so better to break
 attr_dict = walk(os.path.join(main_path, 'attributes'))
 
 if params_dict['custom_axis_spec']:
     params_dict['custom_axis_spec'] = do_custom_pdg(dirs_dict['meshes'], main_path, params_dict['custom_axis_spec'], dirs_dict['attributes'])
+    set_params(main_path, 'params.txt', params_dict)
 
+if params_dict['save_attr']:
+    params_dict['save_attr'] = do_save_attr(dirs_dict['meshes'], main_path, params_dict['save_attr'])
+    set_params(main_path, 'params.txt', params_dict)
 # add gen display to end so don't have to be too careful with range indices for other intra_display
 params_dict['intra_display'] = params_dict['intra_display'] + params_dict['gen_display']
 
