@@ -52,7 +52,7 @@ data_files_path = 'temp'
 
 # which measures to display and how
 
-params_dict = {'gen_measures': True,
+params_dict = {'gen_measures': False,
                'inter_measures':False,
                'intra_measures':False,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
@@ -389,7 +389,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
     :param attrs: list of attr file names
     :return: False when done so this will be skipped when complete
     '''
-    for step in range(0, len(meshes)):
+    for step in range(0, len(meshes) -1):
         load_mesh(meshes[i], 0, 'no')
         load_mesh(meshes[i + 1], 1, 'Yes')
 
@@ -415,8 +415,8 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
             Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_min', 'Label',
                                                                        'Label Heat', 'Active Mesh', 'No')
        # hopefully this will be saved to attr map
-        Process.Mesh__System__Save(mesh_0, 'no','0')
-        Process.Mesh__System__Save(mesh_1, 'no', '1')
+        Process.Mesh__System__Save(meshes[i], 'no','0')
+        Process.Mesh__System__Save(meshes[i+1], 'no', '1')
         Process.Mesh__System__Reset('1')
 
         return False
