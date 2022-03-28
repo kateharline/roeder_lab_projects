@@ -257,7 +257,7 @@ def do_distance_measures(meshes, types, path, step):
     # when done doing steps, return empty types list so this function will be skipped over
     return []
 
-def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
+def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures):
 
 
     for i in range(0, len(meshes)):
@@ -271,11 +271,6 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
             if inter_measures:
                 load_mesh(meshes[i+1], 1, 'Yes')
                 do_inter_measures(meshes[i], meshes[i + 1], i)
-
-        if save_attr:
-            savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
-            #Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
-            Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
 
     return False
 
@@ -310,7 +305,7 @@ def do_parents_to_attr(parent_file, mesh):
     Process.Mesh__System__Save(mesh, 'no', '1')
 
 
-def do_intra_measures(mesh):
+def do_intra_measures(mesh, path=main_path):
     """
     conduct all single mesh measures, then export attribute map to csv
     :param mesh: string, filepath of the mesh
@@ -356,11 +351,11 @@ def do_intra_measures(mesh):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh, 'no','0')
+    Process.Mesh__System__Save(os.path.join(path, 'meshes', mesh), 'no','0')
 
 
 
-def do_inter_measures(mesh_0, mesh_1, i_0):
+def do_inter_measures(mesh_0, mesh_1, i_0, path=main_path):
     """
     run processes that track changes between meshes
     :param mesh_0: string, filepath of the first mesh (t)
@@ -385,8 +380,8 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
-    Process.Mesh__System__Save(mesh_0, 'no','0')
-    Process.Mesh__System__Save(mesh_1, 'no', '1')
+    Process.Mesh__System__Save(os.path.join(path, 'meshes', mesh_0), 'no','0')
+    Process.Mesh__System__Save(os.path.join(path, 'meshes', mesh_1), 'no', '1')
     Process.Mesh__System__Reset('1')
 
 
@@ -431,8 +426,8 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
             Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_min', 'Label',
                                                                        'Label Heat', 'Active Mesh', 'No')
        # hopefully this will be saved to attr map
-        Process.Mesh__System__Save(meshes[i], 'no','0')
-        Process.Mesh__System__Save(meshes[i+1], 'no', '1')
+        Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[i]), 'no','0')
+        Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[i+1]), 'no', '1')
         Process.Mesh__System__Reset('1')
 
     return []
