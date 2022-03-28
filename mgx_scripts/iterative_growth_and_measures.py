@@ -71,7 +71,8 @@ params_dict = {'gen_measures': False,
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
-               'custom_axis_spec':['Proximal-Distal_Distance', 'max']
+               'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
+               'radii':['66.988', '166.821', '289.932', '462.853', '672.005', '922.935', '972.600']
 }
 
 #hack add to end
@@ -257,7 +258,7 @@ def do_distance_measures(meshes, types, path, step):
     # when done doing steps, return empty types list so this function will be skipped over
     return []
 
-def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures):
+def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, radii):
 
 
     for i in range(0, len(meshes)):
@@ -265,7 +266,7 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures):
         load_mesh(meshes[i], 0, 'no')
 
         if intra_measures:
-            do_intra_measures(meshes[i])
+            do_intra_measures(meshes[i], radius=radii[i])
 
         if i < len(meshes) - 1:
             if inter_measures:
@@ -305,7 +306,7 @@ def do_parents_to_attr(parent_file, mesh):
     Process.Mesh__System__Save(mesh, 'no', '1')
 
 
-def do_intra_measures(mesh, path=main_path):
+def do_intra_measures(mesh, radius, path=main_path):
     """
     conduct all single mesh measures, then export attribute map to csv
     :param mesh: string, filepath of the mesh
@@ -348,7 +349,7 @@ def do_intra_measures(mesh, path=main_path):
     Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
     Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Stomata_Area()
 
-
+    Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(os.path.join(path, 'meshes', mesh), 'no','0')
@@ -584,7 +585,7 @@ if params_dict['distance_measures']:
 
 # measures
 if params_dict['gen_measures']:
-    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'])
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['radii'])
     set_params(main_path, 'params.txt', params_dict)
 
 
