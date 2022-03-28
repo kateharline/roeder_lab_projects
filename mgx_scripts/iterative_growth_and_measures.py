@@ -13,7 +13,7 @@ import platform
 o_s = os.name
 if o_s == 'posix':
 	# if vmware
-    root_path = '/home/kate/Desktop'
+    root_path = '/home/kateharline/Desktop/finals'
 
     if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
         # mgx1
@@ -257,7 +257,7 @@ def do_distance_measures(meshes, types, path, step):
     # when done doing steps, return empty types list so this function will be skipped over
     return []
 
-def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr, custom_pdgs):
+def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
 
 
     for i in range(0, len(meshes)):
@@ -271,11 +271,6 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
             if inter_measures:
                 load_mesh(meshes[i+1], 1, 'Yes')
                 do_inter_measures(meshes[i], meshes[i + 1], i)
-            if custom_pdgs:
-                if not inter_measures:
-                    load_mesh(meshes[i + 1], 1, 'Yes')
-                do_custom_pdg(meshes[i], meshes[i+1], i, main_path, custom_pdgs)
-            Process.Mesh__System__Reset('1')
 
         if save_attr:
             savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
@@ -376,48 +371,55 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh_0, 'no','0')
     Process.Mesh__System__Save(mesh_1, 'no', '1')
+    Process.Mesh__System__Reset('1')
 
 
 
 # function called after check corr, PDG run
 # inputs: axis (string), direction of alignment
 # custom spec is list of strings needed to specify direction customization
-def do_custom_pdg(mesh_0, mesh_1, step, path, custom_spec):
+def do_custom_pdg(meshes, path, custom_spec, attrs):
     '''
 
-    :param mesh_0: string
-    :param mesh_1: string
-    :param step: int
+    :param meshes: list of string names of meshes
     :param path: string save path
     :param custom_spec: list of values needed to specify custom direction
     0                           1
     [ name of direction heatmap, max or min alingment
-    :return:
+    :param attrs: list of attr file names
+    :return: False when done so this will be skipped when complete
     '''
-    Process.Stack__System__Set_Current_Stack('Main', '0')
-    Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
-    # load directions
-    Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), custom_spec[0], '1.0')
-    Process.Mesh__Cell_Axis__Custom__Create_Heatmap_Directions('Yes', 'no')
-    # redisplay PDGs for calc
-    if custom_spec[1] == 'max':
-        Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'StrainMax', 'black', 'red',
-                                                              '3', '4', '0.1', '0', 'No', '1.0')
-        # calc custom angles and save to attr map
-        Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Max', 'X')
-        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_max', 'Label',
-                                                               'Label Heat', 'Active Mesh', 'No')
-    else:
-        Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMin', 'Auto', '1', '3', 'StrainMin', 'black',
-                                                                'red',
-                                                                '3', '4', '0.1', '0', 'No', '1.0')
-        # calc custom angles and save to attr map
-        Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Min', 'X')
-        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_min', 'Label',
+    for step in range(0, len(meshes)):
+        load_mesh(meshes[i], 0, 'no')
+        load_mesh(meshes[i + 1], 1, 'Yes')
+
+        Process.Stack__System__Set_Current_Stack('Main', '0')
+        Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
+        # load directions
+        Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(path, 'attributes', attrs[step -1]), custom_spec[0], '1.0')
+        Process.Mesh__Cell_Axis__Custom__Create_Heatmap_Directions('Yes', 'no')
+        # redisplay PDGs for calc
+        if custom_spec[1] == 'max':
+            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'StrainMax', 'black', 'red',
+                                                                  '3', '4', '0.1', '0', 'No', '1.0')
+            # calc custom angles and save to attr map
+            Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Max', 'X')
+            Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_max', 'Label',
                                                                    'Label Heat', 'Active Mesh', 'No')
-   # hopefully this will be saved to attr map
-    Process.Mesh__System__Save(mesh_0, 'no','0')
-    Process.Mesh__System__Save(mesh_1, 'no', '1')
+        else:
+            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMin', 'Auto', '1', '3', 'StrainMin', 'black',
+                                                                    'red',
+                                                                    '3', '4', '0.1', '0', 'No', '1.0')
+            # calc custom angles and save to attr map
+            Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Min', 'X')
+            Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_min', 'Label',
+                                                                       'Label Heat', 'Active Mesh', 'No')
+       # hopefully this will be saved to attr map
+        Process.Mesh__System__Save(mesh_0, 'no','0')
+        Process.Mesh__System__Save(mesh_1, 'no', '1')
+        Process.Mesh__System__Reset('1')
+
+        return False
 
 
 def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None):
@@ -571,11 +573,14 @@ if params_dict['distance_measures']:
 
 # measures
 if params_dict['gen_measures']:
-    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'], params_dict['custom_axis_spec'])
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'])
     set_params(main_path, 'params.txt', params_dict)
 
 # recalculate attr if saved
 attr_dict = walk(os.path.join(main_path, 'attributes'))
+
+if params_dict['custom_axis_spec']:
+    params_dict['custom_axis_spec'] = do_custom_pdg(dirs_dict['meshes'], main_path, params_dict['custom_axis_spec'], dirs_dict['attributes'])
 
 # add gen display to end so don't have to be too careful with range indices for other intra_display
 params_dict['intra_display'] = params_dict['intra_display'] + params_dict['gen_display']
