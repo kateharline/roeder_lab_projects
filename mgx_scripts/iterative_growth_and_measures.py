@@ -435,7 +435,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
         Process.Mesh__System__Save(meshes[i+1], 'no', '1')
         Process.Mesh__System__Reset('1')
 
-        return []
+    return []
 
 
 def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None):
