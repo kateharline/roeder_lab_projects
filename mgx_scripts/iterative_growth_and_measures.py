@@ -56,11 +56,11 @@ params_dict = {'gen_measures': True,
                'inter_measures':False,
                'intra_measures':False,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
-               'distance_measures': ['Margin'],
-               #'distance_measures':[],
+               #'distance_measures': ['Margin'],
+               'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
-               #'save_attr':'',
+               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor Cell Axis PDG',
+               'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation'],
                'inter_display': [],
                'inter_ranges':[[0,4],[1,5]],
@@ -71,6 +71,7 @@ params_dict = {'gen_measures': True,
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
+               'custom_axis_spec':['Proximal-Distal_Distance', 'max']
 }
 
 #hack add to end
@@ -256,7 +257,7 @@ def do_distance_measures(meshes, types, path, step):
     # when done doing steps, return empty types list so this function will be skipped over
     return []
 
-def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr):
+def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, save_attr, custom_pdgs):
 
 
     for i in range(0, len(meshes)):
@@ -270,6 +271,11 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
             if inter_measures:
                 load_mesh(meshes[i+1], 1, 'Yes')
                 do_inter_measures(meshes[i], meshes[i + 1], i)
+            if custom_pdgs:
+                if not inter_measures:
+                    load_mesh(meshes[i + 1], 1, 'Yes')
+                do_custom_pdg(meshes[i], meshes[i+1], i, main_path, custom_pdgs)
+            Process.Mesh__System__Reset('1')
 
         if save_attr:
             savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
@@ -363,19 +369,58 @@ def do_inter_measures(mesh_0, mesh_1, i_0):
     Process.Mesh__Lineage_Tracking__Heat_Map_Proliferation('Yes')
     Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'd_Proliferation', 'Label',
                                                                'Label Heat', 'Active Mesh', 'No')
-
     Process.Mesh__Cell_Axis__PDG__Check_Correspondence('No', 'No', 'No')
     Process.Mesh__Cell_Axis__PDG__Compute_Growth_Directions()
-    Process.Mesh__Cell_Axis__Cell_Axis_Export_To_Attr_Map('Measure Label Tensor', 'Cell Axis PDG'+mesh_0[:-5], 'Label', 'Label Axis', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(mesh_0, 'no','0')
     Process.Mesh__System__Save(mesh_1, 'no', '1')
-    Process.Mesh__System__Reset('1')
 
 
-def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=None):
+
+# function called after check corr, PDG run
+# inputs: axis (string), direction of alignment
+# custom spec is list of strings needed to specify direction customization
+def do_custom_pdg(mesh_0, mesh_1, step, path, custom_spec):
+    '''
+
+    :param mesh_0: string
+    :param mesh_1: string
+    :param step: int
+    :param path: string save path
+    :param custom_spec: list of values needed to specify custom direction
+    0                           1
+    [ name of direction heatmap, max or min alingment
+    :return:
+    '''
+    Process.Stack__System__Set_Current_Stack('Main', '0')
+    Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
+    # load directions
+    Process.Mesh__Heat_Map__Heat_Map_Load(os.path.join(path, 'attributes', attr_dict['attributes'][step -1]), custom_spec[0], '1.0')
+    Process.Mesh__Cell_Axis__Custom__Create_Heatmap_Directions('Yes', 'no')
+    # redisplay PDGs for calc
+    if custom_spec[1] == 'max':
+        Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', '1', '3', 'StrainMax', 'black', 'red',
+                                                              '3', '4', '0.1', '0', 'No', '1.0')
+        # calc custom angles and save to attr map
+        Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Max', 'X')
+        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_max', 'Label',
+                                                               'Label Heat', 'Active Mesh', 'No')
+    else:
+        Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMin', 'Auto', '1', '3', 'StrainMin', 'black',
+                                                                'red',
+                                                                '3', '4', '0.1', '0', 'No', '1.0')
+        # calc custom angles and save to attr map
+        Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Min', 'X')
+        Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_min', 'Label',
+                                                                   'Label Heat', 'Active Mesh', 'No')
+   # hopefully this will be saved to attr map
+    Process.Mesh__System__Save(mesh_0, 'no','0')
+    Process.Mesh__System__Save(mesh_1, 'no', '1')
+
+
+def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None):
     """
     save snapshots for all desired measures
     :param meshes: list of strings, paths to meshes
@@ -424,16 +469,25 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, pdg=No
         for i in range(0,len(measures)):
 
 
-            if measures[i] == 'Cell Axis PDG':
-                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor Cell Axis PDG')
-                                                                 # heatmap, scaleheat, heat min, max, show axis, color +, color -
-                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'Both', 'white', 'red',
-                                                     # line width, line scale, line offset, threshold, custon dir, min dist vtx
-                                                                        '2.0', '2.0', '0.1', '0.0', 'No', '1.0')
-                Process.Mesh__System__View('No', '', '', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+            if measures[i] == 'PDGs':
+                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
+                                                 # heatmap, scaleheat, heat min, max, show axis, color +, color -
+                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
+                                                                        'black', 'red', '3', '4', '0.1', '1', 'No',
+                                                                        '1.0')
+                Process.Mesh__System__View('No', '', '', '', '', '', '', 'Yes', 'Border', '', '', '', '', '', '', '-1', '-1')
+
+            if measures[i] == 'PD-PDG_align':
+                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
+                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
+                                                                        'black', 'red',
+                                                                        '3', '4', '0.1', '1', 'No', '1.0')
+                Process.Mesh__Heat_Map__Heat_Map_Load(
+                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle', '1.0')
+                Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
+                                           '', '-1', '-1')
+
             # snap basic features of mesh
-
-
             elif measures[i] == 'mesh_signal':
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
                                            '','','-1', '-1')
@@ -517,7 +571,7 @@ if params_dict['distance_measures']:
 
 # measures
 if params_dict['gen_measures']:
-    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'])
+    params_dict['gen_measures'] = do_gen_measures(dirs_dict['meshes'], dirs_dict['parents'], main_path, params_dict['intra_measures'], params_dict['inter_measures'], params_dict['save_attr'], params_dict['custom_axis_spec'])
     set_params(main_path, 'params.txt', params_dict)
 
 # recalculate attr if saved
