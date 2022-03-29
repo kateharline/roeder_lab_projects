@@ -43,7 +43,7 @@ file_selector = False
 
 
 # fun fun file management between dev env of vm build and windows build
-data_files_path = 'jawD_2-7'
+data_files_path = 'temp'
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
@@ -62,7 +62,7 @@ params_dict = {'gen_measures': False,
                #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance',
                'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
-               'inter_display': ['PDGs', 'PD-PDG_align'],
+               'inter_display': ['PDGs'],
                'inter_ranges':[['1','4'],['1','4']],
                'intra_display': [],
                'intra_ranges':[],
@@ -481,16 +481,16 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
 
         for i in range(0,len(measures)):
 
-
+	    print(measures)
             if measures[i] == 'PDGs':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
                 Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
                                                                         'black', 'red', '3', '4', '0.1', '1', 'No',
                                                                         '1.0')
-                #Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
 
-            if measures[i] == 'PD-PDG_align':
+            elif measures[i] == 'PD-PDG_align':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                 Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
                                                                         'black', 'red',
