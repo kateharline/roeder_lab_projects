@@ -72,7 +72,7 @@ params_dict = {'gen_measures': True,
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
-               'radii':['66.988', '166.821', '289.932', '462.853', '672.005', '922.935', '972.600'],
+               'radii':['66.988',  '166.821',  '321.039',  '513.980',  '819.205', '1273.705', '1565.905'],
                #'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
                'custom_axis_spec':[]
 }
