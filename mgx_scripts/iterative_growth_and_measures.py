@@ -43,7 +43,7 @@ file_selector = False
 
 
 # fun fun file management between dev env of vm build and windows build
-data_files_path = 'temp'
+data_files_path = 'wt_2-4'
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
@@ -353,6 +353,7 @@ def do_intra_measures(mesh, radius, curve_type='Gaussian', path=main_path):
 
     # hacky export to attr so can be sure of value
     # save as attributes
+    Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor', 'Curvature', 'No')
     Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
                                                                  'white', 'red', '2.0', '100.0', '0.1',
                                                                  '0.0')
