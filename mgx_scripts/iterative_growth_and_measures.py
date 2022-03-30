@@ -52,14 +52,14 @@ data_files_path = 'temp'
 
 # which measures to display and how
 
-params_dict = {'gen_measures': False,
+params_dict = {'gen_measures': True,
                'inter_measures':False,
-               'intra_measures':False,
+               'intra_measures':True,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gauss_curv_heat',
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat',
                #'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
                'inter_display': [],
@@ -306,7 +306,7 @@ def do_parents_to_attr(parent_file, mesh):
     Process.Mesh__System__Save(mesh, 'no', '1')
 
 
-def do_intra_measures(mesh, radius, path=main_path):
+def do_intra_measures(mesh, radius, curve_type='Gaussian', path=main_path):
     """
     conduct all single mesh measures, then export attribute map to csv
     :param mesh: string, filepath of the mesh
@@ -314,42 +314,52 @@ def do_intra_measures(mesh, radius, path=main_path):
     """
 
     # run desired processes
-    Process.Mesh__Heat_Map__Measures__Geometry__Area()
-    Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
-    Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
-                                                            # min or max, direct junctions (yes) or also neighbors (no)
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No', 'Yes')
-    # todo check that it will measure and save both as attributes
-    Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No', 'Yes')
-    Process.Mesh__Heat_Map__Measures__Geometry__Length_Major_Axis()
-    Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
-    Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
-    Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Area()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
+    #                                                         # min or max, direct junctions (yes) or also neighbors (no)
+    # Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No', 'Yes')
+    # # todo check that it will measure and save both as attributes
+    # Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No', 'Yes')
+    # Process.Mesh__Heat_Map__Measures__Geometry__Length_Major_Axis()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Length_Minor_Axis()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Maximum_Radius()
+    # Process.Mesh__Heat_Map__Measures__Geometry__Minimum_Radius()
+    #
+    # Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
+    # Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
+    #
+    #
+    # Process.Mesh__Heat_Map__Measures__Network__Neighbors()
+    #
+    #
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Aspect_Ratio()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Area()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Perimeter()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Variability_Radius()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Neighbors()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Bending()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Bending()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Neighbors()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
+    # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Stomata_Area()
+    #
+    # Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
 
-    Process.Mesh__Heat_Map__Measures__Geometry__Perimeter()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Circularity()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Lobeyness()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Rectangularity()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Solidarity()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Pavement()
-    Process.Mesh__Heat_Map__Measures__Lobeyness__Visibility_Stomata()
+    # hacky export to attr so can be sure of value
+    # save as attributes
+    Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
+                                                                 'white', 'red', '2.0', '100.0', '0.1',
+                                                                 '0.0')
+    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double',
+                                                               curve_type + '_heat',
+                                                               'Label', 'Label Heat', 'Active Mesh', 'No')
 
-
-    Process.Mesh__Heat_Map__Measures__Network__Neighbors()
-
-
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Aspect_Ratio()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Area()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Perimeter()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Variability_Radius()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Neighborhood__Neighbors()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Bending()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Bending()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Common_Neighbors()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
-    Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Stomata_Area()
-
-    Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number
     Process.Mesh__System__Save(os.path.join(path, 'meshes', mesh), 'no','0')
@@ -499,22 +509,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
-            elif measures[i] == 'Curvature':
-                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor',
-                                                                        'Curvature', 'No')
-                Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature('Gaussian', 'Yes', '85.0', 'Both',
-                                                                             'white', 'red', '2.0', '100.0', '0.1',
-                                                                             '0.0')
-                # hacky export to attr so can be sure of value
-                # save as attributes
-                Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double',
-                                                                           'Gauss_curv_heat',
-                                                                           'Label', 'Label Heat', 'Active Mesh', 'No')
-                Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[step-1]), 'no', '0')
-                # display nicely
-                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
-                Process.Mesh__System__View('Yes', '', 'Cells', '', 'Label Heat', '', '', 'Yes', 'Border', '', '', '',
-                                           'Yes', '', '', '-1', '-1')
             # snap basic features of mesh
             elif measures[i] == 'mesh_signal':
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
