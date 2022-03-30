@@ -59,12 +59,12 @@ params_dict = {'gen_measures': False,
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance',
+               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs',
                'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
-               'inter_display': ['PDGs','PD-PDG_align'],
+               'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
-               'intra_display': [],
+               'intra_display': ['Gauss'],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
                'gen_display':[],
@@ -468,9 +468,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
     if step == 0:
 
         if is_inter:
-            load_mesh(dirs_dict['meshes'][step+1], 1, 'Yes')
+            load_mesh(meshes[step+1], 1, 'Yes')
 
-        load_mesh(dirs_dict['meshes'][step], 0, 'No')
+        load_mesh(meshes[step], 0, 'No')
         Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
                                    '', '', '-1', '-1')
 
@@ -481,7 +481,6 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
 
         for i in range(0,len(measures)):
 
-	    print(measures)
             if measures[i] == 'PDGs':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
@@ -499,7 +498,22 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
-
+            elif measures[i] == 'Curvature':
+                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor',
+                                                                        'Curvature', 'No')
+                Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature('Gaussian', 'Yes', '85.0', 'Both',
+                                                                             'white', 'red', '2.0', '100.0', '0.1',
+                                                                             '0.0')
+                # hacky export to attr so can be sure of value
+                # save as attributes
+                Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double',
+                                                                           'Gauss_curv_heat',
+                                                                           'Label', 'Label Heat', 'Active Mesh', 'No')
+                Process.Mesh__System__Save(os.path.join(path, 'meshes', meshes[step-1]), 'no', '0')
+                # display nicely
+                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+                Process.Mesh__System__View('Yes', '', 'Cells', '', 'Label Heat', '', '', 'Yes', 'Border', '', '', '',
+                                           'Yes', '', '', '-1', '-1')
             # snap basic features of mesh
             elif measures[i] == 'mesh_signal':
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
