@@ -445,7 +445,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
     return []
 
 
-def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None):
+def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None, curve_type='Gaussian'):
     """
     save snapshots for all desired measures
     :param meshes: list of strings, paths to meshes
@@ -510,6 +510,16 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
+            elif measures[i] == 'Curvature':
+                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor',
+                                                                        'Curvature', 'No')
+                Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
+                                                                             'white', 'red', '2.0', '100.0', '0.1',
+                                                                             '0.0')
+                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', 'Border', '', '', '', '',
+                                           '', '', '-1', '-1')
+
             # snap basic features of mesh
             elif measures[i] == 'mesh_signal':
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
