@@ -65,7 +65,7 @@ params_dict = {'gen_measures': True,
                'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
-               'intra_display': [],
+               'intra_display': ['Curvature'],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
                'gen_display':[],
