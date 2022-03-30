@@ -349,7 +349,7 @@ def do_intra_measures(mesh, radius, curve_type='Gaussian', path=main_path):
     # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
     # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Stomata_Area()
     #
-    # Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
+    Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
 
     # hacky export to attr so can be sure of value
     # save as attributes
