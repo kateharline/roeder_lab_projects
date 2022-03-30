@@ -517,7 +517,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                                                                              'white', 'red', '2.0', '100.0', '0.1',
                                                                              '0.0')
                 Process.Mesh__Cell_Axis__Cell_Axis_Clear()
-                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', 'Border', '', '', '', '',
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '',
                                            '', '', '-1', '-1')
 
             # snap basic features of mesh
