@@ -43,7 +43,7 @@ file_selector = False
 
 
 # fun fun file management between dev env of vm build and windows build
-data_files_path = 'jawD_2-7'
+data_files_path = 'temp'
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
@@ -59,12 +59,13 @@ params_dict = {'gen_measures': False,
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs',
-               'save_attr':'',
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gauss_curv_heat',
+               #'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
                'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
-               'intra_display': ['Gauss'],
+               # if doing gauss, should be last bc don't give ranges 'Curvature'
+               'intra_display': [],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
                'gen_display':[],
