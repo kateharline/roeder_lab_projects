@@ -514,7 +514,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
-            elif measures[i] == 'Curvature':
+            elif measures[i] == curve_type+'_heat':
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), measures[i], '1.0')
                 # use extended ranges so at least time points on same scale
