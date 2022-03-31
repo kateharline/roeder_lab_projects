@@ -633,7 +633,7 @@ if params_dict['intra_display']:
     params_dict['intra_display_step'] = step + 1
     set_params(main_path, 'params.txt', params_dict)
     pp.pprint(params_dict)
-    params_dict['intra_display'] = do_display(dirs_dict['meshes'], params_dict['intra_display'], params_dict['intra_ranges'], attr_dict, main_path, False, step)
+    params_dict['intra_display'] = do_display(dirs_dict['meshes'], params_dict['intra_display'], params_dict['intra_ranges'], attr_dict, main_path, False, step, curve_ranges=params_dict['curve_ranges'])
     pp.pprint(params_dict)
     set_params(main_path, 'params.txt', params_dict)
 
