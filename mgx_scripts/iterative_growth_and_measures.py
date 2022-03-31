@@ -449,7 +449,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
     return []
 
 
-def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None, curve_type='Gaussian'):
+def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None, curve_type='Gaussian', curve_ranges=[]):
     """
     save snapshots for all desired measures
     :param meshes: list of strings, paths to meshes
@@ -516,9 +516,9 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                                            '', '-1', '-1')
             elif measures[i] == 'Curvature':
                 Process.Mesh__Heat_Map__Heat_Map_Load(
-                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), measures[i], '1.0')
+                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), curve_type+'_heat', '1.0')
                 # use extended ranges so at least time points on same scale
-                Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+                Process.Mesh__Heat_Map__Heat_Map_Set_Range(curve_ranges[step-1][0], curve_ranges[step-1][1])
                 # nice viz parameters
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '',
                                            '',
