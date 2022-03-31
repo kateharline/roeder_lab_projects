@@ -52,9 +52,9 @@ data_files_path = 'jawD_2-4'
 
 # which measures to display and how
 
-params_dict = {'gen_measures': True,
+params_dict = {'gen_measures': False,
                'inter_measures':False,
-               'intra_measures':True,
+               'intra_measures':False,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
                #'distance_measures': ['Margin'],
                'distance_measures':[],
@@ -65,7 +65,7 @@ params_dict = {'gen_measures': True,
                'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
-               'intra_display': [],
+               'intra_display': ['Gaussian_heat'],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
                'gen_display':[],
@@ -74,7 +74,11 @@ params_dict = {'gen_measures': True,
                'inter_display_step':0,
                'radii':['66.988',  '166.821',  '321.039',  '513.980',  '819.205', '1273.705', '1565.905'],
                #'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
-               'custom_axis_spec':[]
+               'custom_axis_spec':[],
+               'curve_ranges':[[-0.00033190885, 0.0013682955],[-0.0000560848525, 0.000451251725],
+                               [-0.000022239075, 0.00003058145],[-0.00000592882, 0.00000839358125],
+                               [-0.0000026098735, 0.0000063491895],[-0.000001324562, 0.000003598945],
+                               [ -0.00000045399895, 0.000001060979]]
 }
 
 #hack add to end
@@ -511,14 +515,14 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                 Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
                                            '', '-1', '-1')
             elif measures[i] == 'Curvature':
-                Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor',
-                                                                        'Curvature', 'No')
-                Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
-                                                                             'white', 'red', '2.0', '100.0', '0.1',
-                                                                             '0.0')
-                Process.Mesh__Cell_Axis__Cell_Axis_Clear()
+                Process.Mesh__Heat_Map__Heat_Map_Load(
+                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), measures[i], '1.0')
+                # use extended ranges so at least time points on same scale
+                Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
+                # nice viz parameters
                 Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '',
-                                           '', '', '-1', '-1')
+                                           '',
+                                           '', '-1', '-1')
 
             # snap basic features of mesh
             elif measures[i] == 'mesh_signal':
