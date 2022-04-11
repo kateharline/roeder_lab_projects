@@ -65,7 +65,7 @@ params_dict = {'gen_measures': False,
                'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
-               'intra_display': ['Gaussian_heat'],
+               'intra_display': ['Parent_look'],
                'intra_ranges':[],
                #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
                'gen_display':[],
@@ -504,6 +504,14 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                                                                         'black', 'red', '3', '4', '0.1', '1', 'No',
                                                                         '1.0')
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
+
+            elif measures[i] == 'Parent_look':
+                Process.Stack__System__Set_Current_Stack('Main', 0)
+                Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1',
+                                           '-1')
+                Process.Stack__System__Set_Current_Stack('Main', 1)
+                Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '',
+                                           '-1', '-1')
 
             elif measures[i] == 'PD-PDG_align':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
