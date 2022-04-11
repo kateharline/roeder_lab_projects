@@ -590,6 +590,14 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
 
             load_mesh(os.path.join(meshes_path, meshes[step]), 0, 'No')
 
+            if 'Parent_look' in measures:
+                Process.Stack__System__Set_Current_Stack('Main', 0)
+                Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1',
+                                           '-1')
+                Process.Stack__System__Set_Current_Stack('Main', 1)
+                Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '',
+                                           '-1', '-1')
+
             sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
 
 
