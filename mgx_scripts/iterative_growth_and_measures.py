@@ -59,10 +59,10 @@ params_dict = {'gen_measures': False,
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat',
-               'save_attr':'',
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat, Label Double StretchCustomX, Label Double StretchCustomY',
+               #'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
-               'inter_display': ['Parent_look'],
+               'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
                'intra_display': [],
@@ -74,7 +74,7 @@ params_dict = {'gen_measures': False,
                'inter_display_step':0,
                'radii':['66.988',  '166.821',  '321.039',  '513.980',  '819.205', '1273.705', '1565.905'],
                #'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
-               'custom_axis_spec':[],
+               'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
                'curve_ranges':[[-0.00033190885, 0.0013682955],[-0.0000560848525, 0.000451251725],
                                [-0.000022239075, 0.00003058145],[-0.00000592882, 0.00000839358125],
                                [-0.0000026098735, 0.0000063491895],[-0.000001324562, 0.000003598945],
@@ -433,6 +433,16 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
             Process.Mesh__Cell_Axis__Custom__Custom_Direction_Angle('Max', 'X')
             Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'aniso_angle_max', 'Label',
                                                                    'Label Heat', 'Active Mesh', 'No')
+            #calculate max along axis
+            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchCustomX', 'Auto', '1', '3', 'Both', 'white', 'red', '2.0', '2.0', '0.1', '0.0', 'Yes', '1.0')
+            Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'StretchCustomX',
+                                                                       'Label', 'Label Heat', 'Active Mesh', 'No')
+            # calculate and save min along axis
+            Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchCustomY', 'Auto', '1', '3', 'Both', 'white',
+                                                                    'red', '2.0', '2.0', '0.1', '0.0', 'Yes', '1.0')
+            Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double', 'StretchCustomY',
+                                                                       'Label', 'Label Heat', 'Active Mesh', 'No')
+
         else:
             Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMin', 'Auto', '1', '3', 'StrainMin', 'black',
                                                                     'red',
