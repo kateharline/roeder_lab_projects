@@ -486,9 +486,17 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
         if is_inter:
             load_mesh(meshes[step+1], 1, 'Yes')
 
+
         load_mesh(meshes[step], 0, 'No')
         Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Wall Heat', '', '', 'No', '', '', '', '', '',
                                    '', '', '-1', '-1')
+        if 'Parent_look' in measures:
+            Process.Stack__System__Set_Current_Stack('Main', 0)
+            Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1',
+                                       '-1')
+            Process.Stack__System__Set_Current_Stack('Main', 1)
+            Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '',
+                                       '-1', '-1')
 
         # todo set main mesh
         sys.exit('Arrange mesh(es) as desired for images of ' + type_message + ' measures then re-run script')
@@ -506,12 +514,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
 
             elif measures[i] == 'Parent_look':
-                Process.Stack__System__Set_Current_Stack('Main', 0)
-                Process.Mesh__System__View('', 'No', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '', '-1',
-                                           '-1')
-                Process.Stack__System__Set_Current_Stack('Main', 1)
-                Process.Mesh__System__View('', 'Yes', 'Cells', '', 'Label', '', '', '', '', '', '', '', '', '', '',
-                                           '-1', '-1')
+                print('look')
 
             elif measures[i] == 'PD-PDG_align':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
