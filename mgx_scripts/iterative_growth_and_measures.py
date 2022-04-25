@@ -296,7 +296,8 @@ def do_save_attr(meshes, main_path, save_attr, st_analy):
         savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
         if st_analy:
-            do_st_export(meshes[i], main_path)
+            if i > 0:
+                do_st_export(meshes[i], main_path)
         # Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
 
     return ''
