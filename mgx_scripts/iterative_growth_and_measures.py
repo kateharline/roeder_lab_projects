@@ -59,8 +59,8 @@ params_dict = {'gen_measures': False,
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
-               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat, Label Double StretchCustomX, Label Double StretchCustomY',
-               #'save_attr':'',
+               #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat, Label Double StretchCustomX, Label Double StretchCustomY',
+               'save_attr':'',
                #'inter_display': ['d_Area', 'd_Proliferation', 'PDGs', 'PD-PDG_align'],
                'inter_display': [],
                'inter_ranges':[['1','4'],['1','4']],
@@ -74,11 +74,12 @@ params_dict = {'gen_measures': False,
                'inter_display_step':0,
                'radii':['66.988',  '166.821',  '321.039',  '513.980',  '819.205', '1273.705', '1565.905'],
                #'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
-               'custom_axis_spec':['Proximal-Distal_Distance', 'max'],
+               'custom_axis_spec':[],
                'curve_ranges':[[-0.00033190885, 0.0013682955],[-0.0000560848525, 0.000451251725],
                                [-0.000022239075, 0.00003058145],[-0.00000592882, 0.00000839358125],
                                [-0.0000026098735, 0.0000063491895],[-0.000001324562, 0.000003598945],
-                               [ -0.00000045399895, 0.000001060979]]
+                               [ -0.00000045399895, 0.000001060979]],
+               'st_analy':True
 }
 
 #hack add to end
@@ -105,6 +106,8 @@ else:
 
 # make all missing folders to avoid throwing errors https://stackoverflow.com/questions/1274405/how-to-create-new-folder
 require_folders = ['meshes', 'parents', 'attributes', 'snaps']
+if params_dict['st_analy']:
+    require_folders.append('txt_meshes')
 
 for i in range(1, len(require_folders)):
     if not os.path.exists(os.path.join(main_path, require_folders[i])):
@@ -279,7 +282,7 @@ def do_gen_measures(meshes, parents, main_path, intra_measures, inter_measures, 
 
     return False
 
-def do_save_attr(meshes, main_path, save_attr):
+def do_save_attr(meshes, main_path, save_attr, st_analy):
     '''
 
     :param meshes: list of mesh filenames
@@ -292,6 +295,8 @@ def do_save_attr(meshes, main_path, save_attr):
         load_mesh(meshes[i], 0, 'no')
         savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
+        if st_analy:
+            do_st_export(meshes[i], main_path)
         # Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
 
     return ''
@@ -457,6 +462,18 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
         Process.Mesh__System__Reset('1')
 
     return []
+
+def do_st_export(mesh, main_path):
+    '''
+    export mesh and parent files as suits C_B Li spatio-temporal analysis
+    :param mesh: str current mesh file name
+    :param mainpath: str upper folders
+    :param i: mesh step
+    :return:
+    '''
+    Process.Mesh__Lineage_Tracking__Save_Parents(os.path.join(main_path, 'parents', mesh + '_parents.csv'), 'Yes')
+    Process.Mesh__System__Export(os.path.join(main_path, 'txt_meshes', mesh + '.txt'), 'Text', 'no', '0', 'No')
+    return False
 
 
 def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom_axis_spec=None, curve_type='Gaussian', curve_ranges=[]):
@@ -650,8 +667,9 @@ if params_dict['custom_axis_spec']:
     params_dict['custom_axis_spec'] = do_custom_pdg(dirs_dict['meshes'], main_path, params_dict['custom_axis_spec'], dirs_dict['attributes'])
     set_params(main_path, 'params.txt', params_dict)
 
-if params_dict['save_attr']:
-    params_dict['save_attr'] = do_save_attr(dirs_dict['meshes'], main_path, params_dict['save_attr'])
+if params_dict['save_attr'] or params_dict['st_analy']:
+    params_dict['save_attr'] = do_save_attr(dirs_dict['meshes'], main_path, params_dict['save_attr'], params_dict['st_analy'])
+    params_dict['st_analy'] = False
     set_params(main_path, 'params.txt', params_dict)
 # add gen display to end so don't have to be too careful with range indices for other intra_display
 params_dict['intra_display'] = params_dict['intra_display'] + params_dict['gen_display']
@@ -672,6 +690,6 @@ if params_dict['inter_display']:
     set_params(main_path, 'params.txt', params_dict)
     params_dict['inter_display'] = do_display(dirs_dict['meshes'], params_dict['inter_display'], params_dict['inter_ranges'], attr_dict, main_path, True, step)
     set_params(main_path, 'params.txt', params_dict)
-    
+
 # done, delete params_dict
 os.remove(os.path.join(main_path,'params.txt'))
