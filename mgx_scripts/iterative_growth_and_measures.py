@@ -18,7 +18,7 @@ if o_s == 'posix':
     if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
         # mgx1
 	    root_path = '/home/aroeder/Desktop/Kate'
-    if platform.release() in ['5.13.0-28-generic', '5.13.0-30-generic', '5.13.0-39-generic']:
+    if platform.release() in ['5.13.0-28-generic', '5.13.0-30-generic']:
         # mgx3
 	    root_path = '/home/kh694/Desktop/Kate/finals'
 
@@ -43,7 +43,7 @@ file_selector = False
 
 
 # fun fun file management between dev env of vm build and windows build
-data_files_path = 'wt_2-4'
+data_files_path = 'jawD_2-2'
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
