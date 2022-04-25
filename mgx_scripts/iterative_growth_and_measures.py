@@ -296,8 +296,7 @@ def do_save_attr(meshes, main_path, save_attr, st_analy):
         savepath = os.path.join(main_path, 'attributes', meshes[i][:-5] + '_attr.csv')
         Process.Mesh__Attributes__Save_to_CSV(savepath, save_attr)
         if st_analy:
-            if i > 0:
-                do_st_export(meshes[i], main_path)
+            do_st_export(meshes[i], main_path, i)
         # Process.Mesh__Attributes__Save_to_CSV_Extended(savepath, 'Empty', '', '', '', '')
 
     return ''
@@ -464,7 +463,7 @@ def do_custom_pdg(meshes, path, custom_spec, attrs):
 
     return []
 
-def do_st_export(mesh, main_path):
+def do_st_export(mesh, main_path, i):
     '''
     export mesh and parent files as suits C_B Li spatio-temporal analysis
     :param mesh: str current mesh file name
@@ -472,7 +471,8 @@ def do_st_export(mesh, main_path):
     :param i: mesh step
     :return:
     '''
-    Process.Mesh__Lineage_Tracking__Save_Parents(os.path.join(main_path, 'parents', mesh + '_parents.csv'), 'Yes')
+    if i > 0:
+        Process.Mesh__Lineage_Tracking__Save_Parents(os.path.join(main_path, 'parents', mesh + '_parents.csv'), 'Yes')
     Process.Mesh__System__Export(os.path.join(main_path, 'txt_meshes', mesh + '.txt'), 'Text', 'no', '0', 'No')
     return False
 
