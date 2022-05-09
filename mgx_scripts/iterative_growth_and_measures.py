@@ -538,7 +538,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
                 Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax-StretchMin', 'Auto', ranges[i][0], ranges[i][1], 'Both',
-                                                                        'black', 'red', '2', '10', '0.1', '1', 'No',
+                                                                        'black', 'red', '2', '10', '0.1', '0', 'No',
                                                                         '1.0')
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
 
@@ -549,7 +549,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                 Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchCustomX-StretchCustomY', 'Auto', ranges[i][0], ranges[i][1], 'BothCustom',
                                                                         'black', 'red',
-                                                                        '2', '10', '0.1', '1', 'No', '1.0')
+                                                                        '2', '10', '0.1', '0', 'No', '1.0')
 
             elif measures[i] == curve_type+'_heat':
                 Process.Mesh__Heat_Map__Heat_Map_Load(
