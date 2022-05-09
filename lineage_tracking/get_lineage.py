@@ -56,4 +56,4 @@ def get_family(lineage_df, times, parents, sample_ids, save_csv=False):
 lineage_df = pd.read_csv('/Users/kateharline/workspace/finals/all_parents.csv', index_col=False)
 
 # all day 8 <- 3
-get_family(lineage_df, [8], [3,4], lineage_df['sample_id'].unique(), True)
+get_family(lineage_df, [8, 7, 6, 5], [4], lineage_df['sample_id'].unique(), True)

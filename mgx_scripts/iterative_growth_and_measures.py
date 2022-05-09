@@ -537,8 +537,8 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
             if measures[i] == 'PDGs':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
                                                  # heatmap, scaleheat, heat min, max, show axis, color +, color -
-                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
-                                                                        'black', 'red', '3', '4', '0.1', '1', 'No',
+                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax-StretchMin', 'Auto', ranges[i][0], ranges[i][1], 'Both',
+                                                                        'black', 'red', '2', '10', '0.1', '1', 'No',
                                                                         '1.0')
                 Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Border', '', '', '', '', '', '', '-1', '-1')
 
@@ -547,13 +547,10 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
 
             elif measures[i] == 'PD-PDG_align':
                 Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('PDG', 'Measure Label Tensor', 'PDGs', 'No')
-                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchMax', 'Auto', ranges[i][0], ranges[i][1], 'StrainMax',
+                Process.Mesh__Cell_Axis__PDG__Display_Growth_Directions('StretchCustomX-StretchCustomY', 'Auto', ranges[i][0], ranges[i][1], 'BothCustom',
                                                                         'black', 'red',
-                                                                        '3', '4', '0.1', '1', 'No', '1.0')
-                Process.Mesh__Heat_Map__Heat_Map_Load(
-                    os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), 'aniso_angle_max', '1.0')
-                Process.Mesh__System__View('Yes', '', '', '', 'Label Heat', '', '', 'No', 'Border', '', '', '', '', '',
-                                           '', '-1', '-1')
+                                                                        '2', '10', '0.1', '1', 'No', '1.0')
+
             elif measures[i] == curve_type+'_heat':
                 Process.Mesh__Heat_Map__Heat_Map_Load(
                     os.path.join(path, 'attributes', attr_dict['attributes'][step - 1]), measures[i], '1.0')

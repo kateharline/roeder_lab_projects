@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e6ad2b96-a433-4b6e-8377-5508507fd097" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/../lineage_tracking/get_lineage.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lineage_tracking/get_lineage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iterative_growth_and_measures.py" beforeDir="false" afterPath="$PROJECT_DIR$/iterative_growth_and_measures.py" afterDir="false" />
     </list>
