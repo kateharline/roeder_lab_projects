@@ -547,7 +547,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                     os.path.join(path, 'st_attributes', 'v_areas_d'+str(step)+'_'+os.path.split(path)[-1]+'.csv'), 'Value', '1.0')
                 Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
                 # nice viz parameters
-                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '',
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Cells', '', '', '', '',
                                            '',
                                            '', '-1', '-1')
             elif measures[i] == 'd_areas':
@@ -557,7 +557,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                         'Value', '1.0')
                     Process.Mesh__Heat_Map__Heat_Map_Set_Range(ranges[i][0], ranges[i][1])
                     # nice viz parameters
-                    Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Border', '', '', '', '',
+                    Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label Heat', '', '', '', 'Cells', '', '', '', '',
                                                '',
                                                '', '-1', '-1')
 
