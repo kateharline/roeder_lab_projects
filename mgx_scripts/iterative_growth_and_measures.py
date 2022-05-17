@@ -52,7 +52,7 @@ data_files_path = '2-1'
 
 # which measures to display and how
 
-params_dict = {'gen_measures': False,
+params_dict = {'gen_measures': True,
                'inter_measures':True,
                'intra_measures':True,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
