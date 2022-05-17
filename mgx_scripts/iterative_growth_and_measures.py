@@ -65,7 +65,7 @@ params_dict = {'gen_measures': False,
                'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area',
                'inter_display': ['d_Area', 'd_Proliferation'],
                #'inter_display': [],
-               'inter_ranges':[],
+               'inter_ranges':[[0,4],[1,5]],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
                'intra_display': [],
                'intra_ranges':[],
