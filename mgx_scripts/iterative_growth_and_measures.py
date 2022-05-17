@@ -43,7 +43,7 @@ file_selector = False
 
 
 # fun fun file management between dev env of vm build and windows build
-data_files_path = 'jawD_2-7'
+data_files_path = '2-1'
 
 # attributes to save
 #save_attr = ['/Geometry/Area', '/Geometry/Aspect Ratio', '/Geometry/Average Radius', '/Geometry/Junction Distance', '/Geometry/Length Major Axis', '/Geometry/Length Minor Axis', '/Geometry/Maximum Radius', '/Geometry/Minimum Radius', '/Geometry/Perimeter', '/Lobeyness/Circularity', '/Lobeyness/Lobeyness', '/Lobeyness/Rectangularity', '/Lobeyness/Solidarity', '/Lobeyness/Visibility Pavement', '/Lobeyness/Visibility Stomata', '/Neighborhood/Area', '/Neighborhood/Aspect Ratio', '/Neighborhood/Neighbors', '/Neighborhood/Perimeter', '/Neighborhood/Variability Radius', '/Shape/Bending', '/Shape/Common Bending', '/Shape/Common Neighbors', '/Shape/Variability Radius', 'd_Area']
@@ -53,22 +53,24 @@ data_files_path = 'jawD_2-7'
 # which measures to display and how
 
 params_dict = {'gen_measures': False,
-               'inter_measures':False,
-               'intra_measures':False,
+               'inter_measures':True,
+               'intra_measures':True,
                #'distance_measures': ['Proximal-Distal', 'Proximal-Distal_lamina', 'Medial-Lateral'],
                #'distance_measures': ['Margin'],
                'distance_measures':[],
                # probably for 2021 Label Double Medial-Lateral_Distance_Distance, Proximal-Distal_Distance_Distance, Proximal-Distal_Distance_sp_Distance
                #'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area, Label Double Geometry/Aspect Ratio, Label Double Geometry/Average Radius, Label Double Geometry/Junction Distance, Label Double Geometry/Length Major Axis, Label Double Geometry/Length Minor Axis, Label Double Geometry/Maximum Radius, Label Double Geometry/Minimum Radius, Label Double Geometry/Perimeter, Label Double Geometry/Circularity, Label Double Lobeyness/Circularity, Label Double Lobeyness/Lobeyness, Label Double Lobeyness/Solidarity, Label Double Lobeyness/Visibility Pavement, Label Double Lobeyness/Visibility Stomata, Label Double Location/Cell Distance, Label Double Medial-Lateral_Distance, Label Double Neighborhood/Area, Label Double Neighborhood/Aspect Ratio, Label Double Neighborhood/Neighbors, Label Double Neighborhood/Perimeter, Label Double Neighborhood/Variability Radius, Label Double Network/Neighbors, Label Double Proximal-Distal_Distance, Label Double Margin_Distance, Label Double Proximal-Distal_lamina_Distance, Label Double Shape/Bending, Label Double Shape/Common Bending, Label Double Shape/Variability Radius, Label Tensor PDGs, Label Double aniso_angle_max, Label Tensor Curvature, Label Double Stomata_Distance, Label Double curv_signed_avg_abs, Label Double Gaussian_heat, Label Double StretchCustomX, Label Double StretchCustomY',
-               'save_attr':'',
-               'inter_display': [],
+               #'save_attr':'',
+               # methods paper attrs
+               'save_attr':'Label Double d_Area, Label Double d_Proliferation, Label Double Geometry/Area',
+               'inter_display': ['d_Area', 'd_Proliferation'],
                #'inter_display': [],
                'inter_ranges':[],
                # if doing gauss, should be last bc don't give ranges 'Curvature'
-               'intra_display': ['Stomata_Distance'],
-               'intra_ranges':[[0,150]],
-               #'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
-               'gen_display':[],
+               'intra_display': [],
+               'intra_ranges':[],
+               'gen_display':['mesh_signal', 'mesh_border', 'mesh_cells'],
+               #'gen_display':[],
                'distance_measure_step':0,
                'intra_display_step':0,
                'inter_display_step':0,
@@ -323,10 +325,10 @@ def do_intra_measures(mesh, radius, curve_type='Gaussian', path=main_path):
     """
 
     # run desired processes
-    # Process.Mesh__Heat_Map__Measures__Geometry__Area()
+    Process.Mesh__Heat_Map__Measures__Geometry__Area()
     # Process.Mesh__Heat_Map__Measures__Geometry__Aspect_Ratio()
     # Process.Mesh__Heat_Map__Measures__Geometry__Average_Radius()
-    #                                                         # min or max, direct junctions (yes) or also neighbors (no)
+                                                            # min or max, direct junctions (yes) or also neighbors (no)
     # Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Min', 'No', 'Yes')
     # # todo check that it will measure and save both as attributes
     # Process.Mesh__Heat_Map__Measures__Geometry__Junction_Distance('Max', 'No', 'Yes')
@@ -358,17 +360,17 @@ def do_intra_measures(mesh, radius, curve_type='Gaussian', path=main_path):
     # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Variability_Radius()
     # Process.Mesh__Heat_Map__ToBeDeleted__Measures__Shape__Stomata_Area()
     #
-    Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
+    # Process.Mesh__Cell_Axis__Curvature__Compute_Tissue_Curvature(radius, 'No')
 
     # hacky export to attr so can be sure of value
     # save as attributes
-    Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor', 'Curvature', 'No')
-    Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
-                                                                 'white', 'red', '2.0', '100.0', '0.1',
-                                                                 '0.0')
-    Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double',
-                                                               curve_type + '_heat',
-                                                               'Label', 'Label Heat', 'Active Mesh', 'No')
+    # Process.Mesh__Cell_Axis__Cell_Axis_Import_From_Attr_Map('Curvature', 'Measure Label Tensor', 'Curvature', 'No')
+    # Process.Mesh__Cell_Axis__Curvature__Display_Tissue_Curvature(curve_type, 'Yes', '85.0', 'Both',
+    #                                                              'white', 'red', '2.0', '100.0', '0.1',
+    #                                                              '0.0')
+    # Process.Mesh__Heat_Map__Operators__Export_Heat_to_Attr_Map('Measure Label Double',
+    #                                                            curve_type + '_heat',
+    #                                                            'Label', 'Label Heat', 'Active Mesh', 'No')
 
     # save the mesh (attributes saved in mesh)
     #                           filename, transform, mesh number

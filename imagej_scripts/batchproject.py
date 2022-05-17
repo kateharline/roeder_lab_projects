@@ -7,7 +7,7 @@ from ij import WindowManager as WM
 
 # change these w each run #
 
-input_path = '/Users/kateharline/workspace/temp/20210728_live_imaging_jawd_wtxpAR169xpAR229'
+input_path = '/Users/kateharline/workspace/li_methods/growth_compare/raw'
 
 
 
@@ -27,11 +27,11 @@ def process(filename, output_path):
     # the number of channels is one (orig image) less than the number of images opened
     
     # add scale bar to image
-    IJ.run("Scale Bar...", "width=50 height=20 font=18 color=White background=None location=[Lower Right] hide overlay");
+    IJ.run("Scale Bar...", "width=100 height=20 font=18 color=Red background=None location=[Lower Right] hide overlay");
     # save scale bar to stack
     IJ.run("Flatten");
     
-    IJ.saveAs("JPG", os.path.join(output_path, 'maxint_w_scale' + filename))
+    IJ.saveAs("PNG", os.path.join(output_path, 'maxint_w_scale' + filename))
     # close all the images 
     num_channels = WM.getImageCount()
     for i in range(0, num_channels):
