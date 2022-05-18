@@ -593,8 +593,7 @@ def do_display(meshes, measures, ranges, attr_dict, path, is_inter, step, custom
                                            '','', '-1', '-1')
 
             elif measures[i] == 'mesh_cells':
-                Process.Mesh__System__View('No', 'No', 'Cells', '', '', '', '', 'No', 'Cells', '', '', '', '',
-                                           '', '', '-1', '-1')
+                Process.Mesh__System__View('Yes', 'No', 'Cells', '', 'Label', '', '', '', 'Cells', '', '', '', 'Yes', '', '', '-1', '-1')
 
             elif measures[i] == 'stack':
                 # manage

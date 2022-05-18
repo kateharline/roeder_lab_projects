@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e6ad2b96-a433-4b6e-8377-5508507fd097" name="Default" comment="" />
+    <list default="true" id="e6ad2b96-a433-4b6e-8377-5508507fd097" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/iterative_growth_and_measures.py" beforeDir="false" afterPath="$PROJECT_DIR$/iterative_growth_and_measures.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
