@@ -8,7 +8,7 @@ import platform
 o_s = os.name
 if o_s == 'posix':
 	# if vmware
-	root_path = '/home/kate/Desktop'
+	root_path = '/home/kateharline/Desktop/li_paper/methods_video'
 
 	if platform.release() in ['4.15.0-118-generic', '4.15.0-20-generic']:
 		# mgx1
@@ -18,15 +18,15 @@ if o_s == 'posix':
 elif o_s == 'nt':
 	root_path = 'C:\\Users\\katha\\Desktop'
 
-data_files_path = 'demo'
-stacks_path = 'scale_tiffs'
+data_files_path = 'resize'
+stacks_path = 'tiffs'
 
 main_path = os.path.join(root_path, data_files_path)
 
-voxel_sizes = ['0.5930470172141393', '0.5930470172141393', '0.5']
+voxel_sizes = ['0.415133', '0.415133', '0.5']
 
 def resize(stack, voxel_sizes, stacks_path):
-	Process.Stack__System__Open(os.path.join(stacks_path, stack), 'Main', '0', '')
+	Process.Stack__System__Open(os.path.join(stacks_path, stack), 'Main', '0', '', 'No')
 	Process.Stack__Canvas__Change_Voxel_Size(voxel_sizes[0], voxel_sizes[1], voxel_sizes[2])
 	Process.Stack__System__Save(os.path.join(stacks_path, stack), 'Main', '0', '5', '/label')
 	Process.Stack__System__Clear_Main_Stack('0')
